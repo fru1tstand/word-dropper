@@ -37,8 +37,11 @@ public class GameBoard extends AppCompatActivity {
         tileBoard.getLayoutParams().height = screenSize.y - STATS_HEIGHT - PROGRESS_HEIGHT;
         tileBoard.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
         tileBoard.setBackgroundColor(Color.RED);
-        tileBoard.setTileBackgroundColor(Color.MAGENTA);
-        tileBoard.setTileTextColor(Color.LTGRAY);
+        tileBoard.forEachTile(tile -> {
+            tile.setBackgroundColor(Color.MAGENTA);
+            tile.getTextPaint().setColor(Color.LTGRAY);
+            tile.getTextPaint().setTextSize(28);
+        });
 
 
         // Create progress bar

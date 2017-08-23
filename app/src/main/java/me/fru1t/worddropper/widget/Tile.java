@@ -18,8 +18,6 @@ public class Tile extends View {
 
     private @Getter @Setter int size;
     private @Getter @Setter String text;
-    // TODO: Add text size
-    // TODO: Add text font
 
     private transient final Paint activeBackgroundColor;
 
