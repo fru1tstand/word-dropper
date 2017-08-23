@@ -7,12 +7,12 @@ import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import me.fru1t.worddropper.tileboard.TileBoardColumn;
 
 /**
@@ -39,10 +39,56 @@ public class TileBoard extends FrameLayout {
         void onChange(ChangeEventType changeEventType, @Nullable String string);
     }
 
+    // https://en.wikipedia.org/wiki/Letter_frequency
+    private enum LetterFrequency {
+        A(8167),
+        B(1492),
+        C(2782),
+        D(4253),
+        E(12702),
+        F(2228),
+        G(2015),
+        H(6094),
+        I(6966),
+        J(153),
+        K(772),
+        L(4025),
+        M(2406),
+        N(6749),
+        O(7507),
+        P(1929),
+        Q(95),
+        R(5987),
+        S(6327),
+        T(9056),
+        U(2758),
+        V(978),
+        W(2360),
+        X(150),
+        Y(1974),
+        Z(74);
+
+        public static final int CUMULATIVE_FREQUENCY = 99999;
+
+        private @Getter int relativeFrequency;
+
+        LetterFrequency(int relativeFrequency) {
+            this.relativeFrequency = relativeFrequency;
+        }
+    }
+
+    @AllArgsConstructor
+    private static class PathElement {
+        int row;
+        int col;
+        Tile tile;
+    }
+
     // Measurements
     private static final int TILE_COLUMNS = 7;
     private static final int TILE_MAX_ROWS = 8;
 
+    // Letter generation
     private static final int LETTERS_IN_ALPHABET = 26;
     private static final int ALPHABET_START_OFFSET = (int) 'A';
 
@@ -57,7 +103,7 @@ public class TileBoard extends FrameLayout {
     private int tileOffrowOffset;
 
     // Touch pathing
-    private final LinkedList<Tile> currentPath;
+    private final ArrayList<PathElement> currentPath;
     private int touchDownRow;
     private int touchDownCol;
 
@@ -79,14 +125,14 @@ public class TileBoard extends FrameLayout {
             for (int row = 0; row < rows; row++) {
                 Tile t = new Tile(context);
                 t.setText(generateNewTileLetter());
+
                 tileColumns.get(col).addToTop(t);
                 addView(t);
-                t.getTextPaint().setTextSize(20);
             }
         }
 
         // Pathing
-        currentPath = new LinkedList<>();
+        currentPath = new ArrayList<>();
         touchDownRow = -1;
         touchDownCol = -1;
     }
@@ -211,26 +257,28 @@ public class TileBoard extends FrameLayout {
         Tile currentTile = tileColumns.get(col).get(row);
 
         // Check if the tile is the first in the list, if so, clear the current path
-        if (currentPath.size() != 0 && currentTile == currentPath.getFirst()) {
-            currentPath.forEach(Tile::onRelease);
+        if (currentPath.size() != 0 && currentTile == currentPath.get(0).tile) {
+            currentPath.forEach(pathElement -> pathElement.tile.onRelease());
             currentPath.clear();
             onChange(ChangeEventType.CHANGE, null);
             return;
         }
 
         // Check if the tile is the last in the list, if so, submit and clear the path
-        if (currentPath.size() != 0 && currentTile == currentPath.getLast()) {
+        if (currentPath.size() != 0
+                && currentTile == currentPath.get(currentPath.size() - 1).tile) {
             StringBuilder sb = new StringBuilder();
-            currentPath.forEach(tile -> sb.append(tile.getText()));
+            currentPath.forEach(pathElement -> sb.append(pathElement.tile.getText()));
             String currentWord = sb.toString();
             ChangeEventType eventType = ChangeEventType.FAILED_SUBMIT;
 
             System.out.println("Current word: " + currentWord);
             if (isWord(currentWord)) {
-                currentPath.forEach(tile -> {
-                    tile.setText(generateNewTileLetter());
-                    tile.onRelease();
-                    tileColumns.forEach(column -> column.reset(tile));
+                currentPath.forEach(pathElement -> {
+                    pathElement.tile.setText(generateNewTileLetter());
+                    pathElement.tile.onRelease();
+
+                    tileColumns.get(pathElement.col).reset(pathElement.tile);
                 });
                 currentPath.clear();
                 eventType = ChangeEventType.SUCCESSFUL_SUBMIT;
@@ -243,17 +291,49 @@ public class TileBoard extends FrameLayout {
 
         // Check if the tile exists in the path already, if so, cut selected tiles through to the
         // tapped tile.
-        int tileIndex = currentPath.indexOf(currentTile);
+        int tileIndex = -1;
+        for (int i = 1; i < currentPath.size() - 1; i++) {
+            if (currentPath.get(i).tile == currentTile) {
+                tileIndex = i;
+                break;
+            }
+        }
         if (tileIndex != -1) {
-            List<Tile> cutList = currentPath.subList(tileIndex + 1, currentPath.size());
-            cutList.forEach(Tile::onRelease);
+            List<PathElement> cutList = currentPath.subList(tileIndex + 1, currentPath.size());
+            cutList.forEach(pe -> pe.tile.onRelease());
             cutList.clear();
             return;
         }
 
-        // Otherwise, add the tile to the path
-        // TODO: Add tile adjacency logic
-        currentPath.add(currentTile);
+        // Are we currently in a path?
+        if (!currentPath.isEmpty()) {
+            // Check if the tile is adjacent to the end of the path, if so, add it to the path.
+            PathElement lastPathElement = currentPath.get(currentPath.size() - 1);
+            if (col == lastPathElement.col) {
+                // Same column
+                if (row + 1 != lastPathElement.row && row - 1 != lastPathElement.row) {
+                    return;
+                }
+            } else if (col - 1 == lastPathElement.col || col + 1 == lastPathElement.col) {
+                // Adjacent column
+                if (col % 2 == 0) {
+                    // Current col is short
+                    if (row != lastPathElement.row && row + 1 != lastPathElement.row) {
+                        return;
+                    }
+                } else {
+                    // Current col is long
+                    if (row - 1 != lastPathElement.row && row != lastPathElement.row) {
+                        return;
+                    }
+                }
+            } else {
+                // Not even close
+                return;
+            }
+        }
+
+        currentPath.add(new PathElement(row, col, currentTile));
         currentTile.onPress();
     }
 
@@ -271,11 +351,14 @@ public class TileBoard extends FrameLayout {
     }
 
     private String generateNewTileLetter() {
-        // TODO: Create letters based on a distribution.
-        char result = (char) (ALPHABET_START_OFFSET + (new Random()).nextInt(LETTERS_IN_ALPHABET));
-        if (result == 'Q') {
-            return "Qu";
+        int nextSeed = (new Random()).nextInt(LetterFrequency.CUMULATIVE_FREQUENCY);
+        int cumulative = 0;
+        for (LetterFrequency letter : LetterFrequency.values()) {
+            cumulative += letter.getRelativeFrequency();
+            if (cumulative > nextSeed) {
+                return letter.name();
+            }
         }
-        return result + "";
+        return LetterFrequency.E.name();
     }
 }
