@@ -1,4 +1,4 @@
-package me.fru1t.worddropper.tileboard;
+package me.fru1t.worddropper.widget.tileboard;
 
 import android.support.annotation.Nullable;
 import android.util.SparseArray;

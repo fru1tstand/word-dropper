@@ -2,12 +2,16 @@ package me.fru1t.worddropper.activities;
 
 import android.graphics.Color;
 import android.graphics.Point;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import me.fru1t.worddropper.activities.gameboard.StatsView;
 import me.fru1t.worddropper.widget.ProgressBar;
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.widget.TileBoard;
@@ -16,7 +20,7 @@ import me.fru1t.worddropper.widget.TileBoard;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class GameBoard extends AppCompatActivity {
+public class GameScreen extends AppCompatActivity {
     private static final int STATS_HEIGHT = 650;
     private static final int PROGRESS_HEIGHT = 20;
 
@@ -43,7 +47,6 @@ public class GameBoard extends AppCompatActivity {
             tile.getTextPaint().setTextSize(28);
         });
 
-
         // Create progress bar
         ProgressBar progressBar = new ProgressBar(this);
         root.addView(progressBar);
@@ -56,16 +59,25 @@ public class GameBoard extends AppCompatActivity {
         progressBar.getTextColor().setColor(Color.BLACK);
 
         // Creates stats
-        FrameLayout stats = new FrameLayout(this);
-        root.addView(stats);
-        stats.setX(0);
-        stats.setY(0);
-        stats.getLayoutParams().height = STATS_HEIGHT;
-        stats.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
-        stats.setBackgroundColor(Color.YELLOW);
+        View statsView = getLayoutInflater().inflate(R.layout.view_game_board_stats, root, false);
+        StatsView stats = new StatsView(statsView);
+        root.addView(statsView);
+        statsView.setX(0);
+        statsView.setY(0);
+        statsView.setBackgroundColor(Color.YELLOW);
+        statsView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
 
-        TextView t = new TextView(this);
-        t.setText("asdf");
-        stats.addView(t);
+        tileBoard.setEventHandler((changeEventType, string) -> {
+            switch (changeEventType) {
+                case CHANGE:
+                    stats.setCurrentWord(string);
+                    break;
+                case SUCCESSFUL_SUBMIT:
+                    stats.setCurrentWord(null);
+                    break;
+                case FAILED_SUBMIT:
+                    break;
+            }
+        });
     }
 }

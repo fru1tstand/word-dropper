@@ -13,7 +13,9 @@ import java.util.function.Consumer;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import me.fru1t.worddropper.tileboard.TileBoardColumn;
+import lombok.Setter;
+import me.fru1t.worddropper.WordDropper;
+import me.fru1t.worddropper.widget.tileboard.TileBoardColumn;
 
 /**
  * The main game board where players create words from.
@@ -88,12 +90,8 @@ public class TileBoard extends FrameLayout {
     private static final int TILE_COLUMNS = 7;
     private static final int TILE_MAX_ROWS = 8;
 
-    // Letter generation
-    private static final int LETTERS_IN_ALPHABET = 26;
-    private static final int ALPHABET_START_OFFSET = (int) 'A';
-
     // Front of linked list is top element
-    private TileBoardEvents eventHandler;
+    private @Setter TileBoardEvents eventHandler;
     private final ArrayList<TileBoardColumn> tileColumns;
 
     // Board sizing
@@ -267,12 +265,9 @@ public class TileBoard extends FrameLayout {
         // Check if the tile is the last in the list, if so, submit and clear the path
         if (currentPath.size() != 0
                 && currentTile == currentPath.get(currentPath.size() - 1).tile) {
-            StringBuilder sb = new StringBuilder();
-            currentPath.forEach(pathElement -> sb.append(pathElement.tile.getText()));
-            String currentWord = sb.toString();
             ChangeEventType eventType = ChangeEventType.FAILED_SUBMIT;
+            String currentWord = getCurrentPathString();
 
-            System.out.println("Current word: " + currentWord);
             if (isWord(currentWord)) {
                 currentPath.forEach(pathElement -> {
                     pathElement.tile.setText(generateNewTileLetter());
@@ -302,6 +297,7 @@ public class TileBoard extends FrameLayout {
             List<PathElement> cutList = currentPath.subList(tileIndex + 1, currentPath.size());
             cutList.forEach(pe -> pe.tile.onRelease());
             cutList.clear();
+            onChange(ChangeEventType.CHANGE, getCurrentPathString());
             return;
         }
 
@@ -335,10 +331,17 @@ public class TileBoard extends FrameLayout {
 
         currentPath.add(new PathElement(row, col, currentTile));
         currentTile.onPress();
+        onChange(ChangeEventType.CHANGE, getCurrentPathString());
+    }
+
+    private String getCurrentPathString() {
+        StringBuilder sb = new StringBuilder();
+        currentPath.forEach(pathElement -> sb.append(pathElement.tile.getText()));
+        return sb.toString();
     }
 
     private boolean isWord(String string) {
-        return (new Random()).nextBoolean(); // TODO: Implement
+        return WordDropper.dictionary.contains(string.toLowerCase());
     }
 
     /**

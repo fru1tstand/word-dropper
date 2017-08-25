@@ -20,6 +20,6 @@ public class MainMenu extends AppCompatActivity {
 
 
     public void onPlayButtonClick(View view) {
-        startActivity(new Intent(this, GameBoard.class));
+        startActivity(new Intent(this, GameScreen.class));
     }
 }
