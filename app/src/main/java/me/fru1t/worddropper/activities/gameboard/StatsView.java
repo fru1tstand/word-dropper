@@ -38,10 +38,17 @@ public class StatsView {
             return;
         }
 
+        s = s.toLowerCase();
+        if (WordDropper.dictionary.contains(s)) {
+            s += " (" + WordDropper.getWordValue(s) + ")";
+            currentWord.setTextColor(activeTextColor);
+        } else {
+            currentWord.setTextColor(defaultTextColor);
+        }
+
+        s = s.substring(0, 1).toUpperCase() + s.substring(1);
         float wordWidth = currentWord.getPaint().measureText(s);
         currentWord.setText(s);
         currentWord.setX(rootWidth / 2 - wordWidth / 2);
-        currentWord.setTextColor(WordDropper.dictionary.contains(s.toLowerCase())
-                ? activeTextColor : defaultTextColor);
     }
 }
