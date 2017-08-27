@@ -1,15 +1,11 @@
 package me.fru1t.worddropper.activities;
 
-import android.graphics.Color;
 import android.graphics.Point;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import me.fru1t.worddropper.WordDropper;
 import me.fru1t.worddropper.activities.gameboard.StatsView;
@@ -59,7 +55,8 @@ public class GameScreen extends AppCompatActivity {
         progressBar.getBackgroundColor().setColor(WordDropper.COLOR_BACKGROUND);
         progressBar.getProgressColor().setColor(WordDropper.COLOR_PRIMARY_LIGHT);
         progressBar.getProgressCalculatedColor().setColor(WordDropper.COLOR_PRIMARY_DARK);
-        progressBar.getTextColor().setColor(WordDropper.COLOR_TEXT);
+        progressBar.getTextPaint().setColor(WordDropper.COLOR_TEXT);
+        progressBar.getTextPaint().setTextSize(16);
 
         // Creates stats
         View statsView = getLayoutInflater().inflate(R.layout.view_game_board_stats, root, false);
