@@ -272,7 +272,6 @@ public class TileBoard extends FrameLayout {
                 currentPath.forEach(pathElement -> {
                     pathElement.tile.setText(generateNewTileLetter());
                     pathElement.tile.onRelease();
-
                     tileColumns.get(pathElement.col).reset(pathElement.tile);
                 });
                 currentPath.clear();
