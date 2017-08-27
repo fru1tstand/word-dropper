@@ -1,6 +1,9 @@
 package me.fru1t.worddropper;
 
 import android.graphics.Color;
+import android.support.annotation.Nullable;
+
+import com.google.common.base.Strings;
 
 import java.util.HashSet;
 
@@ -42,6 +45,9 @@ public class WordDropper {
             this.value = value;
         }
     }
+
+    private static final boolean DEBUG = true;
+
     public static final HashSet<String> dictionary = new HashSet<>();
 
     public static final int COLOR_PRIMARY = Color.parseColor("#ff9800");
@@ -52,9 +58,21 @@ public class WordDropper {
     public static final int COLOR_TEXT = Color.BLACK;
 
     /**
+     * Checks if the given string is a word or not. This method does no sanitization. Make sure
+     * incoming strings are lowercase.
+     */
+    public static boolean isWord(String s) {
+        return DEBUG || dictionary.contains(s);
+    }
+
+    /**
      * Determines the point value of a given string.
      */
-    public static int getWordValue(String string) {
+    public static int getWordValue(@Nullable String string) {
+        if (Strings.isNullOrEmpty(string)) {
+            return 0;
+        }
+
         int result = 0;
         for (char c : string.toUpperCase().toCharArray()) {
             result += LetterValue.valueOf(c + "").value;

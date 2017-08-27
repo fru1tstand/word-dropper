@@ -38,8 +38,7 @@ public class StatsView {
             return;
         }
 
-        s = s.toLowerCase();
-        if (WordDropper.dictionary.contains(s)) {
+        if (WordDropper.isWord(s)) {
             s += " (" + WordDropper.getWordValue(s) + ")";
             currentWord.setTextColor(activeTextColor);
         } else {

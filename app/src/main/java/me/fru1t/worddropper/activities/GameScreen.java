@@ -58,6 +58,7 @@ public class GameScreen extends AppCompatActivity {
         progressBar.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
         progressBar.getBackgroundColor().setColor(WordDropper.COLOR_BACKGROUND);
         progressBar.getProgressColor().setColor(WordDropper.COLOR_PRIMARY_LIGHT);
+        progressBar.getProgressCalculatedColor().setColor(WordDropper.COLOR_PRIMARY_DARK);
         progressBar.getTextColor().setColor(WordDropper.COLOR_TEXT);
 
         // Creates stats
@@ -77,6 +78,7 @@ public class GameScreen extends AppCompatActivity {
                     stats.setCurrentWord(string);
                     break;
                 case SUCCESSFUL_SUBMIT:
+                    progressBar.animateAddProgress(WordDropper.getWordValue(string));
                     stats.setCurrentWord(null);
                     break;
                 case FAILED_SUBMIT:

@@ -268,7 +268,7 @@ public class TileBoard extends FrameLayout {
             ChangeEventType eventType = ChangeEventType.FAILED_SUBMIT;
             String currentWord = getCurrentPathString();
 
-            if (isWord(currentWord)) {
+            if (WordDropper.isWord(currentWord)) {
                 currentPath.forEach(pathElement -> {
                     pathElement.tile.setText(generateNewTileLetter());
                     pathElement.tile.onRelease();
@@ -336,11 +336,7 @@ public class TileBoard extends FrameLayout {
     private String getCurrentPathString() {
         StringBuilder sb = new StringBuilder();
         currentPath.forEach(pathElement -> sb.append(pathElement.tile.getText()));
-        return sb.toString();
-    }
-
-    private boolean isWord(String string) {
-        return WordDropper.dictionary.contains(string.toLowerCase());
+        return sb.toString().toLowerCase();
     }
 
     /**
