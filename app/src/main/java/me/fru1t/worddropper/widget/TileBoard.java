@@ -1,5 +1,7 @@
 package me.fru1t.worddropper.widget;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Point;
 import android.support.annotation.Nullable;
@@ -85,6 +87,8 @@ public class TileBoard extends FrameLayout {
         int col;
         Tile tile;
     }
+
+    private static final int ANIMATION_DURATION_TILE_DROP = 350;
 
     // Measurements
     private static final int TILE_COLUMNS = 7;
@@ -243,10 +247,14 @@ public class TileBoard extends FrameLayout {
                 Tile tile = tileColumns.get(col).get(row);
 
                 tile.setX(col * tileSize + effectiveBoardOffset.x);
-                tile.setY(row * tileSize + rowYOffset + effectiveBoardOffset.y);
                 tile.getLayoutParams().height = tileSize;
                 tile.getLayoutParams().width = tileSize;
                 tile.setSize(tileSize);
+
+                ObjectAnimator animation = ObjectAnimator
+                        .ofFloat(tile, "y", row * tileSize + rowYOffset + effectiveBoardOffset.y);
+                animation.setDuration(ANIMATION_DURATION_TILE_DROP);
+                animation.start();
             }
         }
     }
@@ -273,6 +281,7 @@ public class TileBoard extends FrameLayout {
                     pathElement.tile.setText(generateNewTileLetter());
                     pathElement.tile.onRelease();
                     tileColumns.get(pathElement.col).reset(pathElement.tile);
+                    pathElement.tile.setY(-1 * pathElement.tile.getSize());
                 });
                 currentPath.clear();
                 eventType = ChangeEventType.SUCCESSFUL_SUBMIT;
