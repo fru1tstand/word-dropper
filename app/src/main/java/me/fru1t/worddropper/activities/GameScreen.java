@@ -1,6 +1,7 @@
 package me.fru1t.worddropper.activities;
 
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,7 +10,7 @@ import android.widget.FrameLayout;
 
 import me.fru1t.worddropper.WordDropper;
 import me.fru1t.worddropper.activities.gameboard.StatsView;
-import me.fru1t.worddropper.widget.ProgressBar;
+import me.fru1t.worddropper.widget.WrappingProgressBar;
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.widget.TileBoard;
 
@@ -46,7 +47,7 @@ public class GameScreen extends AppCompatActivity {
         });
 
         // Create progress bar
-        ProgressBar progressBar = new ProgressBar(this);
+        WrappingProgressBar progressBar = new WrappingProgressBar(this);
         root.addView(progressBar);
         progressBar.setX(0);
         progressBar.setY(screenSize.y - PROGRESS_HEIGHT);
@@ -57,6 +58,15 @@ public class GameScreen extends AppCompatActivity {
         progressBar.getProgressCalculatedColor().setColor(WordDropper.COLOR_PRIMARY_DARK);
         progressBar.getTextPaint().setColor(WordDropper.COLOR_TEXT);
         progressBar.getTextPaint().setTextSize(16);
+        progressBar.getTextPaint().setTypeface(Typeface.DEFAULT);
+        progressBar.setNextMaximumFunction(wraps -> {
+            if (wraps < 1) {
+                return 80;
+            }
+            long result = (long) (80 * Math.pow(1.10409, wraps));
+            System.out.println("Result: " + result);
+            return result;
+        });
 
         // Creates stats
         View statsView = getLayoutInflater().inflate(R.layout.view_game_board_stats, root, false);
