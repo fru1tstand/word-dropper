@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.view.View;
 
 import lombok.Getter;
@@ -19,13 +20,15 @@ public class Tile extends View {
     private @Getter @Setter int size;
     private @Getter @Setter String text;
 
-    private transient final Paint activeBackgroundColor;
+    private final Paint activeBackgroundColor;
+    private final Rect textBounds;
 
     public Tile(Context context) {
         super(context);
 
         backgroundColor = new Paint();
         textPaint = new Paint();
+        textBounds = new Rect();
 
         activeBackgroundColor = new Paint();
     }
@@ -48,6 +51,7 @@ public class Tile extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawRect(0, 0, size, size, activeBackgroundColor);
-        canvas.drawText(text, 20, 20, textPaint); // TODO: Middle align
+        textPaint.getTextBounds(text, 0, text.length(), textBounds);
+        canvas.drawText(text, size / 2 - textBounds.centerX(), size / 2 - textBounds.centerY(), textPaint);
     }
 }

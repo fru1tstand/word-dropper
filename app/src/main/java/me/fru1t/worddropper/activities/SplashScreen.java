@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.common.base.Strings;
 
@@ -68,9 +69,9 @@ public class SplashScreen extends AppCompatActivity {
             synchronized (cdl) {
                 cdl.countDown();
                 if (cdl.getCount() == 0) {
-                    addTextView("All threads completed loading dictionary... Starting app.");
-                    (new android.os.Handler()).postDelayed(
-                            () -> startActivity(new Intent(SplashScreen.this, MainMenu.class)), 1000);
+//                    goToMainMenu(1000);
+                    Toast.makeText(SplashScreen.this, "Dictionary loaded", Toast.LENGTH_LONG)
+                            .show();
                 }
             }
         }
@@ -110,6 +111,8 @@ public class SplashScreen extends AppCompatActivity {
                 .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         (new DictionaryLoader("english_dictionary_h", addTextView(null), cdl))
                 .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+        goToMainMenu(1000);
     }
 
     private TextView addTextView(@Nullable String string) {
@@ -122,5 +125,11 @@ public class SplashScreen extends AppCompatActivity {
         }
         root.addView(result);
         return result;
+    }
+
+    private void goToMainMenu(int delayMs) {
+        addTextView("Moving to main menu in " + delayMs + "ms.");
+        (new android.os.Handler()).postDelayed(
+                () -> startActivity(new Intent(SplashScreen.this, MainMenu.class)), delayMs);
     }
 }

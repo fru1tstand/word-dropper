@@ -44,7 +44,7 @@ public class GameScreen extends AppCompatActivity {
         tileBoard.forEachTile(tile -> {
             tile.setBackgroundColor(Color.MAGENTA);
             tile.getTextPaint().setColor(Color.LTGRAY);
-            tile.getTextPaint().setTextSize(28);
+            tile.getTextPaint().setTextSize(52);
         });
 
         // Create progress bar
