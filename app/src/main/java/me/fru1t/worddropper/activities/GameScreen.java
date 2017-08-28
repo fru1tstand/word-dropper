@@ -20,7 +20,7 @@ import me.fru1t.worddropper.widget.TileBoard;
  */
 public class GameScreen extends AppCompatActivity {
     private static final int STATS_HEIGHT = 650;
-    private static final int PROGRESS_HEIGHT = 20;
+    private static final int PROGRESS_HEIGHT = 40;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +63,7 @@ public class GameScreen extends AppCompatActivity {
             if (wraps < 1) {
                 return 80;
             }
-            long result = (long) (80 * Math.pow(1.10409, wraps));
-            System.out.println("Result: " + result);
-            return result;
+            return (long) (80 * Math.pow(1.10409, wraps));
         });
 
         // Creates stats
