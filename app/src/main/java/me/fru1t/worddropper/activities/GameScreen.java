@@ -72,7 +72,7 @@ public class GameScreen extends AppCompatActivity {
         });
 
         // Creates stats
-        View hud = getLayoutInflater().inflate(R.layout.view_game_board_stats, root, false);
+        View hud = getLayoutInflater().inflate(R.layout.view_game_board_hud, root, false);
         GameBoardHUD stats = new GameBoardHUD(hud);
         root.addView(hud);
         hud.setX(0);
