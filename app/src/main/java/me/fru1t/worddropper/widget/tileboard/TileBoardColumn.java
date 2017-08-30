@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 
 import lombok.Getter;
-import me.fru1t.worddropper.widget.Tile;
 
 /**
  * A single column within the tile board. It's a doubly linked list and hash map combination. This

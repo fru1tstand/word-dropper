@@ -1,6 +1,5 @@
-package me.fru1t.worddropper.activities.gameboard;
+package me.fru1t.worddropper.widget.gameboard;
 
-import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
@@ -13,20 +12,22 @@ import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropper;
 
 /**
- * A wrapper for the stats view layout.
+ * Shows the status, metrics, move left, and current tile path in game. Essentially, the header
+ * of the game board. This class isn't technically a widget as you can't inflate it, but rather,
+ * a wrapper for one that is already inflated.
  */
-public class StatsView {
+public class GameBoardHUD {
     private int rootWidth;
     private @Getter @Setter int defaultTextColor;
     private @Getter @Setter int activeTextColor;
 
     private final TextView currentWord;
 
-    public StatsView(View statsView) {
-        currentWord = (TextView) statsView.findViewById(R.id.currentWord);
+    public GameBoardHUD(View hud) {
+        currentWord = (TextView) hud.findViewById(R.id.currentWord);
 
-        statsView.addOnLayoutChangeListener((v, l, t, r, b, ol, ot, or, ob) -> rootWidth = r - l);
-        rootWidth = statsView.getWidth();
+        hud.addOnLayoutChangeListener((v, l, t, r, b, ol, ot, or, ob) -> rootWidth = r - l);
+        rootWidth = hud.getWidth();
 
         currentWord.setY(200);
     }

@@ -1,4 +1,4 @@
-package me.fru1t.worddropper.widget;
+package me.fru1t.worddropper.widget.tileboard;
 
 import android.content.Context;
 import android.graphics.Canvas;

@@ -1,6 +1,5 @@
 package me.fru1t.worddropper.widget;
 
-import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Point;
@@ -17,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import me.fru1t.worddropper.WordDropper;
+import me.fru1t.worddropper.widget.tileboard.Tile;
 import me.fru1t.worddropper.widget.tileboard.TileBoardColumn;
 
 /**

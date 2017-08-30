@@ -22,7 +22,29 @@ public class WordDropper {
         }
     }
 
-    private static final boolean DEBUG = true;
+    public enum Difficulty {
+        EASY("Easy", 11, 5),
+        MEDIUM("Medium", 15, 10),
+        HARD("Hard", 18, 10),
+        EXPERT("Expert", 19, Integer.MAX_VALUE);
+
+        public static final int SCRAMBLES_UNLIMITED = -2;
+        public static final int SCRAMBLES_DISABLED = -1;
+        public static final int WORD_POINTS_DISABLED = -1;
+
+        public final String displayName;
+        public final int wordPointAverage;
+        public final int levelsBeforeScramblePowerUp;
+
+        Difficulty(String displayName, int wordPointAverage, int levelsBeforeScramblePowerUp) {
+            this.displayName = displayName;
+            this.wordPointAverage = wordPointAverage;
+            this.levelsBeforeScramblePowerUp = levelsBeforeScramblePowerUp;
+        }
+    }
+
+    private static final boolean DEBUG = false;
+
 
     public static final HashSet<String> dictionary = new HashSet<>();
 
