@@ -108,6 +108,7 @@ public class TileBoard extends FrameLayout {
     private final ArrayList<PathElement> currentPath;
     private int touchDownRow;
     private int touchDownCol;
+    private boolean enableTouching;
 
     public TileBoard(Context context) {
         super(context);
@@ -137,6 +138,7 @@ public class TileBoard extends FrameLayout {
         currentPath = new ArrayList<>();
         touchDownRow = -1;
         touchDownCol = -1;
+        enableTouching = true;
     }
 
     /**
@@ -145,6 +147,16 @@ public class TileBoard extends FrameLayout {
      */
     public void forEachTile(Consumer<Tile> action) {
         tileColumns.forEach(tileBoardColumn -> tileBoardColumn.forEachTile(action));
+    }
+
+    public void setEnableTouching(boolean enableTouching) {
+        this.enableTouching = enableTouching;
+        if (!enableTouching) {
+            currentPath.forEach(element -> element.tile.release());
+            currentPath.clear();
+            touchDownRow = -1;
+            touchDownCol = -1;
+        }
     }
 
     @Override
@@ -186,6 +198,11 @@ public class TileBoard extends FrameLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        // Don't handle anything if touching is disabled
+        if (!enableTouching) {
+            return false;
+        }
+
         // Don't handle anything that's not the primary touch
         if (event.getActionIndex() != 0) {
             return false;
@@ -259,12 +276,15 @@ public class TileBoard extends FrameLayout {
         }
     }
 
+    /**
+     * Logic for when a tile is pressed given the tile's row and column.
+     */
     private void doActionForTile(int row, int col) {
         Tile currentTile = tileColumns.get(col).get(row);
 
         // Check if the tile is the first in the list, if so, clear the current path
         if (currentPath.size() != 0 && currentTile == currentPath.get(0).tile) {
-            currentPath.forEach(pathElement -> pathElement.tile.onRelease());
+            currentPath.forEach(pathElement -> pathElement.tile.release());
             currentPath.clear();
             onChange(ChangeEventType.CHANGE, null);
             return;
@@ -279,7 +299,7 @@ public class TileBoard extends FrameLayout {
             if (WordDropper.isWord(currentWord)) {
                 currentPath.forEach(pathElement -> {
                     pathElement.tile.setText(generateNewTileLetter());
-                    pathElement.tile.onRelease();
+                    pathElement.tile.release();
                     tileColumns.get(pathElement.col).reset(pathElement.tile);
                     pathElement.tile.setY(-1 * pathElement.tile.getSize());
                 });
@@ -303,7 +323,7 @@ public class TileBoard extends FrameLayout {
         }
         if (tileIndex != -1) {
             List<PathElement> cutList = currentPath.subList(tileIndex + 1, currentPath.size());
-            cutList.forEach(pe -> pe.tile.onRelease());
+            cutList.forEach(pe -> pe.tile.release());
             cutList.clear();
             onChange(ChangeEventType.CHANGE, getCurrentPathString());
             return;
@@ -338,7 +358,7 @@ public class TileBoard extends FrameLayout {
         }
 
         currentPath.add(new PathElement(row, col, currentTile));
-        currentTile.onPress();
+        currentTile.press();
         onChange(ChangeEventType.CHANGE, getCurrentPathString());
     }
 

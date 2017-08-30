@@ -37,12 +37,12 @@ public class Tile extends View {
         postInvalidate();
     }
 
-    public void onPress() {
+    public void press() {
         backgroundColor.setColor(activeBackgroundColor);
         postInvalidate();
     }
 
-    public void onRelease() {
+    public void release() {
         backgroundColor.setColor(defaultBackgroundColor);
         postInvalidate();
     }

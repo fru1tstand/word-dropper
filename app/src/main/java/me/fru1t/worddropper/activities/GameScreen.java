@@ -1,13 +1,14 @@
 package me.fru1t.worddropper.activities;
 
+import android.animation.ValueAnimator;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import lombok.Setter;
 import me.fru1t.worddropper.WordDropper;
 import me.fru1t.worddropper.widget.gameboard.GameBoardHUD;
 import me.fru1t.worddropper.widget.WrappingProgressBar;
@@ -19,13 +20,18 @@ import me.fru1t.worddropper.widget.TileBoard;
  * status bar and navigation/system bar) with user interaction.
  */
 public class GameScreen extends AppCompatActivity {
-    private static class Test {
-        public double average = 0.0;
-        public long words = 0;
-    }
-
-    private static final int STATS_HEIGHT = 650;
+    private static final int HUD_HEIGHT = 650;
     private static final int PROGRESS_HEIGHT = 40;
+
+    private static final int ANIMATION_DURATION_MOVES = 650;
+
+    private @Setter WordDropper.Difficulty difficulty;
+    private int movesRemaining;
+    private int scramblesRemaining;
+
+    public GameScreen() {
+        difficulty = WordDropper.Difficulty.MEDIUM;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +46,15 @@ public class GameScreen extends AppCompatActivity {
         TileBoard tileBoard = new TileBoard(this);
         root.addView(tileBoard);
         tileBoard.setX(0);
-        tileBoard.setY(STATS_HEIGHT);
-        tileBoard.getLayoutParams().height = screenSize.y - STATS_HEIGHT - PROGRESS_HEIGHT;
+        tileBoard.setY(HUD_HEIGHT);
+        tileBoard.getLayoutParams().height = screenSize.y - HUD_HEIGHT - PROGRESS_HEIGHT;
         tileBoard.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
         tileBoard.setBackgroundColor(WordDropper.COLOR_BACKGROUND);
         tileBoard.forEachTile(tile -> {
             tile.setDefaultBackgroundColor(WordDropper.COLOR_BACKGROUND);
             tile.setActiveBackgroundColor(WordDropper.COLOR_PRIMARY);
             tile.getTextPaint().setColor(WordDropper.COLOR_TEXT);
-            tile.getTextPaint().setTextSize(52);
+            tile.getTextPaint().setTextSize(60);
         });
 
         // Create progress bar
@@ -65,41 +71,78 @@ public class GameScreen extends AppCompatActivity {
         progressBar.getTextPaint().setTextSize(16);
         progressBar.getTextPaint().setTypeface(Typeface.DEFAULT);
         progressBar.setNextMaximumFunction(wraps -> {
-            if (wraps < 1) {
+            if (wraps < 2) {
                 return 80;
             }
-            return (long) (80 * Math.pow(1.10409, wraps));
+            return (long) (80 * Math.pow(1.10409, wraps - 1));
         });
 
         // Creates stats
-        View hud = getLayoutInflater().inflate(R.layout.view_game_board_hud, root, false);
-        GameBoardHUD stats = new GameBoardHUD(hud);
+        GameBoardHUD hud = new GameBoardHUD(this);
         root.addView(hud);
         hud.setX(0);
         hud.setY(0);
         hud.setBackgroundColor(WordDropper.COLOR_BACKGROUND);
         hud.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
-        stats.setDefaultTextColor(WordDropper.COLOR_TEXT);
-        stats.setActiveTextColor(WordDropper.COLOR_PRIMARY);
-
-        Test test = new Test();
+        hud.getLayoutParams().height = HUD_HEIGHT;
+        hud.setDefaultTextColor(WordDropper.COLOR_TEXT);
+        hud.setActiveTextColor(WordDropper.COLOR_PRIMARY);
+        hud.getCurrentWordTextView().setTextSize(22);
 
         tileBoard.setEventHandler((changeEventType, string) -> {
             switch (changeEventType) {
                 case CHANGE:
-                    stats.setCurrentWord(string);
+                    hud.setCurrentWordTextView(string);
                     break;
                 case SUCCESSFUL_SUBMIT:
                     progressBar.animateAddProgress(WordDropper.getWordValue(string));
-                    stats.setCurrentWord(null);
+                    hud.setCurrentWordTextView(null);
 
-                    test.average = (test.average * test.words + WordDropper.getWordValue(string)) / (test.words + 1);
-                    test.words++;
-                    System.out.println("Average: " + test.average);
+                    // Use up a move
+                    if (difficulty.isWordAverageEnabled()) {
+                        --movesRemaining;
+                        if (movesRemaining <= 0) {
+                            tileBoard.setEnabled(false);
+                        }
+                    }
+                    hud.setMovesRemaining(movesRemaining + "");
                     break;
                 case FAILED_SUBMIT:
                     break;
             }
         });
+
+        // Post-creation events
+        progressBar.setEventWrappingProgressBarEventListener((wraps, newMax) -> {
+            int currentLevel = wraps + 1;
+
+            if (difficulty.isScramblingAllowed()
+                    && currentLevel % difficulty.levelsBeforeScramblePowerUp == 0) {
+                ++scramblesRemaining;
+                hud.setScramblesRemaining(scramblesRemaining + "");
+            }
+
+            if (difficulty.isWordAverageEnabled()) {
+                int newMovesRemaining =
+                        (int) (movesRemaining + newMax / difficulty.wordPointAverage);
+                ValueAnimator va = ValueAnimator.ofInt(movesRemaining, newMovesRemaining);
+                va.setDuration(ANIMATION_DURATION_MOVES);
+                va.addUpdateListener(
+                        animation -> hud.setMovesRemaining(animation.getAnimatedValue() + ""));
+                va.start();
+
+                movesRemaining = newMovesRemaining;
+                hud.setMovesRemaining(movesRemaining + "");
+            }
+
+            hud.setCurrentLevel(currentLevel + "");
+        });
+
+        // Start game
+        int currentLevel = progressBar.getWraps() + 1;
+        movesRemaining = currentLevel * difficulty.wordPointAverage;
+        hud.setScramblesRemaining(scramblesRemaining + "");
+        hud.setMovesRemaining(movesRemaining + "");
+        hud.setCurrentLevel(currentLevel + "");
     }
 }

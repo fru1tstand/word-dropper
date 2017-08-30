@@ -28,9 +28,9 @@ public class WordDropper {
         HARD("Hard", 18, 10),
         EXPERT("Expert", 19, Integer.MAX_VALUE);
 
-        public static final int SCRAMBLES_UNLIMITED = -2;
-        public static final int SCRAMBLES_DISABLED = -1;
-        public static final int WORD_POINTS_DISABLED = -1;
+        private static final int SCRAMBLES_UNLIMITED = -2;
+        private static final int SCRAMBLES_DISABLED = -1;
+        private static final int WORD_POINTS_DISABLED = -1;
 
         public final String displayName;
         public final int wordPointAverage;
@@ -40,6 +40,18 @@ public class WordDropper {
             this.displayName = displayName;
             this.wordPointAverage = wordPointAverage;
             this.levelsBeforeScramblePowerUp = levelsBeforeScramblePowerUp;
+        }
+
+        public boolean isScramblingAllowed() {
+            return levelsBeforeScramblePowerUp != SCRAMBLES_DISABLED;
+        }
+
+        public boolean isScramblingUnlimited() {
+            return levelsBeforeScramblePowerUp == SCRAMBLES_UNLIMITED;
+        }
+
+        public boolean isWordAverageEnabled() {
+            return wordPointAverage != WORD_POINTS_DISABLED;
         }
     }
 
@@ -54,6 +66,7 @@ public class WordDropper {
     public static final int COLOR_BACKGROUND = Color.parseColor("#e1e2e1");
     public static final int COLOR_BACKGROUND_LIGHT = Color.WHITE;
     public static final int COLOR_TEXT = Color.BLACK;
+    public static final int COLOR_TEXT_BLEND = Color.parseColor("#cccccc");
 
     /**
      * Checks if the given string is a word or not. This method does no sanitization. Make sure

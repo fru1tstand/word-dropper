@@ -25,6 +25,15 @@ public class WrappingProgressBar extends View {
         long next(int wraps);
     }
 
+    public interface WrappingProgressBarEventListener {
+        /**
+         * Called when the progress bar wraps.
+         * @param wraps The number of wraps the progress bar has gone through.
+         * @param newMax The new Max value for this wrap.
+         */
+        void onWrap(int wraps, long newMax);
+    }
+
     private static final int ANIMATION_DURATION_BASE = 150;
     private static final int ANIMATION_DURATION_PER_DELTA = 35;
     private static final int ANIMATION_DURATION_MAX = 1000;
@@ -37,6 +46,7 @@ public class WrappingProgressBar extends View {
     private @Getter long progress;
     private @Getter int wraps;
     private NextMaximumFunction nextMaximumFunction;
+    private @Setter WrappingProgressBarEventListener eventWrappingProgressBarEventListener;
 
     private float calculatedProgressBarWidth;
     private final Rect calculatedTextBounds;
@@ -126,6 +136,9 @@ public class WrappingProgressBar extends View {
                 calculatedProgressBarWidth = 0;
                 if (nextMaximumFunction != null) {
                     max = nextMaximumFunction.next(wraps);
+                }
+                if (eventWrappingProgressBarEventListener != null) {
+                    eventWrappingProgressBarEventListener.onWrap(wraps, max);
                 }
                 animateAddProgress(progressRemainder);
             }
