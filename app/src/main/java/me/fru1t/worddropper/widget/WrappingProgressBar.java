@@ -22,7 +22,7 @@ public class WrappingProgressBar extends View {
          * Determines the next maximum value the progress bar should take on given the number of
          * wraps it has completed.
          */
-        long next(int wraps);
+        int next(int wraps);
     }
 
     public interface WrappingProgressBarEventListener {
@@ -31,7 +31,7 @@ public class WrappingProgressBar extends View {
          * @param wraps The number of wraps the progress bar has gone through.
          * @param newMax The new Max value for this wrap.
          */
-        void onWrap(int wraps, long newMax);
+        void onWrap(int wraps, int newMax);
 
         /**
          * Called when the progress bar completes all animations/triggers after animateAddProgress
@@ -49,10 +49,10 @@ public class WrappingProgressBar extends View {
     private final @Getter Paint progressCalculatedColor;
     private final @Getter Paint textPaint;
 
-    private @Getter long max;
-    private @Getter long progress;
+    private @Getter int max;
+    private @Getter int progress;
     private @Getter int wraps;
-    private @Getter long total;
+    private @Getter int total;
 
     private NextMaximumFunction nextMaximumFunction;
     private @Setter WrappingProgressBarEventListener eventWrappingProgressBarEventListener;
@@ -112,7 +112,7 @@ public class WrappingProgressBar extends View {
         setMax(nextMaximumFunction.next(wraps));
     }
 
-    public void setMax(long max) {
+    public void setMax(int max) {
         this.max = max;
         animateAddProgress(0);
     }
@@ -121,8 +121,8 @@ public class WrappingProgressBar extends View {
      * Adds the given progress to the current progress amount. Animates overflow by filling the bar
      * and recursively calling animateAddProgress until all progressDelta is consumed.
      */
-    public void animateAddProgress(long progressDelta) {
-        long progressRemainder = progressDelta + progress - max;
+    public void animateAddProgress(int progressDelta) {
+        int progressRemainder = progressDelta + progress - max;
         if (progressRemainder > 0) {
             progressDelta = max - progress;
         }

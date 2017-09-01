@@ -77,7 +77,7 @@ public class GameScreen extends AppCompatActivity {
             if (wraps < 1) {
                 return 80;
             }
-            return (long) (80 * Math.pow(1.10409, wraps));
+            return (int) (80 * Math.pow(1.10409, wraps));
         });
 
         // Creates stats
@@ -118,7 +118,7 @@ public class GameScreen extends AppCompatActivity {
         // Post-creation events
         progressBar.setEventWrappingProgressBarEventListener(new WrappingProgressBar.WrappingProgressBarEventListener() {
             @Override
-            public void onWrap(int wraps, long newMax) {
+            public void onWrap(int wraps, int newMax) {
                 int currentLevel = wraps + 1;
 
                 if (difficulty.isScramblingAllowed()
@@ -155,11 +155,11 @@ public class GameScreen extends AppCompatActivity {
                 }
 
                 Intent endGameIntent = new Intent(GameScreen.this, EndGameScreen.class);
-                endGameIntent.putExtra(EndGameScreen.EXTRA_LEVEL, progressBar.getWraps() + 1 + "");
-                endGameIntent.putExtra(EndGameScreen.EXTRA_SCRAMBLES_USED, scramblesUsed + "");
-                endGameIntent.putExtra(EndGameScreen.EXTRA_SCRAMBLES_EARNED, scramblesEarned + "");
-                endGameIntent.putExtra(EndGameScreen.EXTRA_MOVES, movesEarned + "");
-                endGameIntent.putExtra(EndGameScreen.EXTRA_SCORE, progressBar.getTotal() + "");
+                endGameIntent.putExtra(EndGameScreen.EXTRA_LEVEL, progressBar.getWraps() + 1);
+                endGameIntent.putExtra(EndGameScreen.EXTRA_SCRAMBLES_USED, scramblesUsed);
+                endGameIntent.putExtra(EndGameScreen.EXTRA_SCRAMBLES_EARNED, scramblesEarned);
+                endGameIntent.putExtra(EndGameScreen.EXTRA_MOVES, movesEarned);
+                endGameIntent.putExtra(EndGameScreen.EXTRA_SCORE, progressBar.getTotal());
                 startActivity(endGameIntent);
             }
         });
