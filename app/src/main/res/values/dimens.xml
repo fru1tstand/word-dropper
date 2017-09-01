@@ -1,6 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Element sizing -->
-    <dimen name="gameBoardUserLevelProgressHeight">40px</dimen>
-    <dimen name="gameBoardStatsHeight">650px</dimen>
 </resources>

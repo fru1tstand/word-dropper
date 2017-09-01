@@ -32,6 +32,12 @@ public class WrappingProgressBar extends View {
          * @param newMax The new Max value for this wrap.
          */
         void onWrap(int wraps, long newMax);
+
+        /**
+         * Called when the progress bar completes all animations/triggers after animateAddProgress
+         * is called.
+         */
+        void onAnimateAddEnd();
     }
 
     private static final int ANIMATION_DURATION_BASE = 150;
@@ -42,9 +48,12 @@ public class WrappingProgressBar extends View {
     private final @Getter Paint progressColor;
     private final @Getter Paint progressCalculatedColor;
     private final @Getter Paint textPaint;
+
     private @Getter long max;
     private @Getter long progress;
     private @Getter int wraps;
+    private @Getter long total;
+
     private NextMaximumFunction nextMaximumFunction;
     private @Setter WrappingProgressBarEventListener eventWrappingProgressBarEventListener;
 
@@ -58,13 +67,17 @@ public class WrappingProgressBar extends View {
         progressColor = new Paint();
         textPaint = new Paint();
         progressCalculatedColor = new Paint();
-        calculatedTextBounds = new Rect();
 
         wraps = 0;
         max = 1;
         progress = 0;
+        total = 0;
+
         calculatedProgressBarWidth = 0;
+        calculatedTextBounds = new Rect();
+
         nextMaximumFunction = null;
+        eventWrappingProgressBarEventListener = null;
     }
 
     @Override
@@ -114,6 +127,7 @@ public class WrappingProgressBar extends View {
             progressDelta = max - progress;
         }
         progress = progress + progressDelta;
+        total += progressDelta;
 
         ValueAnimator va = ValueAnimator.ofFloat(
                 calculatedProgressBarWidth, (float) (progress * 1.0 / max * getWidth()));
@@ -128,6 +142,9 @@ public class WrappingProgressBar extends View {
             @Override
             public void onAnimationEnd(Animator animation) {
                 if (progressRemainder < 0) {
+                    if (eventWrappingProgressBarEventListener != null) {
+                        eventWrappingProgressBarEventListener.onAnimateAddEnd();
+                    }
                     return;
                 }
 

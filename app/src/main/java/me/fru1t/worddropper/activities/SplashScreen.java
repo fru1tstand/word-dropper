@@ -2,12 +2,10 @@ package me.fru1t.worddropper.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,7 +13,6 @@ import android.widget.Toast;
 import com.google.common.base.Strings;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Scanner;
 import java.util.concurrent.CountDownLatch;
 
@@ -130,6 +127,6 @@ public class SplashScreen extends AppCompatActivity {
     private void goToMainMenu(int delayMs) {
         addTextView("Moving to main menu in " + delayMs + "ms.");
         (new android.os.Handler()).postDelayed(
-                () -> startActivity(new Intent(SplashScreen.this, MainMenu.class)), delayMs);
+                () -> startActivity(new Intent(SplashScreen.this, MainMenuScreen.class)), delayMs);
     }
 }

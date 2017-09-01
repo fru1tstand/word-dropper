@@ -108,7 +108,7 @@ public class TileBoard extends FrameLayout {
     private final ArrayList<PathElement> currentPath;
     private int touchDownRow;
     private int touchDownCol;
-    private boolean enableTouching;
+    private @Getter boolean enableTouching;
 
     public TileBoard(Context context) {
         super(context);

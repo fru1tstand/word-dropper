@@ -23,9 +23,9 @@ public class WordDropper {
     }
 
     public enum Difficulty {
-        EASY("Easy", 11, 5),
-        MEDIUM("Medium", 15, 10),
-        HARD("Hard", 18, 10),
+        EASY("Easy", 8, 5),
+        MEDIUM("Medium", 13, 6),
+        HARD("Hard", 16, 8),
         EXPERT("Expert", 19, Integer.MAX_VALUE);
 
         private static final int SCRAMBLES_UNLIMITED = -2;
@@ -55,7 +55,7 @@ public class WordDropper {
         }
     }
 
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
 
     public static final HashSet<String> dictionary = new HashSet<>();
@@ -66,7 +66,7 @@ public class WordDropper {
     public static final int COLOR_BACKGROUND = Color.parseColor("#e1e2e1");
     public static final int COLOR_BACKGROUND_LIGHT = Color.WHITE;
     public static final int COLOR_TEXT = Color.BLACK;
-    public static final int COLOR_TEXT_BLEND = Color.parseColor("#cccccc");
+    public static final int COLOR_TEXT_BLEND = Color.parseColor("#aaaaaa");
 
     /**
      * Checks if the given string is a word or not. This method does no sanitization. Make sure

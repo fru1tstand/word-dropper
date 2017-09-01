@@ -11,11 +11,11 @@ import me.fru1t.worddropper.R;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class MainMenu extends AppCompatActivity {
+public class MainMenuScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_menu);
+        setContentView(R.layout.activity_main_menu_screen);
     }
 
 

@@ -14,9 +14,9 @@
         <activity
                 android:name=".activities.SplashScreen"
                 android:configChanges="orientation|keyboardHidden|screenSize"
+                android:noHistory="true"
                 android:screenOrientation="portrait"
-                android:theme="@style/FullscreenTheme"
-                android:noHistory="true">
+                android:theme="@style/FullscreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -25,16 +25,21 @@
 
         <!-- Other Activities -->
         <activity
-                android:name=".activities.MainMenu"
+                android:name=".activities.MainMenuScreen"
                 android:configChanges="orientation|keyboardHidden|screenSize"
                 android:label="@string/app_name"
                 android:screenOrientation="portrait"
                 android:theme="@style/FullscreenTheme" />
-
         <activity
                 android:name=".activities.GameScreen"
                 android:configChanges="orientation|keyboardHidden|screenSize"
                 android:label="@string/title_activity_game_board"
+                android:screenOrientation="portrait"
+                android:noHistory="true"
+                android:theme="@style/FullscreenTheme" />
+        <activity
+                android:name=".activities.EndGameScreen"
+                android:configChanges="orientation|keyboardHidden|screenSize"
                 android:screenOrientation="portrait"
                 android:theme="@style/FullscreenTheme" />
     </application>

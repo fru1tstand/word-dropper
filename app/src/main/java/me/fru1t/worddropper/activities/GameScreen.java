@@ -1,6 +1,7 @@
 package me.fru1t.worddropper.activities;
 
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
@@ -26,8 +27,10 @@ public class GameScreen extends AppCompatActivity {
     private static final int ANIMATION_DURATION_MOVES = 650;
 
     private @Setter WordDropper.Difficulty difficulty;
-    private int movesRemaining;
-    private int scramblesRemaining;
+    private int movesEarned;
+    private int movesUsed;
+    private int scramblesEarned;
+    private int scramblesUsed;
 
     public GameScreen() {
         difficulty = WordDropper.Difficulty.MEDIUM;
@@ -36,7 +39,7 @@ public class GameScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_board);
+        setContentView(R.layout.activity_game_screen);
 
         Point screenSize = new Point();
         getWindowManager().getDefaultDisplay().getSize(screenSize);
@@ -71,10 +74,10 @@ public class GameScreen extends AppCompatActivity {
         progressBar.getTextPaint().setTextSize(16);
         progressBar.getTextPaint().setTypeface(Typeface.DEFAULT);
         progressBar.setNextMaximumFunction(wraps -> {
-            if (wraps < 2) {
+            if (wraps < 1) {
                 return 80;
             }
-            return (long) (80 * Math.pow(1.10409, wraps - 1));
+            return (long) (80 * Math.pow(1.10409, wraps));
         });
 
         // Creates stats
@@ -100,12 +103,12 @@ public class GameScreen extends AppCompatActivity {
 
                     // Use up a move
                     if (difficulty.isWordAverageEnabled()) {
-                        --movesRemaining;
-                        if (movesRemaining <= 0) {
-                            tileBoard.setEnabled(false);
+                        ++movesUsed;
+                        if (movesUsed >= movesEarned) {
+                            tileBoard.setEnableTouching(false);
                         }
                     }
-                    hud.setMovesRemaining(movesRemaining + "");
+                    hud.setMovesRemaining((movesEarned - movesUsed) + "");
                     break;
                 case FAILED_SUBMIT:
                     break;
@@ -113,36 +116,59 @@ public class GameScreen extends AppCompatActivity {
         });
 
         // Post-creation events
-        progressBar.setEventWrappingProgressBarEventListener((wraps, newMax) -> {
-            int currentLevel = wraps + 1;
+        progressBar.setEventWrappingProgressBarEventListener(new WrappingProgressBar.WrappingProgressBarEventListener() {
+            @Override
+            public void onWrap(int wraps, long newMax) {
+                int currentLevel = wraps + 1;
 
-            if (difficulty.isScramblingAllowed()
-                    && currentLevel % difficulty.levelsBeforeScramblePowerUp == 0) {
-                ++scramblesRemaining;
-                hud.setScramblesRemaining(scramblesRemaining + "");
+                if (difficulty.isScramblingAllowed()
+                        && currentLevel % difficulty.levelsBeforeScramblePowerUp == 0) {
+                    ++scramblesEarned;
+                    hud.setScramblesRemaining((scramblesEarned - scramblesUsed) + "");
+                }
+
+                if (difficulty.isWordAverageEnabled()) {
+                    int movesToAdd = (int) (newMax / difficulty.wordPointAverage);
+
+                    ValueAnimator va = ValueAnimator.ofInt(
+                            movesEarned - movesUsed, movesEarned + movesToAdd - movesUsed);
+                    va.setDuration(ANIMATION_DURATION_MOVES);
+                    va.addUpdateListener(
+                            animation -> hud.setMovesRemaining(animation.getAnimatedValue() + ""));
+                    va.start();
+
+                    movesEarned += movesToAdd;
+
+                    // Edge case where the user ran out of moves upon levelling up.
+                    if (!tileBoard.isEnableTouching()) {
+                        tileBoard.setEnableTouching(true);
+                    }
+                }
+
+                hud.setCurrentLevel(currentLevel + "");
             }
 
-            if (difficulty.isWordAverageEnabled()) {
-                int newMovesRemaining =
-                        (int) (movesRemaining + newMax / difficulty.wordPointAverage);
-                ValueAnimator va = ValueAnimator.ofInt(movesRemaining, newMovesRemaining);
-                va.setDuration(ANIMATION_DURATION_MOVES);
-                va.addUpdateListener(
-                        animation -> hud.setMovesRemaining(animation.getAnimatedValue() + ""));
-                va.start();
+            @Override
+            public void onAnimateAddEnd() {
+                if (movesUsed < movesEarned) {
+                    return;
+                }
 
-                movesRemaining = newMovesRemaining;
-                hud.setMovesRemaining(movesRemaining + "");
+                Intent endGameIntent = new Intent(GameScreen.this, EndGameScreen.class);
+                endGameIntent.putExtra(EndGameScreen.EXTRA_LEVEL, progressBar.getWraps() + 1 + "");
+                endGameIntent.putExtra(EndGameScreen.EXTRA_SCRAMBLES_USED, scramblesUsed + "");
+                endGameIntent.putExtra(EndGameScreen.EXTRA_SCRAMBLES_EARNED, scramblesEarned + "");
+                endGameIntent.putExtra(EndGameScreen.EXTRA_MOVES, movesEarned + "");
+                endGameIntent.putExtra(EndGameScreen.EXTRA_SCORE, progressBar.getTotal() + "");
+                startActivity(endGameIntent);
             }
-
-            hud.setCurrentLevel(currentLevel + "");
         });
 
         // Start game
         int currentLevel = progressBar.getWraps() + 1;
-        movesRemaining = currentLevel * difficulty.wordPointAverage;
-        hud.setScramblesRemaining(scramblesRemaining + "");
-        hud.setMovesRemaining(movesRemaining + "");
+        movesEarned = (int) (progressBar.getMax() / difficulty.wordPointAverage);
+        hud.setScramblesRemaining((scramblesEarned - scramblesUsed) + "");
+        hud.setMovesRemaining((movesEarned - movesUsed) + "");
         hud.setCurrentLevel(currentLevel + "");
     }
 }
