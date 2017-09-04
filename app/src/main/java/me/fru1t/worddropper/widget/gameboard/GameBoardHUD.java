@@ -4,17 +4,12 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.google.common.base.Strings;
-import com.google.common.base.Supplier;
 
-import java.util.ArrayList;
-import java.util.EventListener;
 import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -43,8 +38,7 @@ public class GameBoardHUD extends FrameLayout {
         void onMovesLeftClick();
     }
 
-    private @Getter @Setter int defaultTextColor;
-    private @Getter @Setter int activeTextColor;
+    private static final int TEXT_SIZE = 22;
 
     private final @Getter TextView currentWordTextView;
 
@@ -60,7 +54,8 @@ public class GameBoardHUD extends FrameLayout {
         // Current word element
         currentWordTextView = new TextView(context);
         addView(currentWordTextView);
-        currentWordTextView.setY(450);
+        currentWordTextView.setY(380);
+        currentWordTextView.setTextSize(TEXT_SIZE);
 
         // Stats
         movesRemaining = new HUDStat(context);
@@ -86,6 +81,14 @@ public class GameBoardHUD extends FrameLayout {
         currentLevel.setY(0);
         currentLevel.setOnTouchListener((v, event) ->
                 touchListenerHandler(event, GameBoardHUDEventListener::onLevelClick));
+    }
+
+    public void updateColors() {
+        setBackgroundColor(WordDropper.colorTheme.background);
+        movesRemaining.updateColors();
+        scramblesRemaining.updateColors();
+        currentLevel.updateColors();
+        postInvalidate();
     }
 
     private boolean touchListenerHandler(MotionEvent event, Consumer<GameBoardHUDEventListener> action) {
@@ -126,15 +129,15 @@ public class GameBoardHUD extends FrameLayout {
     public void setCurrentWordTextView(@Nullable String s) {
         if (Strings.isNullOrEmpty(s)) {
             currentWordTextView.setText("");
-            currentWordTextView.setTextColor(defaultTextColor);
+            currentWordTextView.setTextColor(WordDropper.colorTheme.text);
             return;
         }
 
         if (WordDropper.isWord(s)) {
             s += " (" + WordDropper.getWordValue(s) + ")";
-            currentWordTextView.setTextColor(activeTextColor);
+            currentWordTextView.setTextColor(WordDropper.colorTheme.primary);
         } else {
-            currentWordTextView.setTextColor(defaultTextColor);
+            currentWordTextView.setTextColor(WordDropper.colorTheme.text);
         }
 
         s = s.substring(0, 1).toUpperCase() + s.substring(1);

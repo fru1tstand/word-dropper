@@ -14,7 +14,6 @@ import me.fru1t.worddropper.WordDropper;
 public class HUDStat extends FrameLayout {
     public static final int HEIGHT = 170;
 
-    private static final int TEXT_COLOR = WordDropper.COLOR_TEXT_BLEND;
     private static final int TITLE_TEXT_SIZE = 16;
     private static final int VALUE_TEXT_SIZE = 30;
 
@@ -33,14 +32,18 @@ public class HUDStat extends FrameLayout {
         addView(titleTextView);
         titleTextView.setY(TITLE_SPACING);
         titleTextView.setTextSize(TITLE_TEXT_SIZE);
-        titleTextView.setTextColor(TEXT_COLOR);
 
         valueTextView = new TextView(context);
         addView(valueTextView);
         valueTextView.setTextSize(VALUE_TEXT_SIZE);
-        valueTextView.setTextColor(TEXT_COLOR);
 
         titleSize = new Rect();
+    }
+
+    public void updateColors() {
+        titleTextView.setTextColor(WordDropper.colorTheme.textBlend);
+        valueTextView.setTextColor(WordDropper.colorTheme.textBlend);
+        postInvalidate();
     }
 
     @Override

@@ -9,13 +9,14 @@ import android.view.View;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.fru1t.worddropper.WordDropper;
 
 /**
  * A single interactable tile within the tile board
  */
 public class Tile extends View {
-    private @Getter int defaultBackgroundColor;
-    private @Getter @Setter int activeBackgroundColor;
+    private static final int TEXT_SIZE = 60;
+
     private @Getter @Setter int size;
     private @Getter @Setter String text;
 
@@ -27,23 +28,21 @@ public class Tile extends View {
         super(context);
 
         textPaint = new Paint();
+        textPaint.setTextSize(TEXT_SIZE);
+
         textBounds = new Rect();
         backgroundColor = new Paint();
     }
 
-    public void setDefaultBackgroundColor(int color) {
-        defaultBackgroundColor = color;
-        backgroundColor.setColor(color);
-        postInvalidate();
-    }
-
     public void press() {
-        backgroundColor.setColor(activeBackgroundColor);
+        backgroundColor.setColor(WordDropper.colorTheme.primary);
+        textPaint.setColor(WordDropper.colorTheme.textOnPrimary);
         postInvalidate();
     }
 
     public void release() {
-        backgroundColor.setColor(defaultBackgroundColor);
+        backgroundColor.setColor(WordDropper.colorTheme.background);
+        textPaint.setColor(WordDropper.colorTheme.text);
         postInvalidate();
     }
 
@@ -51,6 +50,9 @@ public class Tile extends View {
     protected void onDraw(Canvas canvas) {
         canvas.drawRect(0, 0, size, size, backgroundColor);
         textPaint.getTextBounds(text, 0, text.length(), textBounds);
-        canvas.drawText(text, size / 2 - textBounds.centerX(), size / 2 - textBounds.centerY(), textPaint);
+        canvas.drawText(text,
+                size / 2 - textBounds.centerX(),
+                size / 2 - textBounds.centerY(),
+                textPaint);
     }
 }

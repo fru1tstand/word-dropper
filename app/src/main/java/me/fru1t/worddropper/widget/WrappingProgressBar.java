@@ -7,10 +7,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.view.View;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.fru1t.worddropper.WordDropper;
 
 /**
  * A minimalist-designed progress bar that shows the progress via text. On hitting the maximum, the
@@ -44,10 +46,13 @@ public class WrappingProgressBar extends View {
     private static final int ANIMATION_DURATION_PER_DELTA = 35;
     private static final int ANIMATION_DURATION_MAX = 1000;
 
-    private final @Getter Paint backgroundColor;
-    private final @Getter Paint progressColor;
-    private final @Getter Paint progressCalculatedColor;
-    private final @Getter Paint textPaint;
+    private static final int TEXT_SIZE = 16;
+    private static final Typeface TEXT_TYPE_FACE = Typeface.DEFAULT;
+
+    private final Paint backgroundColor;
+    private final Paint progressColor;
+    private final Paint progressCalculatedColor;
+    private final Paint textPaint;
 
     private @Getter int max;
     private @Getter int progress;
@@ -65,8 +70,11 @@ public class WrappingProgressBar extends View {
 
         backgroundColor = new Paint();
         progressColor = new Paint();
-        textPaint = new Paint();
         progressCalculatedColor = new Paint();
+
+        textPaint = new Paint();
+        textPaint.setTextSize(TEXT_SIZE);
+        textPaint.setTypeface(TEXT_TYPE_FACE);
 
         wraps = 0;
         max = 1;
@@ -78,6 +86,14 @@ public class WrappingProgressBar extends View {
 
         nextMaximumFunction = null;
         eventWrappingProgressBarEventListener = null;
+    }
+
+    public void updateColors() {
+        backgroundColor.setColor(WordDropper.colorTheme.background);
+        progressColor.setColor(WordDropper.colorTheme.primaryLight);
+        progressCalculatedColor.setColor(WordDropper.colorTheme.primaryDark);
+        textPaint.setColor(WordDropper.colorTheme.textOnPrimaryLight);
+        postInvalidate();
     }
 
     @Override

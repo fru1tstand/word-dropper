@@ -7,6 +7,8 @@ import com.google.common.base.Strings;
 
 import java.util.HashSet;
 
+import me.fru1t.worddropper.settings.ColorTheme;
+
 /**
  * Settings and global variables (*gasp*) loaded on startup.
  */
@@ -21,52 +23,15 @@ public class WordDropper {
             this.value = value;
         }
     }
+    
 
-    public enum Difficulty {
-        EASY("Easy", 8, 5),
-        MEDIUM("Medium", 13, 6),
-        HARD("Hard", 16, 8),
-        EXPERT("Expert", 19, Integer.MAX_VALUE);
 
-        private static final int SCRAMBLES_UNLIMITED = -2;
-        private static final int SCRAMBLES_DISABLED = -1;
-        private static final int WORD_POINTS_DISABLED = -1;
-
-        public final String displayName;
-        public final int wordPointAverage;
-        public final int levelsBeforeScramblePowerUp;
-
-        Difficulty(String displayName, int wordPointAverage, int levelsBeforeScramblePowerUp) {
-            this.displayName = displayName;
-            this.wordPointAverage = wordPointAverage;
-            this.levelsBeforeScramblePowerUp = levelsBeforeScramblePowerUp;
-        }
-
-        public boolean isScramblingAllowed() {
-            return levelsBeforeScramblePowerUp != SCRAMBLES_DISABLED;
-        }
-
-        public boolean isScramblingUnlimited() {
-            return levelsBeforeScramblePowerUp == SCRAMBLES_UNLIMITED;
-        }
-
-        public boolean isWordAverageEnabled() {
-            return wordPointAverage != WORD_POINTS_DISABLED;
-        }
-    }
-
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
 
     public static final HashSet<String> dictionary = new HashSet<>();
+    public static ColorTheme colorTheme = ColorTheme.INVERSE_ORANGE;
 
-    public static final int COLOR_PRIMARY = Color.parseColor("#ff9800");
-    public static final int COLOR_PRIMARY_DARK = Color.parseColor("#c66900");
-    public static final int COLOR_PRIMARY_LIGHT = Color.parseColor("#ffc947");
-    public static final int COLOR_BACKGROUND = Color.parseColor("#e1e2e1");
-    public static final int COLOR_BACKGROUND_LIGHT = Color.WHITE;
-    public static final int COLOR_TEXT = Color.BLACK;
-    public static final int COLOR_TEXT_BLEND = Color.parseColor("#aaaaaa");
 
     /**
      * Checks if the given string is a word or not. This method does no sanitization. Make sure
