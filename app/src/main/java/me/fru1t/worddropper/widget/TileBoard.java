@@ -89,7 +89,8 @@ public class TileBoard extends FrameLayout {
     }
 
     private static final int ANIMATION_DURATION_TILE_DROP = 350;
-    private static final int SCRAMBLE_SPACING = 30;
+    private static final int ANIMATION_SEQUENTIAL_TILE_DROP_DELAY = 5;
+    private static final int SCRAMBLE_SPACING = 50;
 
     // Measurements
     private static final int TILE_COLUMNS = 7;
@@ -129,6 +130,7 @@ public class TileBoard extends FrameLayout {
             for (int row = 0; row < rows; row++) {
                 Tile t = new Tile(context);
                 t.setText(generateNewTileLetter());
+                t.setY(-1 * row * SCRAMBLE_SPACING);
 
                 tileColumns.get(col).addToTop(t);
                 addView(t);
@@ -272,6 +274,8 @@ public class TileBoard extends FrameLayout {
      * Calculates all tiles positions based on their positions within the data structures.
      */
     private void updateTilePosition() {
+        int tileToAnimate = 0;
+
         for (int col = 0; col < TILE_COLUMNS; col++) {
             int rows = TILE_MAX_ROWS;
             int rowYOffset = 0;
@@ -288,10 +292,17 @@ public class TileBoard extends FrameLayout {
                 tile.getLayoutParams().width = tileSize;
                 tile.setSize(tileSize);
 
-                ObjectAnimator animation = ObjectAnimator
-                        .ofFloat(tile, "y", row * tileSize + rowYOffset + effectiveBoardOffset.y);
+                // Don't animate if there's no change
+                int newY = row * tileSize + rowYOffset + effectiveBoardOffset.y;
+                if (tile.getY() == newY) {
+                    continue;
+                }
+
+                ObjectAnimator animation = ObjectAnimator.ofFloat(tile, "y", newY);
                 animation.setDuration(ANIMATION_DURATION_TILE_DROP);
-                animation.start();
+                (new android.os.Handler()).postDelayed(
+                        animation::start, tileToAnimate * ANIMATION_SEQUENTIAL_TILE_DROP_DELAY);
+                tileToAnimate++;
             }
         }
     }
