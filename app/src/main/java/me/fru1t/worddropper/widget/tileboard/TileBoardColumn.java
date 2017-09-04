@@ -125,7 +125,7 @@ public class TileBoardColumn {
     }
 
     /**
-     * Retrieves a tile from this column
+     * Retrieves a tile from this column. Index 0 is the top of a vertical column.
      * @param index The index of the tile.
      * @return The tile at the given index.
      */

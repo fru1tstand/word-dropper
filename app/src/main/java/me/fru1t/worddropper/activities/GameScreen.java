@@ -91,6 +91,38 @@ public class GameScreen extends AppCompatActivity {
         hud.setDefaultTextColor(WordDropper.COLOR_TEXT);
         hud.setActiveTextColor(WordDropper.COLOR_PRIMARY);
         hud.getCurrentWordTextView().setTextSize(22);
+        hud.setEventListener(new GameBoardHUD.GameBoardHUDEventListener() {
+            @Override
+            public void onLevelClick() {
+                System.out.println("On level click");
+            }
+
+            @Override
+            public void onScrambleClick() {
+                if (!difficulty.isScramblingAllowed()) {
+                    return;
+                }
+
+                if (difficulty.isScramblingUnlimited()) {
+                    tileBoard.scramble();
+                    scramblesUsed++;
+                    return;
+                }
+
+                if (scramblesUsed >= scramblesEarned) {
+                    return;
+                }
+
+                scramblesUsed++;
+                tileBoard.scramble();
+                hud.setScramblesRemaining(scramblesEarned - scramblesUsed + "");
+            }
+
+            @Override
+            public void onMovesLeftClick() {
+                System.out.println("moves left click");
+            }
+        });
 
         tileBoard.setEventHandler((changeEventType, string) -> {
             switch (changeEventType) {

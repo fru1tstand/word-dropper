@@ -3,10 +3,18 @@ package me.fru1t.worddropper.widget.gameboard;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.google.common.base.Strings;
+import com.google.common.base.Supplier;
+
+import java.util.ArrayList;
+import java.util.EventListener;
+import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,10 +26,29 @@ import me.fru1t.worddropper.WordDropper;
  * a wrapper for one that is already inflated.
  */
 public class GameBoardHUD extends FrameLayout {
+    public interface GameBoardHUDEventListener {
+        /**
+         * Triggered when the score stat is clicked.
+         */
+        void onLevelClick();
+
+        /**
+         * Triggered when the scramble stat is clicked.
+         */
+        void onScrambleClick();
+
+        /**
+         * Triggered when the moves left stat is clicked.
+         */
+        void onMovesLeftClick();
+    }
+
     private @Getter @Setter int defaultTextColor;
     private @Getter @Setter int activeTextColor;
 
     private final @Getter TextView currentWordTextView;
+
+    private @Setter GameBoardHUDEventListener eventListener;
 
     private final HUDStat movesRemaining;
     private final HUDStat scramblesRemaining;
@@ -41,18 +68,47 @@ public class GameBoardHUD extends FrameLayout {
         movesRemaining.getLayoutParams().height = HUDStat.HEIGHT;
         movesRemaining.setTitle("Moves Left");
         movesRemaining.setY(0);
+        movesRemaining.setOnTouchListener((v, event) ->
+                touchListenerHandler(event, GameBoardHUDEventListener::onMovesLeftClick));
 
         scramblesRemaining = new HUDStat(context);
         addView(scramblesRemaining);
         scramblesRemaining.getLayoutParams().height = HUDStat.HEIGHT;
         scramblesRemaining.setTitle("Scrambles");
         scramblesRemaining.setY(0);
+        scramblesRemaining.setOnTouchListener((v, event) ->
+                touchListenerHandler(event, GameBoardHUDEventListener::onScrambleClick));
 
         currentLevel = new HUDStat(context);
         addView(currentLevel);
         currentLevel.getLayoutParams().height = HUDStat.HEIGHT;
         currentLevel.setTitle("Level");
         currentLevel.setY(0);
+        currentLevel.setOnTouchListener((v, event) ->
+                touchListenerHandler(event, GameBoardHUDEventListener::onLevelClick));
+    }
+
+    private boolean touchListenerHandler(MotionEvent event, Consumer<GameBoardHUDEventListener> action) {
+        if (event.getActionIndex() != 0) {
+            return false;
+        }
+
+        if (eventListener == null) {
+            return false;
+        }
+
+        // Cancel the action if the finger is dragged.
+        if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
+            return false;
+        }
+
+        if (event.getActionMasked() != MotionEvent.ACTION_UP) {
+            return true;
+        }
+
+        action.accept(eventListener);
+
+        return true;
     }
 
     public void setMovesRemaining(String moves) {

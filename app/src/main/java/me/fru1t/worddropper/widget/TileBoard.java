@@ -89,6 +89,7 @@ public class TileBoard extends FrameLayout {
     }
 
     private static final int ANIMATION_DURATION_TILE_DROP = 350;
+    private static final int SCRAMBLE_SPACING = 30;
 
     // Measurements
     private static final int TILE_COLUMNS = 7;
@@ -149,6 +150,9 @@ public class TileBoard extends FrameLayout {
         tileColumns.forEach(tileBoardColumn -> tileBoardColumn.forEachTile(action));
     }
 
+    /**
+     * Sets whether or not the board should respond to touch events.
+     */
     public void setEnableTouching(boolean enableTouching) {
         this.enableTouching = enableTouching;
         if (!enableTouching) {
@@ -157,6 +161,22 @@ public class TileBoard extends FrameLayout {
             touchDownRow = -1;
             touchDownCol = -1;
         }
+    }
+
+    /**
+     * Scrambles all tiles
+     */
+    public void scramble() {
+        for (TileBoardColumn column : tileColumns) {
+            for (int i = 0; i < column.getSize(); i++) {
+                Tile t = column.get(i);
+                t.setY(-1 * (column.getSize() - i) * (t.getSize() + SCRAMBLE_SPACING));
+                t.setText(generateNewTileLetter());
+                t.postInvalidate();
+            }
+        }
+
+        updateTilePosition();
     }
 
     @Override
