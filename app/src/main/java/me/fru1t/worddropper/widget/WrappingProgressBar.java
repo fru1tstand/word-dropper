@@ -90,9 +90,9 @@ public class WrappingProgressBar extends View {
 
     public void updateColors() {
         backgroundColor.setColor(WordDropper.colorTheme.background);
-        progressColor.setColor(WordDropper.colorTheme.primaryLight);
-        progressCalculatedColor.setColor(WordDropper.colorTheme.primaryDark);
-        textPaint.setColor(WordDropper.colorTheme.textOnPrimaryLight);
+        progressColor.setColor(WordDropper.colorTheme.primaryDark);
+        progressCalculatedColor.setColor(WordDropper.colorTheme.primaryLight);
+        textPaint.setColor(WordDropper.colorTheme.textOnPrimaryDark);
         postInvalidate();
     }
 
