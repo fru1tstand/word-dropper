@@ -36,6 +36,11 @@ public class GameBoardHUD extends FrameLayout {
          * Triggered when the moves left stat is clicked.
          */
         void onMovesLeftClick();
+
+        /**
+         * Triggered when the current word panel is clicked.
+         */
+        void onCurrentWordClick();
     }
 
     private static final int TEXT_SIZE = 22;
@@ -81,6 +86,22 @@ public class GameBoardHUD extends FrameLayout {
         currentLevel.setY(0);
         currentLevel.setOnTouchListener((v, event) ->
                 touchListenerHandler(event, GameBoardHUDEventListener::onLevelClick));
+
+        // Set up touch listening
+        setOnTouchListener((v, event) -> {
+            if (eventListener == null
+                    || event.getActionIndex() != 0
+                    || event.getY() < HUDStat.HEIGHT) {
+                return false;
+            }
+
+            if (event.getActionMasked() != MotionEvent.ACTION_UP) {
+                return true;
+            }
+
+            eventListener.onCurrentWordClick();
+            return true;
+        });
     }
 
     public void updateColors() {
@@ -91,17 +112,11 @@ public class GameBoardHUD extends FrameLayout {
         postInvalidate();
     }
 
-    private boolean touchListenerHandler(MotionEvent event, Consumer<GameBoardHUDEventListener> action) {
-        if (event.getActionIndex() != 0) {
-            return false;
-        }
-
-        if (eventListener == null) {
-            return false;
-        }
-
-        // Cancel the action if the finger is dragged.
-        if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
+    private boolean touchListenerHandler(MotionEvent event,
+                                         Consumer<GameBoardHUDEventListener> action) {
+        if (event.getActionIndex() != 0
+                || eventListener == null
+                || event.getY() > HUDStat.HEIGHT) {
             return false;
         }
 
@@ -110,7 +125,6 @@ public class GameBoardHUD extends FrameLayout {
         }
 
         action.accept(eventListener);
-
         return true;
     }
 

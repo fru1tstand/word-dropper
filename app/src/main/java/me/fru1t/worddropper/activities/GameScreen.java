@@ -17,6 +17,7 @@ import me.fru1t.worddropper.widget.gameboard.GameBoardHUD;
 import me.fru1t.worddropper.widget.WrappingProgressBar;
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.widget.TileBoard;
+import me.fru1t.worddropper.widget.gameboard.PauseMenu;
 import me.fru1t.worddropper.widget.tileboard.Tile;
 
 /**
@@ -35,9 +36,11 @@ public class GameScreen extends AppCompatActivity {
     private int scramblesEarned;
     private int scramblesUsed;
 
+    private @Nullable FrameLayout root;
     private @Nullable TileBoard tileBoard;
     private @Nullable WrappingProgressBar progressBar;
     private @Nullable GameBoardHUD hud;
+    private @Nullable PauseMenu pauseMenu;
 
     public GameScreen() {
         difficulty = Difficulty.MEDIUM;
@@ -56,7 +59,7 @@ public class GameScreen extends AppCompatActivity {
             tileBoard.getLayoutParams().height = screenSize.y - HUD_HEIGHT - PROGRESS_HEIGHT;
             tileBoard.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
             tileBoard.setBackgroundColor(WordDropper.colorTheme.background);
-            tileBoard.forEachTile(Tile::release);
+            tileBoard.forEachTile(Tile::release); // Essentially, updateColors.
         }
 
         if (progressBar != null) {
@@ -84,10 +87,14 @@ public class GameScreen extends AppCompatActivity {
 
         Point screenSize = new Point();
         getWindowManager().getDefaultDisplay().getSize(screenSize);
-        FrameLayout root = (FrameLayout) findViewById(R.id.gameBoardRoot);
+        root = (FrameLayout) findViewById(R.id.gameBoardRoot);
+
+        // Create Pause Menu
+        pauseMenu = new PauseMenu(this);
 
         // Create tile board
         tileBoard = new TileBoard(this);
+        assert root != null;
         root.addView(tileBoard);
 
         // Create progress bar
@@ -133,6 +140,15 @@ public class GameScreen extends AppCompatActivity {
             @Override
             public void onMovesLeftClick() {
                 System.out.println("moves left click");
+            }
+
+            @Override
+            public void onCurrentWordClick() {
+                root.addView(pauseMenu);
+                pauseMenu.setX(0);
+                pauseMenu.setY(0);
+                pauseMenu.getLayoutParams().height = PauseMenu.HEIGHT;
+                pauseMenu.getLayoutParams().width = PauseMenu.WIDTH;
             }
         });
 
@@ -199,13 +215,19 @@ public class GameScreen extends AppCompatActivity {
                     return;
                 }
 
-                Intent endGameIntent = new Intent(GameScreen.this, EndGameScreen.class);
-                endGameIntent.putExtra(EndGameScreen.EXTRA_LEVEL, progressBar.getWraps() + 1);
-                endGameIntent.putExtra(EndGameScreen.EXTRA_SCRAMBLES_USED, scramblesUsed);
-                endGameIntent.putExtra(EndGameScreen.EXTRA_SCRAMBLES_EARNED, scramblesEarned);
-                endGameIntent.putExtra(EndGameScreen.EXTRA_MOVES, movesEarned);
-                endGameIntent.putExtra(EndGameScreen.EXTRA_SCORE, progressBar.getTotal());
-                startActivity(endGameIntent);
+                endGame();
+            }
+        });
+
+        pauseMenu.setEventListener(new PauseMenu.PauseMenuEventListener() {
+            @Override
+            public void onEndGame() {
+                endGame();
+            }
+
+            @Override
+            public void onClose() {
+                root.removeView(pauseMenu);
             }
         });
 
@@ -215,5 +237,16 @@ public class GameScreen extends AppCompatActivity {
         hud.setScramblesRemaining((scramblesEarned - scramblesUsed) + "");
         hud.setMovesRemaining((movesEarned - movesUsed) + "");
         hud.setCurrentLevel(currentLevel + "");
+    }
+
+    private void endGame() {
+        assert progressBar != null;
+        Intent endGameIntent = new Intent(GameScreen.this, EndGameScreen.class);
+        endGameIntent.putExtra(EndGameScreen.EXTRA_LEVEL, progressBar.getWraps() + 1);
+        endGameIntent.putExtra(EndGameScreen.EXTRA_SCRAMBLES_USED, scramblesUsed);
+        endGameIntent.putExtra(EndGameScreen.EXTRA_SCRAMBLES_EARNED, scramblesEarned);
+        endGameIntent.putExtra(EndGameScreen.EXTRA_MOVES, movesUsed);
+        endGameIntent.putExtra(EndGameScreen.EXTRA_SCORE, progressBar.getTotal());
+        startActivity(endGameIntent);
     }
 }

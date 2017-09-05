@@ -1,9 +1,11 @@
 package me.fru1t.worddropper.activities;
 
 import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import me.fru1t.worddropper.R;
 
@@ -17,7 +19,6 @@ public class MainMenuScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu_screen);
     }
-
 
     public void onPlayButtonClick(View view) {
         startActivity(new Intent(this, GameScreen.class));
