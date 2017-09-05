@@ -67,7 +67,7 @@
 
             <TextView
                     android:id="@+id/endGameScreenLevelTitle"
-                    android:text="Level"
+                    android:text="@string/endGameScreen_levelTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="8dp"
@@ -82,7 +82,6 @@
 
             <TextView
                     android:id="@+id/endGameScreenLevel"
-                    android:text="8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="8dp"
@@ -109,7 +108,7 @@
 
             <TextView
                     android:id="@+id/endGameScreenScoreTitle"
-                    android:text="Score"
+                    android:text="@string/endGameScreen_scoreTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="8dp"
@@ -124,7 +123,6 @@
 
             <TextView
                     android:id="@+id/endGameScreenScore"
-                    android:text="584"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="8dp"
@@ -157,7 +155,7 @@
 
             <TextView
                     android:id="@+id/endGameScreenScramblesEarnedTitle"
-                    android:text="Scrambles Earned"
+                    android:text="@string/endGameScreen_scramblesEarnedTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="8dp"
@@ -173,7 +171,6 @@
 
             <TextView
                     android:id="@+id/endGameScreenScramblesEarned"
-                    android:text="3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="8dp"
@@ -200,7 +197,7 @@
 
             <TextView
                     android:id="@+id/endGameScreenScramblesUsedTitle"
-                    android:text="Scrambles Used"
+                    android:text="@string/endGameScreen_scramblesUsedTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -215,7 +212,6 @@
 
             <TextView
                     android:id="@+id/endGameScreenScramblesUsed"
-                    android:text="2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="30sp"
@@ -243,7 +239,7 @@
 
             <TextView
                     android:id="@+id/endGameScreenWordsTitle"
-                    android:text="Words Created"
+                    android:text="@string/endGameScreen_wordsCreatedTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -258,7 +254,6 @@
 
             <TextView
                     android:id="@+id/endGameScreenWords"
-                    android:text="70"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="30sp"

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import me.fru1t.worddropper.R;
@@ -19,6 +20,16 @@ public class EndGameScreen extends AppCompatActivity {
     public static final String EXTRA_SCRAMBLES_USED = "extra_scrambles_used";
     public static final String EXTRA_LEVEL = "extra_level";
 
+    private static final int[] UNIMPORTANT_TEXT_VIEW_IDS = {
+            R.id.endGameScreenGlobalTitle,
+            R.id.endGameScreenGlobalSubtitle,
+            R.id.endGameScreenLevelTitle,
+            R.id.endGameScreenScoreTitle,
+            R.id.endGameScreenScramblesEarnedTitle,
+            R.id.endGameScreenScramblesUsedTitle,
+            R.id.endGameScreenWordsTitle
+    };
+
     private static final int ANIMATION_DURATION_STATS = 1100;
     private static final String STAT_FORMAT_STRING = "%s";
 
@@ -29,6 +40,12 @@ public class EndGameScreen extends AppCompatActivity {
     private TextView scramblesEarned;
     private TextView words;
 
+    private final ArrayList<TextView> unimportantTextViews;
+
+    public EndGameScreen() {
+        unimportantTextViews = new ArrayList<>();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -36,6 +53,8 @@ public class EndGameScreen extends AppCompatActivity {
         root.setBackgroundColor(WordDropper.colorTheme.background);
         ColorTheme.set(TextView::setTextColor, WordDropper.colorTheme.text,
                 score, level, scramblesEarned, scramblesUsed, words);
+        ColorTheme.set(TextView::setTextColor, WordDropper.colorTheme.text,
+                unimportantTextViews.toArray(new TextView[unimportantTextViews.size()]));
     }
 
     @Override
@@ -85,5 +104,17 @@ public class EndGameScreen extends AppCompatActivity {
         (new android.os.Handler()).postDelayed(scoreAnimator::start, 50);
         (new android.os.Handler()).postDelayed(scramblesUsedAnimator::start, 100);
         (new android.os.Handler()).postDelayed(wordsAnimator::start, 150);
+
+        // Find all other textviews.
+        unimportantTextViews.clear();
+        unimportantTextViews.addAll(findAllById(UNIMPORTANT_TEXT_VIEW_IDS));
+    }
+
+    private ArrayList<TextView> findAllById(int... ids) {
+        ArrayList<TextView> result = new ArrayList<>();
+        for (int id : ids) {
+            result.add((TextView) root.findViewById(id));
+        }
+        return result;
     }
 }

@@ -1,11 +1,12 @@
 <resources>
     <string name="app_name">WordDropper</string>
 
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-
     <string name="title_activity_game_board">GameBoard</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Activities/EndGameScreen -->
+    <string name="endGameScreen_wordsCreatedTitle">Words Created</string>
+    <string name="endGameScreen_scramblesUsedTitle">Scrambles Used</string>
+    <string name="endGameScreen_scramblesEarnedTitle">Scrambles Earned</string>
+    <string name="endGameScreen_scoreTitle">Score</string>
+    <string name="endGameScreen_levelTitle">Level</string>
 </resources>
