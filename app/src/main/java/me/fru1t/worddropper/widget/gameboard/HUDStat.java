@@ -7,6 +7,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import me.fru1t.worddropper.WordDropper;
+import me.fru1t.worddropper.settings.ColorTheme;
 
 /**
  * A single statistic within the HUD
@@ -41,8 +42,8 @@ public class HUDStat extends FrameLayout {
     }
 
     public void updateColors() {
-        titleTextView.setTextColor(WordDropper.colorTheme.textBlend);
-        valueTextView.setTextColor(WordDropper.colorTheme.textBlend);
+        ColorTheme.set(TextView::setTextColor, WordDropper.colorTheme.textBlend,
+                titleTextView, valueTextView);
         postInvalidate();
     }
 

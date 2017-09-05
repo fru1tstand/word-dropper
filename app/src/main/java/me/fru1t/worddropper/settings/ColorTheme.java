@@ -1,6 +1,12 @@
 package me.fru1t.worddropper.settings;
 
 import android.graphics.Color;
+import android.view.View;
+import android.widget.TextView;
+
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Presets for colors within the game.
@@ -86,5 +92,21 @@ public enum ColorTheme {
         this.textOnPrimary = textOnPrimary;
         this.textOnPrimaryLight = textOnPrimaryLight;
         this.textOnPrimaryDark = textOnPrimaryDark;
+    }
+
+    /**
+     * Performs an action, passing the given color to the given targets. For example, when setting
+     * multiple TextViews' text color, one can do the following:
+     * <code>ColorTheme.set(TextView::setTextColor, Color.WHITE, textView1, textView2...);</code>
+     * @param action Usually passed as a method reference, but can be made arbitrarily. To pass as a
+     *               method reference, the method given must only accept a single integer parameter.
+     * @param color The color to pass the action.
+     * @param targets The instances to target.
+     * @param <T> The type of the target.
+     */
+    public static <T> void set(BiConsumer<T, Integer> action, int color, T... targets) {
+        for (T target : targets) {
+            action.accept(target, color);
+        }
     }
 }

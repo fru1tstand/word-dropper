@@ -9,6 +9,8 @@ import android.widget.TextView;
 import java.util.Locale;
 
 import me.fru1t.worddropper.R;
+import me.fru1t.worddropper.WordDropper;
+import me.fru1t.worddropper.settings.ColorTheme;
 
 public class EndGameScreen extends AppCompatActivity {
     public static final String EXTRA_SCORE = "extra_score";
@@ -20,6 +22,7 @@ public class EndGameScreen extends AppCompatActivity {
     private static final int ANIMATION_DURATION_STATS = 1100;
     private static final String STAT_FORMAT_STRING = "%s";
 
+    private LinearLayout root;
     private TextView score;
     private TextView level;
     private TextView scramblesUsed;
@@ -27,11 +30,20 @@ public class EndGameScreen extends AppCompatActivity {
     private TextView words;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        root.setBackgroundColor(WordDropper.colorTheme.background);
+        ColorTheme.set(TextView::setTextColor, WordDropper.colorTheme.text,
+                score, level, scramblesEarned, scramblesUsed, words);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end_game_screen);
 
-        LinearLayout root = (LinearLayout) findViewById(R.id.endGameScreenRoot);
+        root = (LinearLayout) findViewById(R.id.endGameScreenRoot);
 
         // Populate data
         score = (TextView) root.findViewById(R.id.endGameScreenScore);
