@@ -3,21 +3,21 @@ package me.fru1t.worddropper.activities;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Point;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import lombok.Setter;
+import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropper;
 import me.fru1t.worddropper.layout.MenuLayout;
 import me.fru1t.worddropper.settings.Difficulty;
-import me.fru1t.worddropper.widget.gameboard.GameBoardHUD;
-import me.fru1t.worddropper.widget.WrappingProgressBar;
-import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.widget.TileBoard;
+import me.fru1t.worddropper.widget.WrappingProgressBar;
+import me.fru1t.worddropper.widget.gameboard.GameBoardHUD;
 import me.fru1t.worddropper.widget.tileboard.Tile;
 
 /**

@@ -1,12 +1,8 @@
 package me.fru1t.worddropper.settings;
 
 import android.graphics.Color;
-import android.view.View;
-import android.widget.TextView;
 
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * Presets for colors within the game.
