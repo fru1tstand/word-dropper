@@ -1,3 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Main Menu Screen -->
+    <dimen name="mainMenuScreen_optionFontSize">25sp</dimen>
+    <dimen name="mainMenuScreen_optionHeight">50dp</dimen>
+    <dimen name="mainMenuScreen_titleFontSize">48sp</dimen>
 </resources>

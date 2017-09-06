@@ -16,4 +16,13 @@
     <string name="gameScreen_pauseMenuRestartOption">Restart Game</string>
     <string name="gameScreen_pauseMenuCloseMenuOption">Close</string>
     <string name="gameScreen_pauseMenuEndGameOption">End Game</string>
+
+    <!-- activities/MainMenuScreen -->
+    <string name="mainMenuScreen_titleWord">Word</string>
+    <string name="mainMenuScreen_titleDropper">Dropper</string>
+
+    <string name="mainMenuScreen_optionPlay">Play</string>
+    <string name="mainMenuScreen_optionStats">Stats</string>
+    <string name="mainMenuScreen_optionSettings">Settings</string>
+
 </resources>

@@ -8,20 +8,22 @@ import java.util.function.BiConsumer;
  * Presets for colors within the game.
  */
 public enum ColorTheme {
-    ORANGE("Orange",
+    ORANGE(
+            "Orange", // name
             Color.parseColor("#ff9800"),
             Color.parseColor("#c66900"),
             Color.parseColor("#ffc947"),
             Color.parseColor("#e1e2e1"),
             Color.WHITE,
-            Color.BLACK,
+            Color.parseColor("#333333"), // text
             Color.parseColor("#aaaaaa"),
-            Color.BLACK,
-            Color.BLACK,
-            Color.BLACK
+            Color.BLACK, // textOnPrimary
+            Color.BLACK, // textOnPrimaryLight
+            Color.BLACK // textOnPrimaryDark
     ),
 
-    PURPLE("Purple", // name
+    PURPLE(
+            "Purple", // name
             Color.parseColor("#673ab7"), // primary
             Color.parseColor("#320b86"), // primaryDark
             Color.parseColor("#9a67ea"), // primaryLight
