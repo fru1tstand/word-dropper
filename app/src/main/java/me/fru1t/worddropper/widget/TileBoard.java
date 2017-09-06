@@ -166,7 +166,6 @@ public class TileBoard extends FrameLayout {
      * Scrambles all tiles
      */
     public void scramble() {
-        System.out.println("scrambling");
         for (TileBoardColumn column : tileColumns) {
             for (int i = 0; i < column.getSize(); i++) {
                 Tile t = column.get(i);

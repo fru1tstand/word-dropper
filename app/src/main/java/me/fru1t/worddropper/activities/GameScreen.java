@@ -25,6 +25,8 @@ import me.fru1t.worddropper.widget.tileboard.Tile;
  * status bar and navigation/system bar) with user interaction.
  */
 public class GameScreen extends AppCompatActivity {
+    private static final String INFINITE_STRING = "∞";
+
     private static final int HUD_HEIGHT = 650;
     private static final int PROGRESS_HEIGHT = 40;
 
@@ -43,7 +45,7 @@ public class GameScreen extends AppCompatActivity {
     private @Nullable MenuLayout pauseMenu;
 
     public GameScreen() {
-        difficulty = Difficulty.MEDIUM;
+        difficulty = Difficulty.ZEN;
     }
 
     @Override
@@ -146,7 +148,6 @@ public class GameScreen extends AppCompatActivity {
             @Override
             public void onCurrentWordClick() {
                 if (pauseMenu.isOpen()) {
-                    System.out.println("its already open");
                     return;
                 }
 
@@ -164,15 +165,15 @@ public class GameScreen extends AppCompatActivity {
                 case SUCCESSFUL_SUBMIT:
                     progressBar.animateAddProgress(WordDropper.getWordValue(string));
                     hud.setCurrentWordTextView(null);
+                    ++movesUsed;
 
                     // Use up a move
                     if (difficulty.isWordAverageEnabled()) {
-                        ++movesUsed;
                         if (movesUsed >= movesEarned) {
                             tileBoard.setEnableTouching(false);
                         }
+                        hud.setMovesRemaining((movesEarned - movesUsed) + "");
                     }
-                    hud.setMovesRemaining((movesEarned - movesUsed) + "");
                     break;
                 case FAILED_SUBMIT:
                     break;
@@ -186,6 +187,7 @@ public class GameScreen extends AppCompatActivity {
                 int currentLevel = wraps + 1;
 
                 if (difficulty.isScramblingAllowed()
+                        && !difficulty.isScramblingUnlimited()
                         && currentLevel % difficulty.levelsBeforeScramblePowerUp == 0) {
                     ++scramblesEarned;
                     hud.setScramblesRemaining((scramblesEarned - scramblesUsed) + "");
@@ -214,7 +216,7 @@ public class GameScreen extends AppCompatActivity {
 
             @Override
             public void onAnimateAddEnd() {
-                if (movesUsed < movesEarned) {
+                if (movesUsed < movesEarned || !difficulty.isWordAverageEnabled()) {
                     return;
                 }
 
@@ -257,8 +259,20 @@ public class GameScreen extends AppCompatActivity {
         movesUsed = 0;
 
         // Update hud
-        hud.setScramblesRemaining((scramblesEarned - scramblesUsed) + "");
-        hud.setMovesRemaining((movesEarned - movesUsed) + "");
+        if (!difficulty.isScramblingAllowed()) {
+            hud.setScramblesRemaining("0");
+        } else if (difficulty.isScramblingUnlimited()) {
+            hud.setScramblesRemaining(INFINITE_STRING);
+        } else {
+            hud.setScramblesRemaining((scramblesEarned - scramblesUsed) + "");
+        }
+
+        if (!difficulty.isWordAverageEnabled()) {
+            hud.setMovesRemaining(INFINITE_STRING);
+        } else {
+            hud.setMovesRemaining((movesEarned - movesUsed) + "");
+        }
+
         hud.setCurrentLevel(currentLevel + "");
 
         // Update tile board

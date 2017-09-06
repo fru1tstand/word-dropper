@@ -7,7 +7,9 @@ public enum Difficulty {
     EASY("Easy", 8, 5),
     MEDIUM("Medium", 13, 6),
     HARD("Hard", 16, 8),
-    EXPERT("Expert", 19, Integer.MAX_VALUE);
+    EXPERT("Expert", 19, Integer.MAX_VALUE),
+
+    ZEN("Zen", -1, -2);
 
     private static final int SCRAMBLES_UNLIMITED = -2;
     private static final int SCRAMBLES_DISABLED = -1;
