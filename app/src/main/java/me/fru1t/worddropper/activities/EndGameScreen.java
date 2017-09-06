@@ -1,9 +1,12 @@
 package me.fru1t.worddropper.activities;
 
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -27,18 +30,26 @@ public class EndGameScreen extends AppCompatActivity {
             R.id.endGameScreenScoreTitle,
             R.id.endGameScreenScramblesEarnedTitle,
             R.id.endGameScreenScramblesUsedTitle,
-            R.id.endGameScreenWordsTitle
+            R.id.endGameScreenWordsTitle,
+
+            R.id.endGameScreenActionMainMenu,
+            R.id.endGameScreenActionPlayAgain
     };
 
     private static final int ANIMATION_DURATION_STATS = 1100;
     private static final String STAT_FORMAT_STRING = "%s";
 
     private LinearLayout root;
+    private ScrollView scrollView;
+    private LinearLayout stats;
+    private LinearLayout actionsWrapper;
+
     private TextView score;
     private TextView level;
     private TextView scramblesUsed;
     private TextView scramblesEarned;
     private TextView words;
+    private View actionsSplitter;
 
     private final ArrayList<TextView> unimportantTextViews;
 
@@ -51,6 +62,8 @@ public class EndGameScreen extends AppCompatActivity {
         super.onResume();
 
         root.setBackgroundColor(WordDropper.colorTheme.background);
+        actionsWrapper.setBackgroundColor(WordDropper.colorTheme.backgroundLight);
+        actionsSplitter.setBackgroundColor(WordDropper.colorTheme.background);
         ColorTheme.set(TextView::setTextColor, WordDropper.colorTheme.text,
                 score, level, scramblesEarned, scramblesUsed, words);
         ColorTheme.set(TextView::setTextColor, WordDropper.colorTheme.text,
@@ -63,13 +76,17 @@ public class EndGameScreen extends AppCompatActivity {
         setContentView(R.layout.activity_end_game_screen);
 
         root = (LinearLayout) findViewById(R.id.endGameScreenRoot);
+        scrollView = (ScrollView) root.findViewById(R.id.endGameScreenScrollView);
+        stats = (LinearLayout) scrollView.findViewById(R.id.endGameScreenStats);
+        actionsWrapper = (LinearLayout) root.findViewById(R.id.endGameScreenActionsWrapper);
+        actionsSplitter = actionsWrapper.findViewById(R.id.endGameScreenActionsSplitter);
 
         // Populate data
-        score = (TextView) root.findViewById(R.id.endGameScreenScore);
-        level = (TextView) root.findViewById(R.id.endGameScreenLevel);
-        scramblesUsed = (TextView) root.findViewById(R.id.endGameScreenScramblesUsed);
-        scramblesEarned = (TextView) root.findViewById(R.id.endGameScreenScramblesEarned);
-        words = (TextView) root.findViewById(R.id.endGameScreenWords);
+        score = (TextView) stats.findViewById(R.id.endGameScreenScore);
+        level = (TextView) stats.findViewById(R.id.endGameScreenLevel);
+        scramblesUsed = (TextView) stats.findViewById(R.id.endGameScreenScramblesUsed);
+        scramblesEarned = (TextView) stats.findViewById(R.id.endGameScreenScramblesEarned);
+        words = (TextView) stats.findViewById(R.id.endGameScreenWords);
 
         ValueAnimator scoreAnimator =
                 ValueAnimator.ofInt(0, getIntent().getIntExtra(EXTRA_SCORE, 0));
@@ -116,5 +133,13 @@ public class EndGameScreen extends AppCompatActivity {
             result.add((TextView) root.findViewById(id));
         }
         return result;
+    }
+
+    public void onActionPlayAgainClick(View v) {
+        startActivity(new Intent(this, GameScreen.class));
+    }
+
+    public void onActionMainMenuClick(View v) {
+        startActivity(new Intent(this, MainMenuScreen.class));
     }
 }

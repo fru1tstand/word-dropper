@@ -2,6 +2,10 @@
 <resources>
     <!-- Main Menu Screen -->
     <dimen name="mainMenuScreen_optionFontSize">25sp</dimen>
-    <dimen name="mainMenuScreen_optionHeight">50dp</dimen>
+    <dimen name="mainMenuScreen_optionHeight">62dp</dimen>
     <dimen name="mainMenuScreen_titleFontSize">48sp</dimen>
+
+    <!-- End game screen -->
+    <dimen name="endGameScreen_actionsHeight">56dp</dimen>
+    <dimen name="endGameScreen_actionFontSize">18sp</dimen>
 </resources>

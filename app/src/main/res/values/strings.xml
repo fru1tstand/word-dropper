@@ -10,6 +10,9 @@
     <string name="endGameScreen_scoreTitle">Score</string>
     <string name="endGameScreen_levelTitle">Level</string>
 
+    <string name="endGameScreen_actionPlayAgain">Play Again</string>
+    <string name="endGameScreen_actionMainMenu">Main Menu</string>
+
     <!-- activities/GameScreen -->
     <string name="gameScreen_pauseMenuSaveAndQuit">Save and Quit</string>
     <string name="gameScreen_pauseMenuSettings">Settings</string>
