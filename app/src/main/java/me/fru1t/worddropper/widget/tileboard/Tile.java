@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.support.annotation.NonNull;
 import android.view.View;
 
 import lombok.Getter;
@@ -17,7 +18,7 @@ public class Tile extends View {
     private static final int TEXT_SIZE = 60;
 
     private @Getter @Setter int size;
-    private @Getter @Setter String text;
+    private @NonNull @Getter @Setter String text;
 
     private final @Getter Paint textPaint;
     private final Paint backgroundColor;
@@ -31,6 +32,7 @@ public class Tile extends View {
 
         textBounds = new Rect();
         backgroundColor = new Paint();
+        text = "";
     }
 
     public void press() {
