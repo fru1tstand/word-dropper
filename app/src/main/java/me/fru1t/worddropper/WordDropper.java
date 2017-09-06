@@ -26,7 +26,7 @@ public class WordDropper {
     
 
 
-    private static final boolean DEBUG = false;
+    public static final boolean DEBUG = false;
 
 
     public static final HashSet<String> dictionary = new HashSet<>();

@@ -3,10 +3,17 @@
 
     <string name="title_activity_game_board">GameBoard</string>
 
-    <!-- Activities/EndGameScreen -->
+    <!-- activities/EndGameScreen -->
     <string name="endGameScreen_wordsCreatedTitle">Words Created</string>
     <string name="endGameScreen_scramblesUsedTitle">Scrambles Used</string>
     <string name="endGameScreen_scramblesEarnedTitle">Scrambles Earned</string>
     <string name="endGameScreen_scoreTitle">Score</string>
     <string name="endGameScreen_levelTitle">Level</string>
+
+    <!-- activities/GameScreen -->
+    <string name="gameScreen_pauseMenuSaveAndQuit">Save and Quit</string>
+    <string name="gameScreen_pauseMenuSettings">Settings</string>
+    <string name="gameScreen_pauseMenuRestartOption">Restart Game</string>
+    <string name="gameScreen_pauseMenuCloseMenuOption">Close</string>
+    <string name="gameScreen_pauseMenuEndGameOption">End Game</string>
 </resources>

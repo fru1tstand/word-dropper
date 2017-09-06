@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<me.fru1t.worddropper.layout.MenuLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/menuMenuWrapper">
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal">
+        <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".165" />
+        <LinearLayout
+                android:id="@+id/menuMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight=".67" />
+        <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".165" />
+    </LinearLayout>
+</me.fru1t.worddropper.layout.MenuLayout>

@@ -3,21 +3,21 @@ package me.fru1t.worddropper.activities;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Point;
-import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import lombok.Setter;
 import me.fru1t.worddropper.WordDropper;
+import me.fru1t.worddropper.layout.MenuLayout;
 import me.fru1t.worddropper.settings.Difficulty;
 import me.fru1t.worddropper.widget.gameboard.GameBoardHUD;
 import me.fru1t.worddropper.widget.WrappingProgressBar;
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.widget.TileBoard;
-import me.fru1t.worddropper.widget.gameboard.PauseMenu;
 import me.fru1t.worddropper.widget.tileboard.Tile;
 
 /**
@@ -40,7 +40,7 @@ public class GameScreen extends AppCompatActivity {
     private @Nullable TileBoard tileBoard;
     private @Nullable WrappingProgressBar progressBar;
     private @Nullable GameBoardHUD hud;
-    private @Nullable PauseMenu pauseMenu;
+    private @Nullable MenuLayout pauseMenu;
 
     public GameScreen() {
         difficulty = Difficulty.MEDIUM;
@@ -88,13 +88,14 @@ public class GameScreen extends AppCompatActivity {
         Point screenSize = new Point();
         getWindowManager().getDefaultDisplay().getSize(screenSize);
         root = (FrameLayout) findViewById(R.id.gameBoardRoot);
+        assert root != null;
 
         // Create Pause Menu
-        pauseMenu = new PauseMenu(this);
+        pauseMenu = (MenuLayout) getLayoutInflater().inflate(R.layout.layout_menu, root, false);
+        assert pauseMenu != null;
 
         // Create tile board
         tileBoard = new TileBoard(this);
-        assert root != null;
         root.addView(tileBoard);
 
         // Create progress bar
@@ -144,15 +145,17 @@ public class GameScreen extends AppCompatActivity {
 
             @Override
             public void onCurrentWordClick() {
-                root.addView(pauseMenu);
-                pauseMenu.setX(0);
-                pauseMenu.setY(0);
-                pauseMenu.getLayoutParams().height = PauseMenu.HEIGHT;
-                pauseMenu.getLayoutParams().width = PauseMenu.WIDTH;
+                if (pauseMenu.isOpen()) {
+                    System.out.println("its already open");
+                    return;
+                }
+
+                pauseMenu.setVisibility(View.VISIBLE);
+                pauseMenu.show();
             }
         });
 
-        // Post-creation events
+        // Post-creation
         tileBoard.setEventHandler((changeEventType, string) -> {
             switch (changeEventType) {
                 case CHANGE:
@@ -189,7 +192,7 @@ public class GameScreen extends AppCompatActivity {
                 }
 
                 if (difficulty.isWordAverageEnabled()) {
-                    int movesToAdd = (int) (newMax / difficulty.wordPointAverage);
+                    int movesToAdd = (int) Math.round(1.0 * newMax / difficulty.wordPointAverage);
 
                     ValueAnimator va = ValueAnimator.ofInt(
                             movesEarned - movesUsed, movesEarned + movesToAdd - movesUsed);
@@ -219,24 +222,47 @@ public class GameScreen extends AppCompatActivity {
             }
         });
 
-        pauseMenu.setEventListener(new PauseMenu.PauseMenuEventListener() {
-            @Override
-            public void onEndGame() {
-                endGame();
-            }
-
-            @Override
-            public void onClose() {
-                root.removeView(pauseMenu);
-            }
+        // Pause menu comes last so it's on top
+        root.addView(pauseMenu);
+        root.post(() -> {
+            pauseMenu.getLayoutParams().width = root.getWidth();
+            pauseMenu.getLayoutParams().height = root.getHeight();
         });
+        pauseMenu.setVisibility(View.GONE);
+        pauseMenu.setOnHideListener(() -> pauseMenu.setVisibility(View.GONE));
 
-        // Start game
+        pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuSaveAndQuit, false, () -> {});
+        pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuSettings, true, () -> {});
+        pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuRestartOption, true, this::restart);
+        pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuEndGameOption, false, this::endGame);
+
+        pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuCloseMenuOption, false,
+                pauseMenu::hide);
+
+        root.post(this::restart);
+    }
+
+    private void restart() {
+        assert progressBar != null;
+        assert hud != null;
+        assert tileBoard != null;
+
+        progressBar.reset();
         int currentLevel = progressBar.getWraps() + 1;
+
+        // Set initial values
+        scramblesUsed = 0;
+        scramblesEarned = 0;
         movesEarned = (int) Math.round(1.0 * progressBar.getMax() / difficulty.wordPointAverage);
+        movesUsed = 0;
+
+        // Update hud
         hud.setScramblesRemaining((scramblesEarned - scramblesUsed) + "");
         hud.setMovesRemaining((movesEarned - movesUsed) + "");
         hud.setCurrentLevel(currentLevel + "");
+
+        // Update tile board
+        tileBoard.scramble();
     }
 
     private void endGame() {

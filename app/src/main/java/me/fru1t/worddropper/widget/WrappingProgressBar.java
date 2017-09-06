@@ -133,6 +133,16 @@ public class WrappingProgressBar extends View {
         animateAddProgress(0);
     }
 
+    public void reset() {
+        wraps = 0;
+        total = 0;
+        progress = 0;
+        if (nextMaximumFunction != null) {
+            max = nextMaximumFunction.next(0);
+        }
+        animateAddProgress(0);
+    }
+
     /**
      * Adds the given progress to the current progress amount. Animates overflow by filling the bar
      * and recursively calling animateAddProgress until all progressDelta is consumed.

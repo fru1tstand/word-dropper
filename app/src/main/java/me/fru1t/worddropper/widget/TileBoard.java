@@ -129,9 +129,6 @@ public class TileBoard extends FrameLayout {
             int rows = (col % 2 == 0) ? TILE_MAX_ROWS - 1 : TILE_MAX_ROWS;
             for (int row = 0; row < rows; row++) {
                 Tile t = new Tile(context);
-                t.setText(generateNewTileLetter());
-                t.setY(-1 * row * SCRAMBLE_SPACING);
-
                 tileColumns.get(col).addToTop(t);
                 addView(t);
             }
@@ -169,6 +166,7 @@ public class TileBoard extends FrameLayout {
      * Scrambles all tiles
      */
     public void scramble() {
+        System.out.println("scrambling");
         for (TileBoardColumn column : tileColumns) {
             for (int i = 0; i < column.getSize(); i++) {
                 Tile t = column.get(i);
@@ -200,7 +198,7 @@ public class TileBoard extends FrameLayout {
             tileSize = width / TILE_COLUMNS;
         }
 
-        // We want an event tile size
+        // We want an even tile size
         if (tileSize % 2 != 0) {
             tileSize--;
         }
@@ -213,9 +211,6 @@ public class TileBoard extends FrameLayout {
         effectiveBoardOffset.set( // This is where one can set the positioning of the board
                 (width - effectiveBoardSize.x) / 2, // Middle
                 (height - effectiveBoardSize.y) / 2); // Middle
-
-        // Reposition tiles
-        updateTilePosition();
     }
 
     @Override
@@ -286,7 +281,6 @@ public class TileBoard extends FrameLayout {
 
             for (int row = 0; row < rows; row++) {
                 Tile tile = tileColumns.get(col).get(row);
-
                 tile.setX(col * tileSize + effectiveBoardOffset.x);
                 tile.getLayoutParams().height = tileSize;
                 tile.getLayoutParams().width = tileSize;
