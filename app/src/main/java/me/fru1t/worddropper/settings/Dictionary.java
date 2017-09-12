@@ -6,27 +6,19 @@ import android.support.annotation.Nullable;
 
 import com.google.common.base.Strings;
 
+import org.jdeferred.impl.DeferredObject;
+
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.concurrent.CountDownLatch;
 
-import lombok.Setter;
+import lombok.Getter;
 import me.fru1t.worddropper.WordDropperApplication;
 
 /**
  * Methods for game words like existence, point values, etc.
  */
 public class Dictionary {
-    @FunctionalInterface
-    public interface LoadProgressListener {
-        void onLoadProgress(double percent);
-    }
-
-    @FunctionalInterface
-    public interface LoadCompleteListener {
-        void onLoadComplete();
-    }
-
     private enum LetterValue {
         A(1), B(3), C(3), D(2), E(1), F(4), G(2), H(4), I(1), J(8), K(5), L(1), M(3), N(1), O(1),
         P(3), Q(10), R(1), S(1), T(1), U(1), V(4), W(4), X(8), Y(4), Z(10);
@@ -70,9 +62,8 @@ public class Dictionary {
             synchronized (loaderCdl) {
                 loaderCdl.countDown();
                 if (loaderCdl.getCount() == 0) {
-                    if (loadCompleteListener != null) {
-                        loadCompleteListener.onLoadComplete();
-                    }
+                    isLoaded = true;
+                    onLoadDefer.resolve(null);
                 }
             }
         }
@@ -80,31 +71,27 @@ public class Dictionary {
         @Override
         protected void onProgressUpdate(Integer... values) {
             loadedWords += values[0];
-            if (loadProgressListener != null) {
-                loadProgressListener.onLoadProgress(1.0 * loadedWords / TOTAL_WORDS);
-            }
+            onLoadDefer.notify(1.0 * loadedWords / TOTAL_WORDS);
         }
     }
 
     private static final int TOTAL_WORDS = 369648;
 
+    private @Getter final DeferredObject<Object, Object, Double> onLoadDefer;
     private final WordDropperApplication app;
     private final HashSet<String> dictionary;
     private final CountDownLatch loaderCdl;
     private int loadedWords;
-
-    // TODO: Change to jDeferred: https://github.com/jdeferred/jdeferred
-    private @Nullable @Setter LoadProgressListener loadProgressListener;
-    private @Nullable @Setter LoadCompleteListener loadCompleteListener;
+    private @Getter boolean isLoaded;
 
     public Dictionary(Context context) {
         app = (WordDropperApplication) context.getApplicationContext();
         loaderCdl = new CountDownLatch(8);
         dictionary = new HashSet<>();
+        onLoadDefer = new DeferredObject<>();
 
-        loadProgressListener = null;
-        loadCompleteListener = null;
         loadedWords = 0;
+        isLoaded = false;
 
         // Load dictionary
         (new DictionaryLoader())

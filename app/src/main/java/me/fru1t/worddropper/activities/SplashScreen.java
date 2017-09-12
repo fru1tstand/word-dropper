@@ -30,9 +30,10 @@ public class SplashScreen extends AppCompatActivity {
         addTextView("Loading WordDropperApplication...");
 
         TextView t = addTextView("");
-        app.getDictionary().setLoadProgressListener(progress -> t.setText(progress + ""));
-        app.getDictionary().setLoadCompleteListener(() ->
-                Toast.makeText(this, "done loading", Toast.LENGTH_SHORT).show());
+        app.getDictionary().getOnLoadDefer().progress(progress -> t.setText(progress + ""));
+        app.getDictionary().getOnLoadDefer().done(
+                o -> Toast.makeText(this, "done loading", Toast.LENGTH_SHORT).show());
+
         goToMainMenu(1000);
     }
 

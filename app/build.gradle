@@ -38,6 +38,7 @@ dependencies {
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.guava:guava:23.0-android'
+    compile 'org.jdeferred:jdeferred-android-aar:1.2.6'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.8.47'
