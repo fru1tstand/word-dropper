@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import me.fru1t.android.annotations.VisibleForXML;
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
 import me.fru1t.worddropper.settings.ColorTheme;
@@ -60,6 +61,7 @@ public class MainMenuScreen extends AppCompatActivity {
         ColorTheme.set(TextView::setTextColor, app.getColorTheme().text, options);
     }
 
+    @VisibleForXML
     public void onOptionPlayClick(View view) {
         Intent gameScreenIntent = new Intent(this, GameScreen.class);
         gameScreenIntent.putExtra(GameScreen.EXTRA_DIFFICULTY, Difficulty.MEDIUM.name());
@@ -67,11 +69,9 @@ public class MainMenuScreen extends AppCompatActivity {
         startActivity(gameScreenIntent);
     }
 
-    public void onOptionStatsClick(View view) {
+    @VisibleForXML
+    public void onOptionStatsClick(View view) { }
 
-    }
-
-    public void onOptionSettingsClick(View view) {
-
-    }
+    @VisibleForXML
+    public void onOptionSettingsClick(View view) { }
 }
