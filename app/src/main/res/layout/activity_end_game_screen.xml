@@ -269,7 +269,7 @@
             android:orientation="horizontal">
         <TextView
                 android:text="@string/endGameScreen_actionPlayAgain"
-                android:textSize="@dimen/endGameScreen_actionFontSize"
+                android:textSize="@dimen/endGameScreen_actionTextSize"
                 android:gravity="center"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/endGameScreen_actionsHeight"
@@ -283,7 +283,7 @@
                 android:id="@+id/endGameScreenActionsSplitter"/>
         <TextView
                 android:text="@string/endGameScreen_actionMainMenu"
-                android:textSize="@dimen/endGameScreen_actionFontSize"
+                android:textSize="@dimen/endGameScreen_actionTextSize"
                 android:gravity="center"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/endGameScreen_actionsHeight"

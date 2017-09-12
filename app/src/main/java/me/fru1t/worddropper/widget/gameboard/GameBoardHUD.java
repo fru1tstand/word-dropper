@@ -3,16 +3,16 @@ package me.fru1t.worddropper.widget.gameboard;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.google.common.base.Strings;
 
-import java.util.function.Consumer;
-
 import lombok.Getter;
 import lombok.Setter;
+import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
 
 /**
@@ -21,32 +21,10 @@ import me.fru1t.worddropper.WordDropperApplication;
  * a wrapper for one that is already inflated.
  */
 public class GameBoardHUD extends FrameLayout {
-    // TODO: Change to functional interfaces.
-    public interface GameBoardHUDEventListener {
-        /**
-         * Triggered when the score stat is clicked.
-         */
-        void onLevelClick();
-
-        /**
-         * Triggered when the scramble stat is clicked.
-         */
-        void onScrambleClick();
-
-        /**
-         * Triggered when the moves left stat is clicked.
-         */
-        void onMovesLeftClick();
-
-        /**
-         * Triggered when the current word panel is clicked.
-         */
-        void onCurrentWordClick();
-    }
-
-    private static final int TEXT_SIZE = 22;
-
-    private @Setter GameBoardHUDEventListener eventListener;
+    private @Setter Runnable onLevelClickEventListener;
+    private @Setter Runnable onScrambleClickEventListener;
+    private @Setter Runnable onMovesLeftClickEventListener;
+    private @Setter Runnable onCurrentWordClickEventListener;
 
     private final WordDropperApplication app;
     private final @Getter TextView currentWordTextView;
@@ -57,43 +35,43 @@ public class GameBoardHUD extends FrameLayout {
     public GameBoardHUD(@NonNull Context context) {
         super(context);
         app = (WordDropperApplication) context.getApplicationContext();
+        int hudStatHeight = (int) getResources().getDimension(R.dimen.gameScreen_hudStatHeight);
 
         // Current word element
         currentWordTextView = new TextView(context);
         addView(currentWordTextView);
-        currentWordTextView.setY(380);
-        currentWordTextView.setTextSize(TEXT_SIZE);
+        currentWordTextView.setY(
+                getResources().getDimension(R.dimen.gameScreen_hudCurrentWordTopMargin));
+        currentWordTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimension(R.dimen.gameScreen_hudCurrentWordTextSize));
 
         // Stats
         movesRemaining = new HUDStat(context);
         addView(movesRemaining);
-        movesRemaining.getLayoutParams().height = HUDStat.HEIGHT;
-        movesRemaining.setTitle("Moves Left");
-        movesRemaining.setY(0);
-        movesRemaining.setOnTouchListener((v, event) ->
-                touchListenerHandler(event, GameBoardHUDEventListener::onMovesLeftClick));
+        movesRemaining.getLayoutParams().height = hudStatHeight;
+        movesRemaining.setTitle(R.string.gameScreen_hudStatMovesLeft);
+        movesRemaining.setOnTouchListener(
+                (v, event) -> touchListenerHandler(event, onMovesLeftClickEventListener));
 
         scramblesRemaining = new HUDStat(context);
         addView(scramblesRemaining);
-        scramblesRemaining.getLayoutParams().height = HUDStat.HEIGHT;
-        scramblesRemaining.setTitle("Scrambles");
-        scramblesRemaining.setY(0);
-        scramblesRemaining.setOnTouchListener((v, event) ->
-                touchListenerHandler(event, GameBoardHUDEventListener::onScrambleClick));
+        scramblesRemaining.getLayoutParams().height = hudStatHeight;
+        scramblesRemaining.setTitle(R.string.gameScreen_hudStatScrambles);
+        scramblesRemaining.setOnTouchListener(
+                (v, event) -> touchListenerHandler(event, onScrambleClickEventListener));
 
         currentLevel = new HUDStat(context);
         addView(currentLevel);
-        currentLevel.getLayoutParams().height = HUDStat.HEIGHT;
-        currentLevel.setTitle("Level");
-        currentLevel.setY(0);
-        currentLevel.setOnTouchListener((v, event) ->
-                touchListenerHandler(event, GameBoardHUDEventListener::onLevelClick));
+        currentLevel.getLayoutParams().height = hudStatHeight;
+        currentLevel.setTitle(R.string.gameScreen_hudStatLevel);
+        currentLevel.setOnTouchListener(
+                (v, event) -> touchListenerHandler(event, onLevelClickEventListener));
 
         // Set up touch listening
         setOnTouchListener((v, event) -> {
-            if (eventListener == null
+            if (onCurrentWordClickEventListener == null
                     || event.getActionIndex() != 0
-                    || event.getY() < HUDStat.HEIGHT) {
+                    || event.getY() < hudStatHeight) {
                 return false;
             }
 
@@ -101,7 +79,7 @@ public class GameBoardHUD extends FrameLayout {
                 return true;
             }
 
-            eventListener.onCurrentWordClick();
+            onCurrentWordClickEventListener.run();
             return true;
         });
     }
@@ -114,11 +92,10 @@ public class GameBoardHUD extends FrameLayout {
         postInvalidate();
     }
 
-    private boolean touchListenerHandler(MotionEvent event,
-                                         Consumer<GameBoardHUDEventListener> action) {
+    private boolean touchListenerHandler(MotionEvent event, @Nullable Runnable action) {
         if (event.getActionIndex() != 0
-                || eventListener == null
-                || event.getY() > HUDStat.HEIGHT) {
+                || action == null
+                || event.getY() > getResources().getDimension(R.dimen.gameScreen_hudStatHeight)) {
             return false;
         }
 
@@ -126,7 +103,7 @@ public class GameBoardHUD extends FrameLayout {
             return true;
         }
 
-        action.accept(eventListener);
+        action.run();
         return true;
     }
 
@@ -134,12 +111,24 @@ public class GameBoardHUD extends FrameLayout {
         movesRemaining.setValue(moves);
     }
 
+    public void setMovesRemaining(int moves) {
+        setMovesRemaining(moves + "");
+    }
+
     public void setScramblesRemaining(String scrambles) {
         scramblesRemaining.setValue(scrambles);
     }
 
+    public void setScramblesRemaining(int scrambles) {
+        setScramblesRemaining(scrambles + "");
+    }
+
     public void setCurrentLevel(String level) {
         currentLevel.setValue(level);
+    }
+
+    public void setCurrentLevel(int level) {
+        setCurrentLevel(level + "");
     }
 
     public void setCurrentWordTextView(@Nullable String s) {

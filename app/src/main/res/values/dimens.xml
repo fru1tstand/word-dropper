@@ -3,9 +3,25 @@
     <!-- Main Menu Screen -->
     <dimen name="mainMenuScreen_optionFontSize">25sp</dimen>
     <dimen name="mainMenuScreen_optionHeight">62dp</dimen>
-    <dimen name="mainMenuScreen_titleFontSize">48sp</dimen>
+    <dimen name="mainMenuScreen_titleTextSize">48sp</dimen>
 
     <!-- End game screen -->
     <dimen name="endGameScreen_actionsHeight">56dp</dimen>
-    <dimen name="endGameScreen_actionFontSize">18sp</dimen>
+    <dimen name="endGameScreen_actionTextSize">18sp</dimen>
+
+    <!-- Game Screen -->
+    <dimen name="gameScreen_hudStatHeight">70dp</dimen>
+    <dimen name="gameScreen_hudStatTitleTextSize">16sp</dimen>
+    <dimen name="gameScreen_hudStatValueTextSize">30sp</dimen>
+    <dimen name="gameScreen_hudStatTitleTopPadding">12dp</dimen>
+    <dimen name="gameScreen_hudStatValueTopMargin">8dp</dimen>
+
+    <dimen name="gameScreen_hudHeight">248dp</dimen>
+    <dimen name="gameScreen_hudCurrentWordTopMargin">145dp</dimen>
+    <dimen name="gameScreen_hudCurrentWordTextSize">22sp</dimen>
+    <dimen name="gameScreen_progressHeight">16dp</dimen>
+
+    <!-- MenuLayout -->
+    <dimen name="menuLayout_textSize">18sp</dimen>
+    <dimen name="menuLayout_optionHeight">50dp</dimen>
 </resources>

@@ -19,28 +19,23 @@ import me.fru1t.worddropper.WordDropperApplication;
  * progress bar will wrap and start at zero again.
  */
 public class WrappingProgressBar extends View {
+    @FunctionalInterface
     public interface NextMaximumFunction {
         /**
-         * Determines the next maximum value the progress bar should take on given the number of
+         * Determines the next maximum value the progress bar should take onWrapEventListener given the number of
          * wraps it has completed.
          */
         int next(int wraps);
     }
 
-    // TODO: Change to functional interface
-    public interface WrappingProgressBarEventListener {
+    @FunctionalInterface
+    public interface OnWrapEventListener {
         /**
          * Called when the progress bar wraps.
          * @param wraps The number of wraps the progress bar has gone through.
          * @param newMax The new Max value for this wrap.
          */
         void onWrap(int wraps, int newMax);
-
-        /**
-         * Called when the progress bar completes all animations/triggers after animateAddProgress
-         * is called.
-         */
-        void onAnimateAddEnd();
     }
 
     private static final int ANIMATION_DURATION_BASE = 150;
@@ -62,7 +57,8 @@ public class WrappingProgressBar extends View {
     private @Getter int total;
 
     private NextMaximumFunction nextMaximumFunction;
-    private @Setter WrappingProgressBarEventListener eventWrappingProgressBarEventListener;
+    private @Setter OnWrapEventListener onWrapEventListener;
+    private @Setter Runnable onAnimateAddEndEventListener;
 
     private float calculatedProgressBarWidth;
     private final Rect calculatedTextBounds;
@@ -88,7 +84,7 @@ public class WrappingProgressBar extends View {
         calculatedTextBounds = new Rect();
 
         nextMaximumFunction = null;
-        eventWrappingProgressBarEventListener = null;
+        onWrapEventListener = null;
     }
 
     public void updateColors() {
@@ -171,8 +167,8 @@ public class WrappingProgressBar extends View {
             @Override
             public void onAnimationEnd(Animator animation) {
                 if (progressRemainder < 0) {
-                    if (eventWrappingProgressBarEventListener != null) {
-                        eventWrappingProgressBarEventListener.onAnimateAddEnd();
+                    if (onAnimateAddEndEventListener != null) {
+                        onAnimateAddEndEventListener.run();
                     }
                     return;
                 }
@@ -183,8 +179,8 @@ public class WrappingProgressBar extends View {
                 if (nextMaximumFunction != null) {
                     max = nextMaximumFunction.next(wraps);
                 }
-                if (eventWrappingProgressBarEventListener != null) {
-                    eventWrappingProgressBarEventListener.onWrap(wraps, max);
+                if (onWrapEventListener != null) {
+                    onWrapEventListener.onWrap(wraps, max);
                 }
                 animateAddProgress(progressRemainder);
             }

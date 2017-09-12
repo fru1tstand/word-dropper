@@ -33,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/mainMenuScreenTitleWord"
                     android:layout_marginTop="0dp"
-                    android:textSize="@dimen/mainMenuScreen_titleFontSize" />
+                    android:textSize="@dimen/mainMenuScreen_titleTextSize" />
 
             <TextView
                     android:text="@string/mainMenuScreen_titleDropper"
@@ -42,7 +42,7 @@
                     app:layout_constraintLeft_toRightOf="@+id/mainMenuScreenTitleWord"
                     app:layout_constraintTop_toBottomOf="@+id/mainMenuScreenTitleWord"
                     android:id="@+id/mainMenuScreenTitleDropper"
-                    android:textSize="@dimen/mainMenuScreen_titleFontSize" />
+                    android:textSize="@dimen/mainMenuScreen_titleTextSize" />
         </android.support.constraint.ConstraintLayout>
     </android.support.constraint.ConstraintLayout>
 

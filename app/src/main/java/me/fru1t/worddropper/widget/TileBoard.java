@@ -35,10 +35,10 @@ public class TileBoard extends FrameLayout {
      */
     public interface TileBoardEvents {
         /**
-         * Triggered when the user performs an action on the board (eg. making a word, submitting
+         * Triggered when the user performs an action onWrapEventListener the board (eg. making a word, submitting
          * a word, etc).
          * @param changeEventType The type of change that occurred.
-         * @param string The current word on the board.
+         * @param string The current word onWrapEventListener the board.
          */
         void onChange(ChangeEventType changeEventType, @Nullable String string);
     }
@@ -145,8 +145,8 @@ public class TileBoard extends FrameLayout {
     }
 
     /**
-     * Performs the given action for each tile on this board.
-     * @param action The action to perform on each tile.
+     * Performs the given action for each tile onWrapEventListener this board.
+     * @param action The action to perform onWrapEventListener each tile.
      */
     public void forEachTile(Consumer<Tile> action) {
         tileColumns.forEach(tileBoardColumn -> tileBoardColumn.forEachTile(action));
@@ -268,7 +268,7 @@ public class TileBoard extends FrameLayout {
     }
 
     /**
-     * Calculates all tiles positions based on their positions within the data structures.
+     * Calculates all tiles positions based onWrapEventListener their positions within the data structures.
      */
     private void updateTilePosition() {
         int tileToAnimate = 0;

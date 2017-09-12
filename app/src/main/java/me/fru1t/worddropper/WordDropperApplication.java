@@ -10,7 +10,7 @@ import me.fru1t.worddropper.settings.ColorTheme;
 import me.fru1t.worddropper.settings.Dictionary;
 
 /**
- * Settings and global variables (*gasp*) loaded on startup.
+ * Settings and global variables (*gasp*) loaded onWrapEventListener startup.
  */
 public class WordDropperApplication extends Application {
     private @Getter SharedPreferences sharedPreferences;

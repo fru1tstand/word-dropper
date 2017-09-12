@@ -3,9 +3,12 @@ package me.fru1t.worddropper.widget.gameboard;
 import android.content.Context;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
+import android.util.TypedValue;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
 import me.fru1t.worddropper.settings.ColorTheme;
 
@@ -13,15 +16,6 @@ import me.fru1t.worddropper.settings.ColorTheme;
  * A single statistic within the HUD
  */
 public class HUDStat extends FrameLayout {
-    // TODO: Move to resource file and switch to dp
-    public static final int HEIGHT = 170;
-
-    private static final int TITLE_TEXT_SIZE = 16;
-    private static final int VALUE_TEXT_SIZE = 30;
-
-    private static final int TITLE_SPACING = 20;
-    private static final int VALUE_SPACING = 10;
-
     private final WordDropperApplication app;
     
     private final TextView titleTextView;
@@ -35,12 +29,14 @@ public class HUDStat extends FrameLayout {
 
         titleTextView = new TextView(context);
         addView(titleTextView);
-        titleTextView.setY(TITLE_SPACING);
-        titleTextView.setTextSize(TITLE_TEXT_SIZE);
+        titleTextView.setY(getResources().getDimension(R.dimen.gameScreen_hudStatTitleTopPadding));
+        titleTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimension(R.dimen.gameScreen_hudStatTitleTextSize));
 
         valueTextView = new TextView(context);
         addView(valueTextView);
-        valueTextView.setTextSize(VALUE_TEXT_SIZE);
+        valueTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimension(R.dimen.gameScreen_hudStatValueTextSize));
 
         titleSize = new Rect();
     }
@@ -57,8 +53,8 @@ public class HUDStat extends FrameLayout {
         relayout();
     }
 
-    public void setTitle(String title) {
-        titleTextView.setText(title);
+    public void setTitle(@StringRes int stringId) {
+        titleTextView.setText(app.getResources().getString(stringId));
         relayout();
     }
 
@@ -76,7 +72,9 @@ public class HUDStat extends FrameLayout {
         titleTextView.setX(rootWidth / 2 - titleSize.centerX());
 
         // Center value
-        valueTextView.setY(titleSize.height() + VALUE_SPACING + TITLE_SPACING);
+        valueTextView.setY(titleSize.height()
+                + getResources().getDimension(R.dimen.gameScreen_hudStatTitleTopPadding)
+                + getResources().getDimension(R.dimen.gameScreen_hudStatValueTopMargin));
         valueTextView.setX(rootWidth / 2
                 - valueTextView.getPaint().measureText(valueTextView.getText().toString()) / 2);
     }

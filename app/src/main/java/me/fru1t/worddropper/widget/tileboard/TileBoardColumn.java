@@ -43,7 +43,7 @@ public class TileBoardColumn {
     }
 
     /**
-     * Performs an action on each tile that belongs to this column.
+     * Performs an action onWrapEventListener each tile that belongs to this column.
      * @param action
      */
     public void forEachTile(Consumer<Tile> action) {

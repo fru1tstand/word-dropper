@@ -25,7 +25,6 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
         app = (WordDropperApplication) getApplicationContext();
 
-        // TODO: Clean up
         root = (LinearLayout) findViewById(R.id.splashScreenRoot);
 
         addTextView("Loading WordDropperApplication...");

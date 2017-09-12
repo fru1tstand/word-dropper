@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -24,29 +25,12 @@ import me.fru1t.worddropper.WordDropperApplication;
  * Styles a menu. This is the driver to layout_menu.xml.
  */
 public class MenuLayout extends RelativeLayout {
-    // TODO: Replace custom interfaces with Runnables
-    @FunctionalInterface
-    public interface OnShowListener {
-        void onShow();
-    }
-
-    @FunctionalInterface
-    public interface OnHideListener {
-        void onHide();
-    }
-
     private static final int MENU_WRAPPER_BACKGROUND_COLOR = Color.argb(128, 0, 0, 0);
-
-    private static final int ANIMATION_DURATION_MENU_TOGGLE = 350;
-
-    // TODO: Move to dimens
-    private static final int FONT_SIZE = 18;
-    private static final int MENU_OPTION_HEIGHT = 130;
     
     private final WordDropperApplication app;
     private @Getter boolean isOpen;
-    private @Nullable @Setter OnShowListener onShowListener;
-    private @Nullable @Setter OnHideListener onHideListener;
+    private @Nullable @Setter Runnable onShowListener;
+    private @Nullable @Setter Runnable onHideListener;
 
     private LinearLayout menu;
     private final ArrayList<TextView> menuOptions;
@@ -95,7 +79,8 @@ public class MenuLayout extends RelativeLayout {
         TextView result = new TextView(getContext());
         result.setText(getResources().getText(resId));
         result.setGravity(Gravity.CENTER);
-        result.setTextSize(FONT_SIZE);
+        result.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+                getResources().getDimension(R.dimen.menuLayout_textSize));
         result.setClickable(true);
         result.setOnClickListener(v -> {
             if (closeOnSelect) {
@@ -106,7 +91,8 @@ public class MenuLayout extends RelativeLayout {
         result.setTextColor(app.getColorTheme().text);
 
         menu.addView(result);
-        result.getLayoutParams().height = MENU_OPTION_HEIGHT;
+        result.getLayoutParams().height =
+                (int) getResources().getDimension(R.dimen.menuLayout_optionHeight);
         result.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
 
         menuOptions.add(result);
@@ -125,21 +111,21 @@ public class MenuLayout extends RelativeLayout {
 
         if (isOpen) {
             if (onShowListener != null) {
-                onShowListener.onShow();
+                onShowListener.run();
             }
             return;
         }
 
         isOpen = true;
         AlphaAnimation aa = new AlphaAnimation(0f, 1f);
-        aa.setDuration(ANIMATION_DURATION_MENU_TOGGLE);
+        aa.setDuration(getResources().getInteger(R.integer.animation_durationResponsive));
         aa.setFillAfter(true);
         aa.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationEnd(Animation animation) {
                 clearAnimation();
                 if (onShowListener != null) {
-                    onShowListener.onShow();
+                    onShowListener.run();
                 }
             }
 
@@ -159,21 +145,21 @@ public class MenuLayout extends RelativeLayout {
     public void hide() {
         if (!isOpen) {
             if (onHideListener != null) {
-                onHideListener.onHide();
+                onHideListener.run();
             }
             return;
         }
 
         isOpen = false;
         AlphaAnimation aa = new AlphaAnimation(1f, 0f);
-        aa.setDuration(ANIMATION_DURATION_MENU_TOGGLE);
+        aa.setDuration(getResources().getInteger(R.integer.animation_durationResponsive));
         aa.setFillAfter(true);
         aa.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationEnd(Animation animation) {
                 clearAnimation();
                 if (onHideListener != null) {
-                    onHideListener.onHide();
+                    onHideListener.run();
                 }
             }
 

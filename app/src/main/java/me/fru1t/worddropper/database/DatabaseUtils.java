@@ -36,7 +36,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
     public long startGame(Difficulty difficulty, String boardState) {
         ContentValues values = new ContentValues();
 
-        // We store phone time here, be sure to sanitize on server
+        // We store phone time here, be sure to sanitize onWrapEventListener server
         values.put(Game.COLUMN_UNIX_START, System.currentTimeMillis() / 1000);
         values.put(Game.COLUMN_STATUS, Game.STATUS_IN_PROGRESS);
         values.put(Game.COLUMN_DIFFICULTY, difficulty.toString());

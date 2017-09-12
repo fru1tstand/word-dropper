@@ -25,13 +25,6 @@ import me.fru1t.worddropper.widget.tileboard.Tile;
 public class GameScreen extends AppCompatActivity {
     public static final String EXTRA_DIFFICULTY = "extra_difficulty";
 
-    private static final String INFINITE_STRING = "∞";
-
-    // TODO: Move this to dimen and change to dp
-    private static final int HUD_HEIGHT = 650;
-    private static final int PROGRESS_HEIGHT = 40;
-    private static final int ANIMATION_DURATION_MOVES = 650;
-
     private WordDropperApplication app;
 
     private Difficulty difficulty;
@@ -52,11 +45,10 @@ public class GameScreen extends AppCompatActivity {
         setContentView(R.layout.activity_game_screen);
         app = (WordDropperApplication) getApplicationContext();
 
-        difficulty = Difficulty.valueOf(getIntent().getStringExtra(EXTRA_DIFFICULTY));
-
         Point screenSize = new Point();
         getWindowManager().getDefaultDisplay().getSize(screenSize);
         root = (FrameLayout) findViewById(R.id.gameBoardRoot);
+        difficulty = Difficulty.valueOf(getIntent().getStringExtra(EXTRA_DIFFICULTY));
 
         // Create Pause Menu
         pauseMenu = (MenuLayout) getLayoutInflater().inflate(R.layout.layout_menu, root, false);
@@ -78,47 +70,34 @@ public class GameScreen extends AppCompatActivity {
         // Creates stats
         hud = new GameBoardHUD(this);
         root.addView(hud);
-        hud.setEventListener(new GameBoardHUD.GameBoardHUDEventListener() {
-            @Override
-            public void onLevelClick() {
-                System.out.println("On level click");
+        hud.setOnLevelClickEventListener(() -> System.out.println("On level click"));
+        hud.setOnMovesLeftClickEventListener(() -> System.out.println("moves left click"));
+        hud.setOnScrambleClickEventListener(() -> {
+            if (!difficulty.isScramblingAllowed()) {
+                return;
             }
 
-            @Override
-            public void onScrambleClick() {
-                if (!difficulty.isScramblingAllowed()) {
-                    return;
-                }
-
-                if (difficulty.isScramblingUnlimited()) {
-                    tileBoard.scramble();
-                    scramblesUsed++;
-                    return;
-                }
-
-                if (scramblesUsed >= scramblesEarned) {
-                    return;
-                }
-
-                scramblesUsed++;
+            if (difficulty.isScramblingUnlimited()) {
                 tileBoard.scramble();
-                hud.setScramblesRemaining(scramblesEarned - scramblesUsed + "");
+                scramblesUsed++;
+                return;
             }
 
-            @Override
-            public void onMovesLeftClick() {
-                System.out.println("moves left click");
+            if (scramblesUsed >= scramblesEarned) {
+                return;
             }
 
-            @Override
-            public void onCurrentWordClick() {
-                if (pauseMenu.isOpen()) {
-                    return;
-                }
-
-                pauseMenu.setVisibility(View.VISIBLE);
-                pauseMenu.show();
+            scramblesUsed++;
+            tileBoard.scramble();
+            hud.setScramblesRemaining(scramblesEarned - scramblesUsed);
+        });
+        hud.setOnCurrentWordClickEventListener(() -> {
+            if (pauseMenu.isOpen()) {
+                return;
             }
+
+            pauseMenu.setVisibility(View.VISIBLE);
+            pauseMenu.show();
         });
 
         // Post-creation
@@ -137,7 +116,7 @@ public class GameScreen extends AppCompatActivity {
                         if (movesUsed >= movesEarned) {
                             tileBoard.setEnableTouching(false);
                         }
-                        hud.setMovesRemaining((movesEarned - movesUsed) + "");
+                        hud.setMovesRemaining(movesEarned - movesUsed);
                     }
                     break;
                 case FAILED_SUBMIT:
@@ -145,51 +124,45 @@ public class GameScreen extends AppCompatActivity {
             }
         });
 
-        progressBar.setEventWrappingProgressBarEventListener(
-                new WrappingProgressBar.WrappingProgressBarEventListener() {
-            @Override
-            public void onWrap(int wraps, int newMax) {
-                int currentLevel = wraps + 1;
+        progressBar.setOnWrapEventListener((wraps, newMax) -> {
+            int currentLevel = wraps + 1;
 
-                if (difficulty.isScramblingAllowed()
-                        && !difficulty.isScramblingUnlimited()
-                        && currentLevel % difficulty.levelsBeforeScramblePowerUp == 0) {
-                    ++scramblesEarned;
-                    hud.setScramblesRemaining((scramblesEarned - scramblesUsed) + "");
-                }
-
-                if (difficulty.isWordAverageEnabled()) {
-                    int movesToAdd = (int) Math.round(1.0 * newMax / difficulty.wordPointAverage);
-
-                    ValueAnimator va = ValueAnimator.ofInt(
-                            movesEarned - movesUsed, movesEarned + movesToAdd - movesUsed);
-                    va.setDuration(ANIMATION_DURATION_MOVES);
-                    va.addUpdateListener(
-                            animation -> hud.setMovesRemaining(animation.getAnimatedValue() + ""));
-                    va.start();
-
-                    movesEarned += movesToAdd;
-
-                    // Edge case where the user ran out of moves upon levelling up.
-                    if (!tileBoard.isEnableTouching()) {
-                        tileBoard.setEnableTouching(true);
-                    }
-                }
-
-                hud.setCurrentLevel(currentLevel + "");
+            if (difficulty.isScramblingAllowed()
+                    && !difficulty.isScramblingUnlimited()
+                    && currentLevel % difficulty.levelsBeforeScramblePowerUp == 0) {
+                ++scramblesEarned;
+                hud.setScramblesRemaining(scramblesEarned - scramblesUsed);
             }
 
-            @Override
-            public void onAnimateAddEnd() {
-                if (movesUsed < movesEarned || !difficulty.isWordAverageEnabled()) {
-                    return;
-                }
+            if (difficulty.isWordAverageEnabled()) {
+                int movesToAdd = (int) Math.round(1.0 * newMax / difficulty.wordPointAverage);
 
-                endGame();
+                ValueAnimator va = ValueAnimator.ofInt(
+                        movesEarned - movesUsed, movesEarned + movesToAdd - movesUsed);
+                va.setDuration(getResources().getInteger(R.integer.animation_durationEffect));
+                va.addUpdateListener(
+                        animation -> hud.setMovesRemaining((Integer) animation.getAnimatedValue()));
+                va.start();
+
+                movesEarned += movesToAdd;
+
+                // Edge case where the user ran out of moves upon levelling up.
+                if (!tileBoard.isEnableTouching()) {
+                    tileBoard.setEnableTouching(true);
+                }
             }
+
+            hud.setCurrentLevel(currentLevel + "");
+        });
+        progressBar.setOnAnimateAddEndEventListener(() -> {
+            if (movesUsed < movesEarned || !difficulty.isWordAverageEnabled()) {
+                return;
+            }
+
+            endGame();
         });
 
-        // Pause menu comes last so it's on top
+        // Pause menu comes last so it's onWrapEventListener top
         root.addView(pauseMenu);
         root.post(() -> {
             pauseMenu.getLayoutParams().width = root.getWidth();
@@ -212,23 +185,23 @@ public class GameScreen extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        int hudHeight = (int) getResources().getDimension(R.dimen.gameScreen_hudHeight);
+        int progressHeight = (int) getResources().getDimension(R.dimen.gameScreen_progressHeight);
 
         Point screenSize = new Point();
         getWindowManager().getDefaultDisplay().getSize(screenSize);
 
         if (tileBoard != null) {
-            tileBoard.setX(0);
-            tileBoard.setY(HUD_HEIGHT);
-            tileBoard.getLayoutParams().height = screenSize.y - HUD_HEIGHT - PROGRESS_HEIGHT;
+            tileBoard.setY(hudHeight);
+            tileBoard.getLayoutParams().height = screenSize.y - hudHeight - progressHeight;
             tileBoard.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
             tileBoard.setBackgroundColor(app.getColorTheme().background);
             tileBoard.forEachTile(Tile::release); // Essentially, updateColors.
         }
 
         if (progressBar != null) {
-            progressBar.setX(0);
-            progressBar.setY(screenSize.y - PROGRESS_HEIGHT);
-            progressBar.getLayoutParams().height = PROGRESS_HEIGHT;
+            progressBar.setY(screenSize.y - progressHeight);
+            progressBar.getLayoutParams().height = progressHeight;
             progressBar.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
             progressBar.updateColors();
         }
@@ -237,7 +210,7 @@ public class GameScreen extends AppCompatActivity {
             hud.setX(0);
             hud.setY(0);
             hud.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
-            hud.getLayoutParams().height = HUD_HEIGHT;
+            hud.getLayoutParams().height = hudHeight;
             hud.updateColors();
         }
     }
@@ -254,20 +227,20 @@ public class GameScreen extends AppCompatActivity {
 
         // Update hud
         if (!difficulty.isScramblingAllowed()) {
-            hud.setScramblesRemaining("0");
+            hud.setScramblesRemaining(0);
         } else if (difficulty.isScramblingUnlimited()) {
-            hud.setScramblesRemaining(INFINITE_STRING);
+            hud.setScramblesRemaining(getResources().getString(R.string.gameScreen_infiniteValue));
         } else {
-            hud.setScramblesRemaining((scramblesEarned - scramblesUsed) + "");
+            hud.setScramblesRemaining(scramblesEarned - scramblesUsed);
         }
 
         if (!difficulty.isWordAverageEnabled()) {
-            hud.setMovesRemaining(INFINITE_STRING);
+            hud.setMovesRemaining(getResources().getString(R.string.gameScreen_infiniteValue));
         } else {
-            hud.setMovesRemaining((movesEarned - movesUsed) + "");
+            hud.setMovesRemaining(movesEarned - movesUsed);
         }
 
-        hud.setCurrentLevel(currentLevel + "");
+        hud.setCurrentLevel(currentLevel);
 
         // Update tile board
         tileBoard.scramble();

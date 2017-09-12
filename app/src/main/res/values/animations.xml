@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Durations -->
+    <integer name="animation_durationResponsive">280</integer>
+    <integer name="animation_durationEffect">550</integer>
+</resources>
