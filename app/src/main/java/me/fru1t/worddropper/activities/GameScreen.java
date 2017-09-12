@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
 
 import me.fru1t.worddropper.R;
@@ -139,6 +140,7 @@ public class GameScreen extends AppCompatActivity {
 
                 ValueAnimator va = ValueAnimator.ofInt(
                         movesEarned - movesUsed, movesEarned + movesToAdd - movesUsed);
+                va.setInterpolator(new AccelerateDecelerateInterpolator());
                 va.setDuration(getResources().getInteger(R.integer.animation_durationEffect));
                 va.addUpdateListener(
                         animation -> hud.setMovesRemaining((Integer) animation.getAnimatedValue()));

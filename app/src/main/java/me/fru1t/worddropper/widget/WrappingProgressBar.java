@@ -9,9 +9,12 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.BounceInterpolator;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
 
 /**
@@ -38,11 +41,6 @@ public class WrappingProgressBar extends View {
         void onWrap(int wraps, int newMax);
     }
 
-    private static final int ANIMATION_DURATION_BASE = 150;
-    private static final int ANIMATION_DURATION_PER_DELTA = 35;
-    private static final int ANIMATION_DURATION_MAX = 1000;
-
-    private static final int TEXT_SIZE = 16;
     private static final Typeface TEXT_TYPE_FACE = Typeface.DEFAULT;
 
     private final Paint backgroundColor;
@@ -72,7 +70,7 @@ public class WrappingProgressBar extends View {
         progressCalculatedColor = new Paint();
 
         textPaint = new Paint();
-        textPaint.setTextSize(TEXT_SIZE);
+        textPaint.setTextSize(getResources().getDimension(R.dimen.wrappingProgressBar_textSize));
         textPaint.setTypeface(TEXT_TYPE_FACE);
 
         wraps = 0;
@@ -156,9 +154,13 @@ public class WrappingProgressBar extends View {
 
         ValueAnimator va = ValueAnimator.ofFloat(
                 calculatedProgressBarWidth, (float) (progress * 1.0 / max * getWidth()));
+        va.setInterpolator(new BounceInterpolator());
         va.setDuration(Math.min(
-                ANIMATION_DURATION_BASE + ANIMATION_DURATION_PER_DELTA * progressDelta,
-                ANIMATION_DURATION_MAX));
+                getResources().getInteger(R.integer.animation_durationWrappingProgressBarBase)
+                        + getResources().getInteger(
+                                R.integer.animation_durationWrappingProgressBarPerDelta)
+                        * progressDelta,
+                getResources().getInteger(R.integer.animation_durationWrappingProgressBarMax)));
         va.addUpdateListener(animation -> {
             calculatedProgressBarWidth = (float) animation.getAnimatedValue();
             postInvalidate();

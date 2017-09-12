@@ -3,8 +3,12 @@ package me.fru1t.worddropper.widget;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Point;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.MotionEvent;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.BounceInterpolator;
 import android.widget.FrameLayout;
 
 import java.util.ArrayList;
@@ -15,6 +19,7 @@ import java.util.function.Consumer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
 import me.fru1t.worddropper.widget.tileboard.Tile;
 import me.fru1t.worddropper.widget.tileboard.TileBoardColumn;
@@ -88,8 +93,6 @@ public class TileBoard extends FrameLayout {
         Tile tile;
     }
 
-    private static final int ANIMATION_DURATION_TILE_DROP = 350;
-    private static final int ANIMATION_SEQUENTIAL_TILE_DROP_DELAY = 5;
     private static final int SCRAMBLE_SPACING = 50;
 
     // Measurements
@@ -295,9 +298,10 @@ public class TileBoard extends FrameLayout {
                 }
 
                 ObjectAnimator animation = ObjectAnimator.ofFloat(tile, "y", newY);
-                animation.setDuration(ANIMATION_DURATION_TILE_DROP);
-                (new android.os.Handler()).postDelayed(
-                        animation::start, tileToAnimate * ANIMATION_SEQUENTIAL_TILE_DROP_DELAY);
+                animation.setDuration(
+                        getResources().getInteger(R.integer.animation_durationGameBoardTileDrop));
+                (new Handler()).postDelayed(animation::start, tileToAnimate * getResources()
+                        .getInteger(R.integer.animation_tileBoardSequentialTileDropDelay));
                 tileToAnimate++;
             }
         }

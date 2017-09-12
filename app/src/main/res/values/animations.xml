@@ -3,4 +3,14 @@
     <!-- Durations -->
     <integer name="animation_durationResponsive">280</integer>
     <integer name="animation_durationEffect">550</integer>
+    <integer name="animation_durationLag">1100</integer>
+
+    <!-- Wrapping Progress Bar -->
+    <integer name="animation_durationWrappingProgressBarBase">150</integer>
+    <integer name="animation_durationWrappingProgressBarPerDelta">35</integer>
+    <integer name="animation_durationWrappingProgressBarMax">1000</integer>
+
+    <!-- Game Board -->
+    <integer name="animation_tileBoardSequentialTileDropDelay">5</integer>
+    <integer name="animation_durationGameBoardTileDrop">380</integer>
 </resources>

@@ -3,14 +3,17 @@ package me.fru1t.worddropper.activities;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
+import me.fru1t.android.annotations.VisibleForXML;
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
 import me.fru1t.worddropper.settings.ColorTheme;
@@ -36,7 +39,6 @@ public class EndGameScreen extends AppCompatActivity {
             R.id.endGameScreenActionPlayAgain
     };
 
-    private static final int ANIMATION_DURATION_STATS = 1100;
     private static final String STAT_FORMAT_STRING = "%s";
 
     private WordDropperApplication app;
@@ -77,39 +79,11 @@ public class EndGameScreen extends AppCompatActivity {
         scramblesEarned = (TextView) root.findViewById(R.id.endGameScreenScramblesEarned);
         words = (TextView) root.findViewById(R.id.endGameScreenWords);
 
-        ValueAnimator scoreAnimator =
-                ValueAnimator.ofInt(0, getIntent().getIntExtra(EXTRA_SCORE, 0));
-        ValueAnimator levelAnimator =
-                ValueAnimator.ofInt(0, getIntent().getIntExtra(EXTRA_LEVEL, 0));
-        ValueAnimator scramblesUsedAnimator =
-                ValueAnimator.ofInt(0, getIntent().getIntExtra(EXTRA_SCRAMBLES_USED, 0));
-        ValueAnimator scramblesEarnedAnimator =
-                ValueAnimator.ofInt(0, getIntent().getIntExtra(EXTRA_SCRAMBLES_EARNED, 0));
-        ValueAnimator wordsAnimator =
-                ValueAnimator.ofInt(0, getIntent().getIntExtra(EXTRA_MOVES, 0));
-
-        scoreAnimator.setDuration(ANIMATION_DURATION_STATS);
-        levelAnimator.setDuration(ANIMATION_DURATION_STATS);
-        scramblesUsedAnimator.setDuration(ANIMATION_DURATION_STATS);
-        scramblesEarnedAnimator.setDuration(ANIMATION_DURATION_STATS);
-        wordsAnimator.setDuration(ANIMATION_DURATION_STATS);
-
-        scoreAnimator.addUpdateListener(animation -> score.setText(
-                String.format(Locale.ENGLISH, STAT_FORMAT_STRING, animation.getAnimatedValue())));
-        levelAnimator.addUpdateListener(animation -> level.setText(
-                String.format(Locale.ENGLISH, STAT_FORMAT_STRING, animation.getAnimatedValue())));
-        scramblesUsedAnimator.addUpdateListener(animation -> scramblesUsed.setText(
-                String.format(Locale.ENGLISH, STAT_FORMAT_STRING, animation.getAnimatedValue())));
-        scramblesEarnedAnimator.addUpdateListener(animation -> scramblesEarned.setText(
-                String.format(Locale.ENGLISH, STAT_FORMAT_STRING, animation.getAnimatedValue())));
-        wordsAnimator.addUpdateListener(animation -> words.setText(
-                String.format(Locale.ENGLISH, STAT_FORMAT_STRING, animation.getAnimatedValue())));
-
-        levelAnimator.start();
-        (new android.os.Handler()).postDelayed(scramblesEarnedAnimator::start, 50);
-        (new android.os.Handler()).postDelayed(scoreAnimator::start, 50);
-        (new android.os.Handler()).postDelayed(scramblesUsedAnimator::start, 100);
-        (new android.os.Handler()).postDelayed(wordsAnimator::start, 150);
+        animateValue(EXTRA_LEVEL, level, 0);
+        animateValue(EXTRA_SCORE, score, 50);
+        animateValue(EXTRA_SCRAMBLES_EARNED, scramblesEarned, 50);
+        animateValue(EXTRA_SCRAMBLES_USED, scramblesUsed, 100);
+        animateValue(EXTRA_MOVES, words, 150);
 
         // Find all other textviews.
         unimportantTextViews.clear();
@@ -137,6 +111,22 @@ public class EndGameScreen extends AppCompatActivity {
         return result;
     }
 
+    private void animateValue(String intentExtraName, TextView target, int delay) {
+        ValueAnimator animator =
+                ValueAnimator.ofInt(0, getIntent().getIntExtra(intentExtraName, 0));
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator.setDuration(getResources().getInteger(R.integer.animation_durationLag));
+        animator.addUpdateListener(animation -> target.setText(
+                String.format(Locale.ENGLISH, STAT_FORMAT_STRING, animation.getAnimatedValue())));
+
+        if (delay > 0) {
+            (new Handler()).postDelayed(animator::start, delay);
+        } else {
+            animator.start();
+        }
+    }
+
+    @VisibleForXML
     public void onActionPlayAgainClick(View v) {
         Intent gameScreenIntent = new Intent(this, GameScreen.class);
         gameScreenIntent.putExtra(GameScreen.EXTRA_DIFFICULTY, difficulty);
@@ -144,6 +134,7 @@ public class EndGameScreen extends AppCompatActivity {
         startActivity(gameScreenIntent);
     }
 
+    @VisibleForXML
     public void onActionMainMenuClick(View v) {
         startActivity(new Intent(this, MainMenuScreen.class));
     }

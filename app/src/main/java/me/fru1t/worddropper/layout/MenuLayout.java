@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.LinearLayout;
@@ -118,6 +119,7 @@ public class MenuLayout extends RelativeLayout {
 
         isOpen = true;
         AlphaAnimation aa = new AlphaAnimation(0f, 1f);
+        aa.setInterpolator(new AccelerateInterpolator());
         aa.setDuration(getResources().getInteger(R.integer.animation_durationResponsive));
         aa.setFillAfter(true);
         aa.setAnimationListener(new Animation.AnimationListener() {
@@ -152,6 +154,7 @@ public class MenuLayout extends RelativeLayout {
 
         isOpen = false;
         AlphaAnimation aa = new AlphaAnimation(1f, 0f);
+        aa.setInterpolator(new AccelerateInterpolator());
         aa.setDuration(getResources().getInteger(R.integer.animation_durationResponsive));
         aa.setFillAfter(true);
         aa.setAnimationListener(new Animation.AnimationListener() {

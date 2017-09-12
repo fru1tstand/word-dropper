@@ -11,6 +11,7 @@ import java.util.Scanner;
 import java.util.concurrent.CountDownLatch;
 
 import lombok.Setter;
+import me.fru1t.worddropper.WordDropperApplication;
 
 /**
  * Methods for game words like existence, point values, etc.
@@ -43,9 +44,9 @@ public class Dictionary {
             String dictionaryName = params[0];
             HashSet<String> result = new HashSet<>();
 
-            Scanner dictionaryScanner = new Scanner(context.getResources().openRawResource(
-                    context.getResources().getIdentifier(
-                            dictionaryName, "raw", context.getPackageName())));
+            Scanner dictionaryScanner = new Scanner(app.getResources().openRawResource(
+                    app.getResources().getIdentifier(
+                            dictionaryName, "raw", app.getPackageName())));
             int wordsLoaded = 0;
             while (dictionaryScanner.hasNext()) {
                 result.add(dictionaryScanner.next());
@@ -87,7 +88,7 @@ public class Dictionary {
 
     private static final int TOTAL_WORDS = 369648;
 
-    private final Context context;
+    private final WordDropperApplication app;
     private final HashSet<String> dictionary;
     private final CountDownLatch loaderCdl;
     private int loadedWords;
@@ -97,7 +98,7 @@ public class Dictionary {
     private @Nullable @Setter LoadCompleteListener loadCompleteListener;
 
     public Dictionary(Context context) {
-        this.context = context;
+        app = (WordDropperApplication) context.getApplicationContext();
         loaderCdl = new CountDownLatch(8);
         dictionary = new HashSet<>();
 
@@ -147,6 +148,6 @@ public class Dictionary {
      * incoming strings are lowercase.
      */
     public boolean isWord(String s) {
-        return dictionary.contains(s);
+        return app.isDebugging() ||  dictionary.contains(s);
     }
 }

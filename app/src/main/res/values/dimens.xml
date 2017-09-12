@@ -24,4 +24,7 @@
     <!-- MenuLayout -->
     <dimen name="menuLayout_textSize">18sp</dimen>
     <dimen name="menuLayout_optionHeight">50dp</dimen>
+
+    <!-- Wrapping progress bar -->
+    <dimen name="wrappingProgressBar_textSize">8sp</dimen>
 </resources>
