@@ -18,12 +18,13 @@ import java.util.ArrayList;
 import lombok.Getter;
 import lombok.Setter;
 import me.fru1t.worddropper.R;
-import me.fru1t.worddropper.WordDropper;
+import me.fru1t.worddropper.WordDropperApplication;
 
 /**
  * Styles a menu. This is the driver to layout_menu.xml.
  */
 public class MenuLayout extends RelativeLayout {
+    // TODO: Replace custom interfaces with Runnables
     @FunctionalInterface
     public interface OnShowListener {
         void onShow();
@@ -38,30 +39,35 @@ public class MenuLayout extends RelativeLayout {
 
     private static final int ANIMATION_DURATION_MENU_TOGGLE = 350;
 
+    // TODO: Move to dimens
     private static final int FONT_SIZE = 18;
     private static final int MENU_OPTION_HEIGHT = 130;
-
-    private LinearLayout menu;
-    private final ArrayList<TextView> menuOptions;
-
+    
+    private final WordDropperApplication app;
     private @Getter boolean isOpen;
     private @Nullable @Setter OnShowListener onShowListener;
     private @Nullable @Setter OnHideListener onHideListener;
 
+    private LinearLayout menu;
+    private final ArrayList<TextView> menuOptions;
+
     public MenuLayout(Context context) {
         super(context);
+        app = (WordDropperApplication) context.getApplicationContext();
         menuOptions = new ArrayList<>();
         isOpen = false;
     }
 
     public MenuLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+        app = (WordDropperApplication) context.getApplicationContext();
         menuOptions = new ArrayList<>();
         isOpen = false;
     }
 
     public MenuLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        app = (WordDropperApplication) context.getApplicationContext();
         menuOptions = new ArrayList<>();
         isOpen = false;
     }
@@ -71,7 +77,7 @@ public class MenuLayout extends RelativeLayout {
         super.onFinishInflate();
 
         menu = (LinearLayout) findViewById(R.id.menuMenu);
-        menu.setBackgroundColor(WordDropper.colorTheme.backgroundLight);
+        menu.setBackgroundColor(app.getColorTheme().backgroundLight);
 
         setClickable(true);
         setOnClickListener(v -> hide());
@@ -97,7 +103,7 @@ public class MenuLayout extends RelativeLayout {
             }
             action.run();
         });
-        result.setTextColor(WordDropper.colorTheme.text);
+        result.setTextColor(app.getColorTheme().text);
 
         menu.addView(result);
         result.getLayoutParams().height = MENU_OPTION_HEIGHT;
@@ -114,8 +120,8 @@ public class MenuLayout extends RelativeLayout {
      */
     public void show() {
         // Update colors
-        menu.setBackgroundColor(WordDropper.colorTheme.backgroundLight);
-        menuOptions.forEach(tv -> tv.setTextColor(WordDropper.colorTheme.text));
+        menu.setBackgroundColor(app.getColorTheme().backgroundLight);
+        menuOptions.forEach(tv -> tv.setTextColor(app.getColorTheme().text));
 
         if (isOpen) {
             if (onShowListener != null) {

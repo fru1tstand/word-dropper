@@ -12,7 +12,7 @@ import android.view.View;
 
 import lombok.Getter;
 import lombok.Setter;
-import me.fru1t.worddropper.WordDropper;
+import me.fru1t.worddropper.WordDropperApplication;
 
 /**
  * A minimalist-designed progress bar that shows the progress via text. On hitting the maximum, the
@@ -27,6 +27,7 @@ public class WrappingProgressBar extends View {
         int next(int wraps);
     }
 
+    // TODO: Change to functional interface
     public interface WrappingProgressBarEventListener {
         /**
          * Called when the progress bar wraps.
@@ -54,6 +55,7 @@ public class WrappingProgressBar extends View {
     private final Paint progressCalculatedColor;
     private final Paint textPaint;
 
+    private final WordDropperApplication app;
     private @Getter int max;
     private @Getter int progress;
     private @Getter int wraps;
@@ -67,6 +69,7 @@ public class WrappingProgressBar extends View {
 
     public WrappingProgressBar(Context context) {
         super(context);
+        app = (WordDropperApplication) context.getApplicationContext();
 
         backgroundColor = new Paint();
         progressColor = new Paint();
@@ -89,10 +92,10 @@ public class WrappingProgressBar extends View {
     }
 
     public void updateColors() {
-        backgroundColor.setColor(WordDropper.colorTheme.background);
-        progressColor.setColor(WordDropper.colorTheme.primaryDark);
-        progressCalculatedColor.setColor(WordDropper.colorTheme.primaryLight);
-        textPaint.setColor(WordDropper.colorTheme.textOnPrimaryDark);
+        backgroundColor.setColor(app.getColorTheme().background);
+        progressColor.setColor(app.getColorTheme().primaryDark);
+        progressCalculatedColor.setColor(app.getColorTheme().primaryLight);
+        textPaint.setColor(app.getColorTheme().textOnPrimaryDark);
         postInvalidate();
     }
 

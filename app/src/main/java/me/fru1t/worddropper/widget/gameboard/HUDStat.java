@@ -6,13 +6,14 @@ import android.support.annotation.NonNull;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import me.fru1t.worddropper.WordDropper;
+import me.fru1t.worddropper.WordDropperApplication;
 import me.fru1t.worddropper.settings.ColorTheme;
 
 /**
  * A single statistic within the HUD
  */
 public class HUDStat extends FrameLayout {
+    // TODO: Move to resource file and switch to dp
     public static final int HEIGHT = 170;
 
     private static final int TITLE_TEXT_SIZE = 16;
@@ -21,6 +22,8 @@ public class HUDStat extends FrameLayout {
     private static final int TITLE_SPACING = 20;
     private static final int VALUE_SPACING = 10;
 
+    private final WordDropperApplication app;
+    
     private final TextView titleTextView;
     private final TextView valueTextView;
 
@@ -28,6 +31,7 @@ public class HUDStat extends FrameLayout {
 
     public HUDStat(@NonNull Context context) {
         super(context);
+        app = (WordDropperApplication) context.getApplicationContext();
 
         titleTextView = new TextView(context);
         addView(titleTextView);
@@ -42,7 +46,7 @@ public class HUDStat extends FrameLayout {
     }
 
     public void updateColors() {
-        ColorTheme.set(TextView::setTextColor, WordDropper.colorTheme.textBlend,
+        ColorTheme.set(TextView::setTextColor, app.getColorTheme().textBlend,
                 titleTextView, valueTextView);
         postInvalidate();
     }

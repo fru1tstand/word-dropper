@@ -8,8 +8,9 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import me.fru1t.worddropper.R;
-import me.fru1t.worddropper.WordDropper;
+import me.fru1t.worddropper.WordDropperApplication;
 import me.fru1t.worddropper.settings.ColorTheme;
+import me.fru1t.worddropper.settings.Difficulty;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -21,6 +22,8 @@ public class MainMenuScreen extends AppCompatActivity {
             R.id.mainMenuScreenOptionStats,
             R.id.mainMenuScreenOptionSettings
     };
+
+    private WordDropperApplication app;
 
     private FrameLayout root;
     private TextView titleWord;
@@ -36,6 +39,7 @@ public class MainMenuScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu_screen);
+        app = (WordDropperApplication) getApplicationContext();
 
         root = (FrameLayout) findViewById(R.id.mainMenuScreenRoot);
         titleWord = (TextView) root.findViewById(R.id.mainMenuScreenTitleWord);
@@ -50,14 +54,17 @@ public class MainMenuScreen extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        root.setBackgroundColor(WordDropper.colorTheme.background);
-        ColorTheme.set(TextView::setTextColor, WordDropper.colorTheme.primary,
+        root.setBackgroundColor(app.getColorTheme().background);
+        ColorTheme.set(TextView::setTextColor, app.getColorTheme().primary,
                 titleWord, titleDropper);
-        ColorTheme.set(TextView::setTextColor, WordDropper.colorTheme.text, options);
+        ColorTheme.set(TextView::setTextColor, app.getColorTheme().text, options);
     }
 
     public void onOptionPlayClick(View view) {
-        startActivity(new Intent(this, GameScreen.class));
+        Intent gameScreenIntent = new Intent(this, GameScreen.class);
+        gameScreenIntent.putExtra(GameScreen.EXTRA_DIFFICULTY, Difficulty.MEDIUM.name());
+
+        startActivity(gameScreenIntent);
     }
 
     public void onOptionStatsClick(View view) {

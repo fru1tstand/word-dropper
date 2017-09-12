@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 
 import lombok.Getter;
 import lombok.Setter;
-import me.fru1t.worddropper.WordDropper;
+import me.fru1t.worddropper.WordDropperApplication;
 
 /**
  * Shows the status, metrics, move left, and current tile path in game. Essentially, the header
@@ -21,6 +21,7 @@ import me.fru1t.worddropper.WordDropper;
  * a wrapper for one that is already inflated.
  */
 public class GameBoardHUD extends FrameLayout {
+    // TODO: Change to functional interfaces.
     public interface GameBoardHUDEventListener {
         /**
          * Triggered when the score stat is clicked.
@@ -45,16 +46,17 @@ public class GameBoardHUD extends FrameLayout {
 
     private static final int TEXT_SIZE = 22;
 
-    private final @Getter TextView currentWordTextView;
-
     private @Setter GameBoardHUDEventListener eventListener;
 
+    private final WordDropperApplication app;
+    private final @Getter TextView currentWordTextView;
     private final HUDStat movesRemaining;
     private final HUDStat scramblesRemaining;
     private final HUDStat currentLevel;
 
     public GameBoardHUD(@NonNull Context context) {
         super(context);
+        app = (WordDropperApplication) context.getApplicationContext();
 
         // Current word element
         currentWordTextView = new TextView(context);
@@ -105,7 +107,7 @@ public class GameBoardHUD extends FrameLayout {
     }
 
     public void updateColors() {
-        setBackgroundColor(WordDropper.colorTheme.background);
+        setBackgroundColor(app.getColorTheme().background);
         movesRemaining.updateColors();
         scramblesRemaining.updateColors();
         currentLevel.updateColors();
@@ -143,15 +145,15 @@ public class GameBoardHUD extends FrameLayout {
     public void setCurrentWordTextView(@Nullable String s) {
         if (Strings.isNullOrEmpty(s)) {
             currentWordTextView.setText("");
-            currentWordTextView.setTextColor(WordDropper.colorTheme.text);
+            currentWordTextView.setTextColor(app.getColorTheme().text);
             return;
         }
 
-        if (WordDropper.isWord(s)) {
-            s += " (" + WordDropper.getWordValue(s) + ")";
-            currentWordTextView.setTextColor(WordDropper.colorTheme.primary);
+        if (app.getDictionary().isWord(s)) {
+            s += " (" + app.getDictionary().getWordValue(s) + ")";
+            currentWordTextView.setTextColor(app.getColorTheme().primary);
         } else {
-            currentWordTextView.setTextColor(WordDropper.colorTheme.text);
+            currentWordTextView.setTextColor(app.getColorTheme().text);
         }
 
         s = s.substring(0, 1).toUpperCase() + s.substring(1);

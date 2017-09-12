@@ -1,7 +1,7 @@
 <resources>
+    <!-- App -->
     <string name="app_name">WordDropper</string>
-
-    <string name="title_activity_game_board">GameBoard</string>
+    <string name="app_sharedPreferencesFileName">worddropper-shared-preferences</string>
 
     <!-- activities/EndGameScreen -->
     <string name="endGameScreen_wordsCreatedTitle">Words Created</string>
@@ -27,5 +27,4 @@
     <string name="mainMenuScreen_optionPlay">Play</string>
     <string name="mainMenuScreen_optionStats">Stats</string>
     <string name="mainMenuScreen_optionSettings">Settings</string>
-
 </resources>

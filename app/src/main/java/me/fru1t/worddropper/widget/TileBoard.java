@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import me.fru1t.worddropper.WordDropper;
+import me.fru1t.worddropper.WordDropperApplication;
 import me.fru1t.worddropper.widget.tileboard.Tile;
 import me.fru1t.worddropper.widget.tileboard.TileBoardColumn;
 
@@ -96,6 +96,8 @@ public class TileBoard extends FrameLayout {
     private static final int TILE_COLUMNS = 7;
     private static final int TILE_MAX_ROWS = 8;
 
+    private final WordDropperApplication app;
+
     // Front of linked list is top element
     private @Setter TileBoardEvents eventHandler;
     private final ArrayList<TileBoardColumn> tileColumns;
@@ -114,6 +116,7 @@ public class TileBoard extends FrameLayout {
 
     public TileBoard(Context context) {
         super(context);
+        app = (WordDropperApplication) context.getApplicationContext();
 
         eventHandler = null;
 
@@ -320,7 +323,7 @@ public class TileBoard extends FrameLayout {
             ChangeEventType eventType = ChangeEventType.FAILED_SUBMIT;
             String currentWord = getCurrentPathString();
 
-            if (WordDropper.isWord(currentWord)) {
+            if (app.getDictionary().isWord(currentWord)) {
                 currentPath.forEach(pathElement -> {
                     pathElement.tile.setText(generateNewTileLetter());
                     pathElement.tile.release();

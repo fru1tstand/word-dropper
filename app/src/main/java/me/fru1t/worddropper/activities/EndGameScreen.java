@@ -6,14 +6,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 import me.fru1t.worddropper.R;
-import me.fru1t.worddropper.WordDropper;
+import me.fru1t.worddropper.WordDropperApplication;
 import me.fru1t.worddropper.settings.ColorTheme;
 
 public class EndGameScreen extends AppCompatActivity {
@@ -22,6 +21,7 @@ public class EndGameScreen extends AppCompatActivity {
     public static final String EXTRA_SCRAMBLES_EARNED = "extra_scrambles_earned";
     public static final String EXTRA_SCRAMBLES_USED = "extra_scrambles_used";
     public static final String EXTRA_LEVEL = "extra_level";
+    public static final String EXTRA_DIFFICULTY = "extra_difficulty";
 
     private static final int[] UNIMPORTANT_TEXT_VIEW_IDS = {
             R.id.endGameScreenGlobalTitle,
@@ -39,9 +39,9 @@ public class EndGameScreen extends AppCompatActivity {
     private static final int ANIMATION_DURATION_STATS = 1100;
     private static final String STAT_FORMAT_STRING = "%s";
 
+    private WordDropperApplication app;
+
     private LinearLayout root;
-    private ScrollView scrollView;
-    private LinearLayout stats;
     private LinearLayout actionsWrapper;
 
     private TextView score;
@@ -50,6 +50,7 @@ public class EndGameScreen extends AppCompatActivity {
     private TextView scramblesEarned;
     private TextView words;
     private View actionsSplitter;
+    private String difficulty;
 
     private final ArrayList<TextView> unimportantTextViews;
 
@@ -58,35 +59,23 @@ public class EndGameScreen extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
-        root.setBackgroundColor(WordDropper.colorTheme.background);
-        actionsWrapper.setBackgroundColor(WordDropper.colorTheme.backgroundLight);
-        actionsSplitter.setBackgroundColor(WordDropper.colorTheme.background);
-        ColorTheme.set(TextView::setTextColor, WordDropper.colorTheme.text,
-                score, level, scramblesEarned, scramblesUsed, words);
-        ColorTheme.set(TextView::setTextColor, WordDropper.colorTheme.text,
-                unimportantTextViews.toArray(new TextView[unimportantTextViews.size()]));
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end_game_screen);
+        app = (WordDropperApplication) getApplicationContext();
 
         root = (LinearLayout) findViewById(R.id.endGameScreenRoot);
-        scrollView = (ScrollView) root.findViewById(R.id.endGameScreenScrollView);
-        stats = (LinearLayout) scrollView.findViewById(R.id.endGameScreenStats);
         actionsWrapper = (LinearLayout) root.findViewById(R.id.endGameScreenActionsWrapper);
         actionsSplitter = actionsWrapper.findViewById(R.id.endGameScreenActionsSplitter);
 
         // Populate data
-        score = (TextView) stats.findViewById(R.id.endGameScreenScore);
-        level = (TextView) stats.findViewById(R.id.endGameScreenLevel);
-        scramblesUsed = (TextView) stats.findViewById(R.id.endGameScreenScramblesUsed);
-        scramblesEarned = (TextView) stats.findViewById(R.id.endGameScreenScramblesEarned);
-        words = (TextView) stats.findViewById(R.id.endGameScreenWords);
+        // TODO: Show difficulty somewhere.
+        difficulty = getIntent().getStringExtra(EXTRA_DIFFICULTY);
+        score = (TextView) root.findViewById(R.id.endGameScreenScore);
+        level = (TextView) root.findViewById(R.id.endGameScreenLevel);
+        scramblesUsed = (TextView) root.findViewById(R.id.endGameScreenScramblesUsed);
+        scramblesEarned = (TextView) root.findViewById(R.id.endGameScreenScramblesEarned);
+        words = (TextView) root.findViewById(R.id.endGameScreenWords);
 
         ValueAnimator scoreAnimator =
                 ValueAnimator.ofInt(0, getIntent().getIntExtra(EXTRA_SCORE, 0));
@@ -127,6 +116,19 @@ public class EndGameScreen extends AppCompatActivity {
         unimportantTextViews.addAll(findAllById(UNIMPORTANT_TEXT_VIEW_IDS));
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        root.setBackgroundColor(app.getColorTheme().background);
+        actionsWrapper.setBackgroundColor(app.getColorTheme().backgroundLight);
+        actionsSplitter.setBackgroundColor(app.getColorTheme().background);
+        ColorTheme.set(TextView::setTextColor, app.getColorTheme().text,
+                score, level, scramblesEarned, scramblesUsed, words);
+        ColorTheme.set(TextView::setTextColor, app.getColorTheme().text,
+                unimportantTextViews.toArray(new TextView[unimportantTextViews.size()]));
+    }
+
     private ArrayList<TextView> findAllById(int... ids) {
         ArrayList<TextView> result = new ArrayList<>();
         for (int id : ids) {
@@ -136,7 +138,10 @@ public class EndGameScreen extends AppCompatActivity {
     }
 
     public void onActionPlayAgainClick(View v) {
-        startActivity(new Intent(this, GameScreen.class));
+        Intent gameScreenIntent = new Intent(this, GameScreen.class);
+        gameScreenIntent.putExtra(GameScreen.EXTRA_DIFFICULTY, difficulty);
+
+        startActivity(gameScreenIntent);
     }
 
     public void onActionMainMenuClick(View v) {

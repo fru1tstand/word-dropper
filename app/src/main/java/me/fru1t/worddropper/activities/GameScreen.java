@@ -4,15 +4,13 @@ import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import lombok.Setter;
 import me.fru1t.worddropper.R;
-import me.fru1t.worddropper.WordDropper;
+import me.fru1t.worddropper.WordDropperApplication;
 import me.fru1t.worddropper.layout.MenuLayout;
 import me.fru1t.worddropper.settings.Difficulty;
 import me.fru1t.worddropper.widget.TileBoard;
@@ -25,76 +23,43 @@ import me.fru1t.worddropper.widget.tileboard.Tile;
  * status bar and navigation/system bar) with user interaction.
  */
 public class GameScreen extends AppCompatActivity {
+    public static final String EXTRA_DIFFICULTY = "extra_difficulty";
+
     private static final String INFINITE_STRING = "∞";
 
+    // TODO: Move this to dimen and change to dp
     private static final int HUD_HEIGHT = 650;
     private static final int PROGRESS_HEIGHT = 40;
-
     private static final int ANIMATION_DURATION_MOVES = 650;
 
-    private @Setter Difficulty difficulty;
+    private WordDropperApplication app;
+
+    private Difficulty difficulty;
     private int movesEarned;
     private int movesUsed;
     private int scramblesEarned;
     private int scramblesUsed;
 
-    private @Nullable FrameLayout root;
-    private @Nullable TileBoard tileBoard;
-    private @Nullable WrappingProgressBar progressBar;
-    private @Nullable GameBoardHUD hud;
-    private @Nullable MenuLayout pauseMenu;
-
-    public GameScreen() {
-        difficulty = Difficulty.ZEN;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        Point screenSize = new Point();
-        getWindowManager().getDefaultDisplay().getSize(screenSize);
-
-        if (tileBoard != null) {
-            tileBoard.setX(0);
-            tileBoard.setY(HUD_HEIGHT);
-            tileBoard.getLayoutParams().height = screenSize.y - HUD_HEIGHT - PROGRESS_HEIGHT;
-            tileBoard.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
-            tileBoard.setBackgroundColor(WordDropper.colorTheme.background);
-            tileBoard.forEachTile(Tile::release); // Essentially, updateColors.
-        }
-
-        if (progressBar != null) {
-            progressBar.setX(0);
-            progressBar.setY(screenSize.y - PROGRESS_HEIGHT);
-            progressBar.getLayoutParams().height = PROGRESS_HEIGHT;
-            progressBar.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
-            progressBar.updateColors();
-        }
-
-        if (hud != null) {
-            hud.setX(0);
-            hud.setY(0);
-            hud.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
-            hud.getLayoutParams().height = HUD_HEIGHT;
-            hud.updateColors();
-        }
-    }
+    private FrameLayout root;
+    private TileBoard tileBoard;
+    private WrappingProgressBar progressBar;
+    private GameBoardHUD hud;
+    private MenuLayout pauseMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_game_screen);
+        app = (WordDropperApplication) getApplicationContext();
+
+        difficulty = Difficulty.valueOf(getIntent().getStringExtra(EXTRA_DIFFICULTY));
 
         Point screenSize = new Point();
         getWindowManager().getDefaultDisplay().getSize(screenSize);
         root = (FrameLayout) findViewById(R.id.gameBoardRoot);
-        assert root != null;
 
         // Create Pause Menu
         pauseMenu = (MenuLayout) getLayoutInflater().inflate(R.layout.layout_menu, root, false);
-        assert pauseMenu != null;
 
         // Create tile board
         tileBoard = new TileBoard(this);
@@ -163,7 +128,7 @@ public class GameScreen extends AppCompatActivity {
                     hud.setCurrentWordTextView(string);
                     break;
                 case SUCCESSFUL_SUBMIT:
-                    progressBar.animateAddProgress(WordDropper.getWordValue(string));
+                    progressBar.animateAddProgress(app.getDictionary().getWordValue(string));
                     hud.setCurrentWordTextView(null);
                     ++movesUsed;
 
@@ -244,11 +209,40 @@ public class GameScreen extends AppCompatActivity {
         root.post(this::restart);
     }
 
-    private void restart() {
-        assert progressBar != null;
-        assert hud != null;
-        assert tileBoard != null;
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+        Point screenSize = new Point();
+        getWindowManager().getDefaultDisplay().getSize(screenSize);
+
+        if (tileBoard != null) {
+            tileBoard.setX(0);
+            tileBoard.setY(HUD_HEIGHT);
+            tileBoard.getLayoutParams().height = screenSize.y - HUD_HEIGHT - PROGRESS_HEIGHT;
+            tileBoard.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+            tileBoard.setBackgroundColor(app.getColorTheme().background);
+            tileBoard.forEachTile(Tile::release); // Essentially, updateColors.
+        }
+
+        if (progressBar != null) {
+            progressBar.setX(0);
+            progressBar.setY(screenSize.y - PROGRESS_HEIGHT);
+            progressBar.getLayoutParams().height = PROGRESS_HEIGHT;
+            progressBar.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+            progressBar.updateColors();
+        }
+
+        if (hud != null) {
+            hud.setX(0);
+            hud.setY(0);
+            hud.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+            hud.getLayoutParams().height = HUD_HEIGHT;
+            hud.updateColors();
+        }
+    }
+
+    private void restart() {
         progressBar.reset();
         int currentLevel = progressBar.getWraps() + 1;
 
@@ -280,13 +274,14 @@ public class GameScreen extends AppCompatActivity {
     }
 
     private void endGame() {
-        assert progressBar != null;
         Intent endGameIntent = new Intent(GameScreen.this, EndGameScreen.class);
         endGameIntent.putExtra(EndGameScreen.EXTRA_LEVEL, progressBar.getWraps() + 1);
         endGameIntent.putExtra(EndGameScreen.EXTRA_SCRAMBLES_USED, scramblesUsed);
         endGameIntent.putExtra(EndGameScreen.EXTRA_SCRAMBLES_EARNED, scramblesEarned);
         endGameIntent.putExtra(EndGameScreen.EXTRA_MOVES, movesUsed);
         endGameIntent.putExtra(EndGameScreen.EXTRA_SCORE, progressBar.getTotal());
+        endGameIntent.putExtra(EndGameScreen.EXTRA_DIFFICULTY, difficulty.name());
+
         startActivity(endGameIntent);
     }
 }

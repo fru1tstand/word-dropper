@@ -13,6 +13,11 @@ import lombok.Getter;
  * implementation uses terms with respect to a vertical column where the rows are elements from top
  * to bottom. When iterating over the elements, the iterable interface gives tiles from the top to
  * the bottom (eg. in the order of a stack: FILO).
+ *
+ * This class prioritises fetching over inserts or "resets". Any reorganization of elements within
+ * the column has an O(n) cost; however, fetching is always O(1). This is useful to us as the user
+ * may select/deselect tiles rapidly (requiring a fetch), but performs a submit (causing a
+ * reorganize) far less frequently.
  */
 public class TileBoardColumn {
     private static class Element {
@@ -51,7 +56,7 @@ public class TileBoardColumn {
 
     /**
      * Adds a tile to the top of the column. If the given tile already exists in this column, it is
-     * ignored.
+     * ignored. Adding is a O(n) operation.
      * @param tile The tile to add.
      */
     public void addToTop(Tile tile) {
@@ -81,7 +86,7 @@ public class TileBoardColumn {
     }
 
     /**
-     * Resets a tile in this column by moving it to the top.
+     * Resets a tile in this column by moving it to the top. Resetting is an O(n) operation.
      * @param tile The tile to remove.
      */
     public void reset(Tile tile) {
@@ -125,7 +130,8 @@ public class TileBoardColumn {
     }
 
     /**
-     * Retrieves a tile from this column. Index 0 is the top of a vertical column.
+     * Retrieves a tile from this column. Index 0 is the top of a vertical column. Fetching is an
+     * O(1) operation.
      * @param index The index of the tile.
      * @return The tile at the given index.
      */
