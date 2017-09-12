@@ -6,10 +6,9 @@ import android.graphics.Point;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.MotionEvent;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.BounceInterpolator;
 import android.widget.FrameLayout;
+
+import com.google.common.base.Strings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,11 +98,10 @@ public class TileBoard extends FrameLayout {
     private static final int TILE_COLUMNS = 7;
     private static final int TILE_MAX_ROWS = 8;
 
-    private final WordDropperApplication app;
-
-    // Front of linked list is top element
-    private @Setter TileBoardEvents eventHandler;
+    // Left to right organization of columns.
     private final ArrayList<TileBoardColumn> tileColumns;
+    private final WordDropperApplication app;
+    private @Setter TileBoardEvents eventHandler;
 
     // Board sizing
     private final Point effectiveBoardSize = new Point();
@@ -176,12 +174,43 @@ public class TileBoard extends FrameLayout {
             for (int i = 0; i < column.getSize(); i++) {
                 Tile t = column.get(i);
                 t.setY(-1 * (column.getSize() - i) * (t.getSize() + SCRAMBLE_SPACING));
-                t.setText(generateNewTileLetter());
+                t.setLetter(generateNewTileLetter());
                 t.postInvalidate();
             }
         }
 
         updateTilePosition();
+    }
+
+    /**
+     * @return Retrieves a serialized version of the board
+     */
+    public String getBoardState() {
+        StringBuilder result = new StringBuilder();
+        forEachTile(tile -> result.append(tile.getLetter()));
+        return result.toString();
+    }
+
+    /**
+     * Sets the current board state. If the operation fails, the board may be left in an unknown
+     * state (between the old and new states).
+     * @param boardState The board state.
+     * @return Whether or not the operation was successful.
+     */
+    public boolean setBoardState(String boardState) {
+        if (Strings.isNullOrEmpty(boardState)) {
+            return false;
+        }
+        final int[] i = {0};
+        final boolean[] didSucceed = {true};
+        forEachTile(tile -> {
+            if (i[0] > boardState.length()) {
+                didSucceed[0] = false;
+                return;
+            }
+            tile.setLetter(boardState.charAt(i[0]++));
+        });
+        return didSucceed[0];
     }
 
     @Override
@@ -321,7 +350,8 @@ public class TileBoard extends FrameLayout {
             return;
         }
 
-        // Check if the tile is the last in the list, if so, submit and clear the path
+        // Check if the tile is the last in the list, if so, submit, reset tiles used, and clear
+        // the path
         if (currentPath.size() != 0
                 && currentTile == currentPath.get(currentPath.size() - 1).tile) {
             ChangeEventType eventType = ChangeEventType.FAILED_SUBMIT;
@@ -329,7 +359,7 @@ public class TileBoard extends FrameLayout {
 
             if (app.getDictionary().isWord(currentWord)) {
                 currentPath.forEach(pathElement -> {
-                    pathElement.tile.setText(generateNewTileLetter());
+                    pathElement.tile.setLetter(generateNewTileLetter());
                     pathElement.tile.release();
                     tileColumns.get(pathElement.col).reset(pathElement.tile);
                     pathElement.tile.setY(-1 * pathElement.tile.getSize());
@@ -395,7 +425,7 @@ public class TileBoard extends FrameLayout {
 
     private String getCurrentPathString() {
         StringBuilder sb = new StringBuilder();
-        currentPath.forEach(pathElement -> sb.append(pathElement.tile.getText()));
+        currentPath.forEach(pathElement -> sb.append(pathElement.tile.getLetter()));
         return sb.toString().toLowerCase();
     }
 
@@ -408,15 +438,15 @@ public class TileBoard extends FrameLayout {
         }
     }
 
-    private String generateNewTileLetter() {
+    private char generateNewTileLetter() {
         int nextSeed = (new Random()).nextInt(LetterFrequency.CUMULATIVE_FREQUENCY);
         int cumulative = 0;
         for (LetterFrequency letter : LetterFrequency.values()) {
             cumulative += letter.getRelativeFrequency();
             if (cumulative > nextSeed) {
-                return letter.name();
+                return letter.name().charAt(0);
             }
         }
-        return LetterFrequency.E.name();
+        return LetterFrequency.E.name().charAt(0);
     }
 }

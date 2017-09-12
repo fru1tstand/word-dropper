@@ -14,11 +14,25 @@ import lombok.NoArgsConstructor;
 public class GameWord implements BaseColumns {
     public static final String TABLE_NAME = "game_word";
 
+    /**
+     * INTEGER
+     * The corresponding ID to a valid game.
+     */
     public static final String COLUMN_GAME_ID = "game_id";
+
+    /**
+     * INTEGER
+     * The point value given to the word at the time (as point values may change in the future).
+     */
     public static final String COLUMN_POINT_VALUE = "point_value";
+
+    /**
+     * TEXT
+     * The word submitted.
+     */
     public static final String COLUMN_WORD = "word";
 
-    public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS" + TABLE_NAME + " ("
+    public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
             + _ID                   + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + COLUMN_GAME_ID        + " INTEGER NOT NULL, "
             + COLUMN_POINT_VALUE    + " INTEGER NOT NULL, "

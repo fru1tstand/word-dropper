@@ -21,6 +21,8 @@
     <dimen name="gameScreen_hudCurrentWordTextSize">22sp</dimen>
     <dimen name="gameScreen_progressHeight">16dp</dimen>
 
+    <dimen name="gameScreen_tileTextSize">22sp</dimen>
+
     <!-- MenuLayout -->
     <dimen name="menuLayout_textSize">18sp</dimen>
     <dimen name="menuLayout_optionHeight">50dp</dimen>

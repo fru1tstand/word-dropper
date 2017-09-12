@@ -13,6 +13,8 @@ import me.fru1t.worddropper.settings.Dictionary;
  * Settings and global variables (*gasp*) loaded onWrapEventListener startup.
  */
 public class WordDropperApplication extends Application {
+    public static final String LOG_TAG = "WordDropper";
+
     private @Getter SharedPreferences sharedPreferences;
     private @Getter ColorTheme colorTheme;
 

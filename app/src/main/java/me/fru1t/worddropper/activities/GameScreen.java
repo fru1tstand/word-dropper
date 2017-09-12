@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
+import me.fru1t.worddropper.database.tables.Game;
 import me.fru1t.worddropper.layout.MenuLayout;
 import me.fru1t.worddropper.settings.Difficulty;
 import me.fru1t.worddropper.widget.TileBoard;
@@ -26,6 +27,8 @@ import me.fru1t.worddropper.widget.tileboard.Tile;
 public class GameScreen extends AppCompatActivity {
     public static final String EXTRA_DIFFICULTY = "extra_difficulty";
 
+    private static final long NO_GAME = -1;
+
     private WordDropperApplication app;
 
     private Difficulty difficulty;
@@ -39,6 +42,12 @@ public class GameScreen extends AppCompatActivity {
     private WrappingProgressBar progressBar;
     private GameBoardHUD hud;
     private MenuLayout pauseMenu;
+
+    private long gameId;
+
+    public GameScreen() {
+        gameId = NO_GAME;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +90,8 @@ public class GameScreen extends AppCompatActivity {
             if (difficulty.isScramblingUnlimited()) {
                 tileBoard.scramble();
                 scramblesUsed++;
+                app.getDatabaseUtils().updateGame(gameId,
+                        update -> update.put(Game.COLUMN_SCRAMBLES_USED, scramblesUsed));
                 return;
             }
 
@@ -91,6 +102,8 @@ public class GameScreen extends AppCompatActivity {
             scramblesUsed++;
             tileBoard.scramble();
             hud.setScramblesRemaining(scramblesEarned - scramblesUsed);
+            app.getDatabaseUtils().updateGame(gameId,
+                    update -> update.put(Game.COLUMN_SCRAMBLES_USED, scramblesUsed));
         });
         hud.setOnCurrentWordClickEventListener(() -> {
             if (pauseMenu.isOpen()) {
@@ -102,13 +115,15 @@ public class GameScreen extends AppCompatActivity {
         });
 
         // Post-creation
-        tileBoard.setEventHandler((changeEventType, string) -> {
+        tileBoard.setEventHandler((changeEventType, word) -> {
             switch (changeEventType) {
                 case CHANGE:
-                    hud.setCurrentWordTextView(string);
+                    hud.setCurrentWordTextView(word);
                     break;
+
                 case SUCCESSFUL_SUBMIT:
-                    progressBar.animateAddProgress(app.getDictionary().getWordValue(string));
+                    int wordValue = app.getDictionary().getWordValue(word);
+                    progressBar.animateAddProgress(wordValue);
                     hud.setCurrentWordTextView(null);
                     ++movesUsed;
 
@@ -119,12 +134,20 @@ public class GameScreen extends AppCompatActivity {
                         }
                         hud.setMovesRemaining(movesEarned - movesUsed);
                     }
+
+                    // Add to database
+                    app.getDatabaseUtils().addGameMove(
+                            gameId, word, wordValue, progressBar.getTotal(),
+                            tileBoard.getBoardState());
                     break;
+
                 case FAILED_SUBMIT:
+                    // Do nothing.
                     break;
             }
         });
 
+        // On level up
         progressBar.setOnWrapEventListener((wraps, newMax) -> {
             int currentLevel = wraps + 1;
 
@@ -154,7 +177,15 @@ public class GameScreen extends AppCompatActivity {
                 }
             }
 
-            hud.setCurrentLevel(currentLevel + "");
+            hud.setCurrentLevel(currentLevel);
+
+            // Update database
+            app.getDatabaseUtils().updateGame(gameId, update -> {
+                update.put(Game.COLUMN_LEVEL, currentLevel);
+                update.put(Game.COLUMN_MOVES_EARNED, movesEarned);
+                update.put(Game.COLUMN_SCRAMBLES_EARNED, scramblesEarned);
+                update.put(Game.COLUMN_BOARD_STATE, tileBoard.getBoardState());
+            });
         });
         progressBar.setOnAnimateAddEndEventListener(() -> {
             if (movesUsed < movesEarned || !difficulty.isWordAverageEnabled()) {
@@ -175,13 +206,13 @@ public class GameScreen extends AppCompatActivity {
 
         pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuSaveAndQuit, false, () -> {});
         pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuSettings, true, () -> {});
-        pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuRestartOption, true, this::restart);
+        pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuRestartOption, true, this::startGame);
         pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuEndGameOption, false, this::endGame);
 
         pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuCloseMenuOption, false,
                 pauseMenu::hide);
 
-        root.post(this::restart);
+        root.post(this::startGame);
     }
 
     @Override
@@ -217,7 +248,7 @@ public class GameScreen extends AppCompatActivity {
         }
     }
 
-    private void restart() {
+    private void startGame() {
         progressBar.reset();
         int currentLevel = progressBar.getWraps() + 1;
 
@@ -246,17 +277,19 @@ public class GameScreen extends AppCompatActivity {
 
         // Update tile board
         tileBoard.scramble();
+
+        // Get game id from database
+        gameId = app.getDatabaseUtils().startGame(difficulty, tileBoard.getBoardState(),
+                movesEarned, scramblesEarned);
     }
 
     private void endGame() {
-        Intent endGameIntent = new Intent(GameScreen.this, EndGameScreen.class);
-        endGameIntent.putExtra(EndGameScreen.EXTRA_LEVEL, progressBar.getWraps() + 1);
-        endGameIntent.putExtra(EndGameScreen.EXTRA_SCRAMBLES_USED, scramblesUsed);
-        endGameIntent.putExtra(EndGameScreen.EXTRA_SCRAMBLES_EARNED, scramblesEarned);
-        endGameIntent.putExtra(EndGameScreen.EXTRA_MOVES, movesUsed);
-        endGameIntent.putExtra(EndGameScreen.EXTRA_SCORE, progressBar.getTotal());
-        endGameIntent.putExtra(EndGameScreen.EXTRA_DIFFICULTY, difficulty.name());
+        // End game in database
+        app.getDatabaseUtils().endGame(gameId);
 
+        // Open end game screen
+        Intent endGameIntent = new Intent(this, EndGameScreen.class);
+        endGameIntent.putExtra(EndGameScreen.EXTRA_GAME_ID, gameId);
         startActivity(endGameIntent);
     }
 }

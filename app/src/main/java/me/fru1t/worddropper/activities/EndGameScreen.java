@@ -9,22 +9,22 @@ import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
 import me.fru1t.android.annotations.VisibleForXML;
+import me.fru1t.android.database.Row;
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
+import me.fru1t.worddropper.database.tables.Game;
+import me.fru1t.worddropper.database.tables.GameWord;
 import me.fru1t.worddropper.settings.ColorTheme;
+import me.fru1t.worddropper.settings.Difficulty;
 
 public class EndGameScreen extends AppCompatActivity {
-    public static final String EXTRA_SCORE = "extra_score";
-    public static final String EXTRA_MOVES = "extra_moves";
-    public static final String EXTRA_SCRAMBLES_EARNED = "extra_scrambles_earned";
-    public static final String EXTRA_SCRAMBLES_USED = "extra_scrambles_used";
-    public static final String EXTRA_LEVEL = "extra_level";
-    public static final String EXTRA_DIFFICULTY = "extra_difficulty";
+    public static final String EXTRA_GAME_ID = "extra_game_id"; // Long
 
     private static final int[] UNIMPORTANT_TEXT_VIEW_IDS = {
             R.id.endGameScreenGlobalTitle,
@@ -53,6 +53,7 @@ public class EndGameScreen extends AppCompatActivity {
     private TextView words;
     private View actionsSplitter;
     private String difficulty;
+    private TextView wordsList;
 
     private final ArrayList<TextView> unimportantTextViews;
 
@@ -70,24 +71,50 @@ public class EndGameScreen extends AppCompatActivity {
         actionsWrapper = (LinearLayout) root.findViewById(R.id.endGameScreenActionsWrapper);
         actionsSplitter = actionsWrapper.findViewById(R.id.endGameScreenActionsSplitter);
 
+        // Fetch data
+        long gameId = getIntent().getLongExtra(EXTRA_GAME_ID, -1);
+        Row gameData = app.getDatabaseUtils().getRowFromId(
+                Game.TABLE_NAME,
+                gameId,
+                new String[] { Game.COLUMN_UNIX_START, Game.COLUMN_STATUS, Game.COLUMN_DIFFICULTY,
+                        Game.COLUMN_BOARD_STATE, Game.COLUMN_MOVES_EARNED, Game.COLUMN_BOARD_STATE,
+                        Game.COLUMN_MOVES_EARNED, Game.COLUMN_SCRAMBLES_USED,
+                        Game.COLUMN_SCRAMBLES_EARNED, Game.COLUMN_LEVEL, Game.COLUMN_SCORE });
+        if (gameData == null) {
+            Toast.makeText(this, R.string.endGameScreen_gameNotFoundError, Toast.LENGTH_LONG)
+                    .show();
+            startActivity(new Intent(this, MainMenuScreen.class));
+            return;
+        }
+        int gameDataWords = app.getDatabaseUtils().getRowCount(
+                GameWord.TABLE_NAME,
+                GameWord.COLUMN_GAME_ID + " = ?",
+                new String[] { gameId + "" });
+
         // Populate data
         // TODO: Show difficulty somewhere.
-        difficulty = getIntent().getStringExtra(EXTRA_DIFFICULTY);
+        difficulty = gameData.getString(Game.COLUMN_DIFFICULTY, Difficulty.ZEN.name());
         score = (TextView) root.findViewById(R.id.endGameScreenScore);
         level = (TextView) root.findViewById(R.id.endGameScreenLevel);
         scramblesUsed = (TextView) root.findViewById(R.id.endGameScreenScramblesUsed);
         scramblesEarned = (TextView) root.findViewById(R.id.endGameScreenScramblesEarned);
         words = (TextView) root.findViewById(R.id.endGameScreenWords);
+        wordsList = (TextView) root.findViewById(R.id.endGameScreenWordsList);
 
-        animateValue(EXTRA_LEVEL, level, 0);
-        animateValue(EXTRA_SCORE, score, 50);
-        animateValue(EXTRA_SCRAMBLES_EARNED, scramblesEarned, 50);
-        animateValue(EXTRA_SCRAMBLES_USED, scramblesUsed, 100);
-        animateValue(EXTRA_MOVES, words, 150);
+        animateValue(gameData.getInt(Game.COLUMN_LEVEL, 0), level, 0);
+        animateValue(gameData.getInt(Game.COLUMN_SCORE, 0), score, 50);
+        animateValue(gameData.getInt(Game.COLUMN_SCRAMBLES_EARNED, 0), scramblesEarned, 50);
+        animateValue(gameData.getInt(Game.COLUMN_SCRAMBLES_USED, 0), scramblesUsed, 100);
+        animateValue(gameDataWords, words, 150);
 
         // Find all other textviews.
         unimportantTextViews.clear();
         unimportantTextViews.addAll(findAllById(UNIMPORTANT_TEXT_VIEW_IDS));
+
+        // Populate words
+        ArrayList<String> gameMovesList =
+                app.getDatabaseUtils().getGameMoves(getIntent().getLongExtra(EXTRA_GAME_ID, -1));
+        gameMovesList.forEach(s -> wordsList.append(s + ", "));
     }
 
     @Override
@@ -111,9 +138,8 @@ public class EndGameScreen extends AppCompatActivity {
         return result;
     }
 
-    private void animateValue(String intentExtraName, TextView target, int delay) {
-        ValueAnimator animator =
-                ValueAnimator.ofInt(0, getIntent().getIntExtra(intentExtraName, 0));
+    private void animateValue(int value, TextView target, int delay) {
+        ValueAnimator animator = ValueAnimator.ofInt(0, value);
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
         animator.setDuration(getResources().getInteger(R.integer.animation_durationLag));
         animator.addUpdateListener(animation -> target.setText(

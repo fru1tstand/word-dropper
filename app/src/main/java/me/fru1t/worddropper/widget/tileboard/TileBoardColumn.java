@@ -43,8 +43,8 @@ public class TileBoardColumn {
     }
 
     /**
-     * Performs an action onWrapEventListener each tile that belongs to this column.
-     * @param action
+     * Performs an action onWrapEventListener each tile that belongs to this column starting from
+     * the top and ending at the bottom.
      */
     public void forEachTile(Consumer<Tile> action) {
         Element e = top;

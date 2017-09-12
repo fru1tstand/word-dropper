@@ -13,6 +13,8 @@
     <string name="endGameScreen_actionPlayAgain">Play Again</string>
     <string name="endGameScreen_actionMainMenu">Main Menu</string>
 
+    <string name="endGameScreen_gameNotFoundError">The requested game couldn\'t be found.</string>
+
     <!-- activities/GameScreen -->
     <string name="gameScreen_pauseMenuSaveAndQuit">Save and Quit</string>
     <string name="gameScreen_pauseMenuSettings">Settings</string>
