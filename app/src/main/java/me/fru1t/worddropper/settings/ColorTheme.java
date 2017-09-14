@@ -44,7 +44,7 @@ public enum ColorTheme {
             Color.parseColor("#303030"), // background
             Color.parseColor("#424242"), // backgroundLight
             Color.WHITE, // text
-            Color.parseColor("#eeeeee"), // textBlend
+            Color.parseColor("#999999"), // textBlend
             Color.WHITE, // textOnPrimary
             Color.WHITE, // textOnPrimaryLight
             Color.WHITE // textOnPrimaryDark

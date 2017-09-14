@@ -289,6 +289,7 @@ public class GameScreen extends AppCompatActivity {
         }
 
         hud.setCurrentLevel(currentLevel);
+        hud.clearGraph();
 
         // Update tile board
         tileBoard.scramble();

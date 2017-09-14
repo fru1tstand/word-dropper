@@ -17,6 +17,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.google.common.base.Strings;
 
 import java.util.LinkedList;
@@ -78,9 +79,6 @@ public class GameBoardHUD extends FrameLayout {
         wordHistoryChart.setViewPortOffsets(0, 0, 0, 0);
 
         wordHistoryDataList = new LinkedList<>();
-        for (int i = 0; i < CHART_ELEMENTS; i++) {
-            wordHistoryDataList.add(new BarEntry(i, 0, ""));
-        }
         wordHistoryDataSet = new BarDataSet(wordHistoryDataList, "");
         wordHistoryDataSet.setValueFormatter((value, entry, dataSetIndex, viewPortHandler)
                 -> value == 0 ? "" : (int) value + "");
@@ -233,6 +231,16 @@ public class GameBoardHUD extends FrameLayout {
         wordHistoryChart.notifyDataSetChanged();
         wordHistoryChart.setVisibleXRangeMaximum(CHART_ELEMENTS);
         wordHistoryChart.moveViewToX(data.getEntryCount());
+    }
+
+    public void clearGraph() {
+        wordHistoryDataList.clear();
+        for (int i = 0; i < CHART_ELEMENTS; i++) {
+            wordHistoryDataList.add(new BarEntry(i, 0, ""));
+        }
+        wordHistoryChart.getData().notifyDataChanged();
+        wordHistoryChart.notifyDataSetChanged();
+        wordHistoryChart.invalidate();
     }
 
     @Override
