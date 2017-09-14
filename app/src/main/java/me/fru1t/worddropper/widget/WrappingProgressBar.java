@@ -119,16 +119,27 @@ public class WrappingProgressBar extends View {
                 textPaint);
     }
 
+    /**
+     * As the progress bar wraps, this function will determine the next "maximum value" the progress
+     * bar will take on.
+     */
     public void setNextMaximumFunction(NextMaximumFunction nextMaximumFunction) {
         this.nextMaximumFunction = nextMaximumFunction;
         setMax(nextMaximumFunction.next(wraps));
     }
 
+    /**
+     * Straight up sets the maximum value the progress bar should have. Note, upon wrap, if the
+     * nextMaximumFunction has been set, this value will be overwritten by that function.
+     */
     public void setMax(int max) {
         this.max = max;
         animateAddProgress(0);
     }
 
+    /**
+     * Resets the total of this progress bar.
+     */
     public void reset() {
         wraps = 0;
         total = 0;
