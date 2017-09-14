@@ -21,12 +21,14 @@
     <string name="gameScreen_pauseMenuRestartOption">Restart Game</string>
     <string name="gameScreen_pauseMenuCloseMenuOption">Close</string>
     <string name="gameScreen_pauseMenuEndGameOption">End Game</string>
+    <string name="gameScreen_pauseMenuDebugSubmitWords">Submit Words</string>
 
     <string name="gameScreen_hudStatMovesLeft">Moves Left</string>
     <string name="gameScreen_hudStatScrambles">Scrambles</string>
     <string name="gameScreen_hudStatLevel">Level</string>
-
     <string name="gameScreen_infiniteValue">∞</string>
+
+    <string name="gameScreen_wordHistoryChartDescription">Previous word points</string>
 
     <!-- activities/MainMenuScreen -->
     <string name="mainMenuScreen_titleWord">Word</string>

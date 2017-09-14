@@ -9,6 +9,7 @@ import com.google.common.base.Strings;
 import org.jdeferred.impl.DeferredObject;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.CountDownLatch;
 
@@ -136,5 +137,24 @@ public class Dictionary {
      */
     public boolean isWord(String s) {
         return app.isDebugging() ||  dictionary.contains(s);
+    }
+
+    /**
+     * Retrieves a random word from the dictionary that's valued at or above a given value
+     */
+    public String getRandomWord(int minWordValue) {
+        Random r = new Random();
+        while (true) {
+            int i = r.nextInt(dictionary.size());
+            for (String s : dictionary) {
+                if (i-- <= 0) {
+                    if (getWordValue(s) >= minWordValue) {
+                        return s;
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
     }
 }

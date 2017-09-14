@@ -17,10 +17,12 @@
     <dimen name="gameScreen_hudStatValueTopMargin">8dp</dimen>
 
     <dimen name="gameScreen_hudHeight">248dp</dimen>
-    <dimen name="gameScreen_hudCurrentWordTopMargin">145dp</dimen>
+    <dimen name="gameScreen_hudCurrentWordTopMargin">135dp</dimen>
     <dimen name="gameScreen_hudCurrentWordTextSize">22sp</dimen>
-    <dimen name="gameScreen_progressHeight">16dp</dimen>
+    <dimen name="gameScreen_hudCurrentWordHorizontalPadding">4dp</dimen>
+    <dimen name="gameScreen_hudCurrentWordVerticalPadding">1dp</dimen>
 
+    <dimen name="gameScreen_progressHeight">16dp</dimen>
     <dimen name="gameScreen_tileTextSize">22sp</dimen>
 
     <!-- MenuLayout -->

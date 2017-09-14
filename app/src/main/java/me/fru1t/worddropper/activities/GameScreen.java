@@ -124,7 +124,6 @@ public class GameScreen extends AppCompatActivity {
                 case SUCCESSFUL_SUBMIT:
                     int wordValue = app.getDictionary().getWordValue(word);
                     progressBar.animateAddProgress(wordValue);
-                    hud.setCurrentWordTextView(null);
                     ++movesUsed;
 
                     // Use up a move
@@ -134,6 +133,10 @@ public class GameScreen extends AppCompatActivity {
                         }
                         hud.setMovesRemaining(movesEarned - movesUsed);
                     }
+
+                    // Update hud
+                    hud.setCurrentWordTextView(null);
+                    hud.addWordToGraph(word, wordValue);
 
                     // Add to database
                     app.getDatabaseUtils().addGameMove(
@@ -209,6 +212,20 @@ public class GameScreen extends AppCompatActivity {
         pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuRestartOption, true, this::startGame);
         pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuEndGameOption, false, this::endGame);
 
+        if (app.isDebugging()) {
+            pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuDebugSubmitWords, true, () -> {
+                for (int i = 0; i < 40; i++) {
+                    (new android.os.Handler()).postDelayed(() -> runOnUiThread(() ->
+                            tileBoard.getEventHandler().onChange(
+                                    TileBoard.ChangeEventType.SUCCESSFUL_SUBMIT,
+                                    app.getDictionary()
+                                            .getRandomWord(difficulty.wordPointAverage))),
+                            i * 100);
+                }
+            });
+
+        }
+
         pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuCloseMenuOption, false,
                 pauseMenu::hide);
 
@@ -240,8 +257,6 @@ public class GameScreen extends AppCompatActivity {
         }
 
         if (hud != null) {
-            hud.setX(0);
-            hud.setY(0);
             hud.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
             hud.getLayoutParams().height = hudHeight;
             hud.updateColors();

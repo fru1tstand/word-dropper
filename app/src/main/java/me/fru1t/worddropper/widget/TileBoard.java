@@ -101,7 +101,7 @@ public class TileBoard extends FrameLayout {
     // Left to right organization of columns.
     private final ArrayList<TileBoardColumn> tileColumns;
     private final WordDropperApplication app;
-    private @Setter TileBoardEvents eventHandler;
+    private @Getter @Setter TileBoardEvents eventHandler;
 
     // Board sizing
     private final Point effectiveBoardSize = new Point();

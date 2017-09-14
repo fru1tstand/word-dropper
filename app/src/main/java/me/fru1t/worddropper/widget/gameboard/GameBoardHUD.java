@@ -1,16 +1,26 @@
 package me.fru1t.worddropper.widget.gameboard;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.google.common.base.Strings;
 
-import lombok.Getter;
+import java.util.LinkedList;
+
 import lombok.Setter;
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
@@ -21,25 +31,79 @@ import me.fru1t.worddropper.WordDropperApplication;
  * a wrapper for one that is already inflated.
  */
 public class GameBoardHUD extends FrameLayout {
+    private static final int CHART_ELEMENTS = 30;
+
     private @Setter Runnable onLevelClickEventListener;
     private @Setter Runnable onScrambleClickEventListener;
     private @Setter Runnable onMovesLeftClickEventListener;
     private @Setter Runnable onCurrentWordClickEventListener;
 
     private final WordDropperApplication app;
-    private final @Getter TextView currentWordTextView;
+    private final TextView currentWordTextView;
     private final HUDStat movesRemaining;
     private final HUDStat scramblesRemaining;
     private final HUDStat currentLevel;
+
+    private final BarChart wordHistoryChart;
+    private final BarDataSet wordHistoryDataSet;
+    private final LinkedList<BarEntry> wordHistoryDataList;
+
+    private int currentWordHorizontalPadding;
+    private int currentWordVerticalPadding;
 
     public GameBoardHUD(@NonNull Context context) {
         super(context);
         app = (WordDropperApplication) context.getApplicationContext();
         int hudStatHeight = (int) getResources().getDimension(R.dimen.gameScreen_hudStatHeight);
+        currentWordHorizontalPadding = (int)
+                getResources().getDimension(R.dimen.gameScreen_hudCurrentWordHorizontalPadding);
+        currentWordVerticalPadding = (int)
+                getResources().getDimension(R.dimen.gameScreen_hudCurrentWordVerticalPadding);
+
+        // Chart
+        wordHistoryChart = new BarChart(context);
+        addView(wordHistoryChart);
+        wordHistoryChart.setY(getResources().getDimension(R.dimen.gameScreen_hudStatHeight));
+        wordHistoryChart.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+        wordHistoryChart.getLayoutParams().height =
+                (int) (getResources().getDimension(R.dimen.gameScreen_hudHeight)
+                        - getResources().getDimension(R.dimen.gameScreen_hudStatHeight));
+        wordHistoryChart.setDrawBarShadow(false);
+        wordHistoryChart.setDrawValueAboveBar(true);
+        wordHistoryChart.getDescription().setEnabled(false);
+        wordHistoryChart.setPinchZoom(false);
+        wordHistoryChart.setDrawGridBackground(false);
+        wordHistoryChart.setBackgroundColor(Color.TRANSPARENT);
+        wordHistoryChart.setTouchEnabled(false);
+        wordHistoryChart.setViewPortOffsets(0, 0, 0, 0);
+
+        wordHistoryDataList = new LinkedList<>();
+        for (int i = 0; i < CHART_ELEMENTS; i++) {
+            wordHistoryDataList.add(new BarEntry(i, 0, ""));
+        }
+        wordHistoryDataSet = new BarDataSet(wordHistoryDataList, "");
+        wordHistoryDataSet.setValueFormatter((value, entry, dataSetIndex, viewPortHandler)
+                -> value == 0 ? "" : (int) value + "");
+        BarData data = new BarData(wordHistoryDataSet);
+        wordHistoryChart.setData(data);
+
+        XAxis xAxis = wordHistoryChart.getXAxis();
+        xAxis.setEnabled(false);
+        xAxis.setAvoidFirstLastClipping(true);
+
+        YAxis yAxis = wordHistoryChart.getAxisLeft();
+        yAxis.setEnabled(false);
+        yAxis.setAxisMinimum(0);
+        yAxis.setDrawGridLines(false);
+
+        wordHistoryChart.getLegend().setEnabled(false);
+        wordHistoryChart.getAxisRight().setEnabled(false);
 
         // Current word element
         currentWordTextView = new TextView(context);
         addView(currentWordTextView);
+        currentWordTextView.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        currentWordTextView.getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
         currentWordTextView.setY(
                 getResources().getDimension(R.dimen.gameScreen_hudCurrentWordTopMargin));
         currentWordTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX,
@@ -86,6 +150,11 @@ public class GameBoardHUD extends FrameLayout {
 
     public void updateColors() {
         setBackgroundColor(app.getColorTheme().background);
+
+        wordHistoryChart.getData().setValueTextColor(app.getColorTheme().textBlend);
+        wordHistoryDataSet.setColor(app.getColorTheme().textBlend);
+        currentWordTextView.setBackgroundColor(app.getColorTheme().background);
+
         movesRemaining.updateColors();
         scramblesRemaining.updateColors();
         currentLevel.updateColors();
@@ -135,6 +204,8 @@ public class GameBoardHUD extends FrameLayout {
         if (Strings.isNullOrEmpty(s)) {
             currentWordTextView.setText("");
             currentWordTextView.setTextColor(app.getColorTheme().text);
+            currentWordTextView
+                    .setPadding(0, currentWordVerticalPadding, 0, currentWordVerticalPadding);
             return;
         }
 
@@ -146,9 +217,22 @@ public class GameBoardHUD extends FrameLayout {
         }
 
         s = s.substring(0, 1).toUpperCase() + s.substring(1);
-        float wordWidth = currentWordTextView.getPaint().measureText(s);
+        float elementSize = currentWordTextView.getPaint().measureText(s)
+                + currentWordHorizontalPadding * 2;
         currentWordTextView.setText(s);
-        currentWordTextView.setX(getWidth() / 2 - wordWidth / 2);
+        currentWordTextView.setX(getWidth() / 2 - elementSize / 2);
+        currentWordTextView.setPadding(currentWordHorizontalPadding, currentWordVerticalPadding,
+                currentWordHorizontalPadding, currentWordVerticalPadding);
+    }
+
+    public void addWordToGraph(String word, int value) {
+        BarData data = wordHistoryChart.getData();
+        data.addEntry(new BarEntry(wordHistoryDataList.peekLast().getX() + 1, value, word), 0);
+        data.removeEntry(wordHistoryDataList.peekFirst(), 0);
+        data.notifyDataChanged();
+        wordHistoryChart.notifyDataSetChanged();
+        wordHistoryChart.setVisibleXRangeMaximum(CHART_ELEMENTS);
+        wordHistoryChart.moveViewToX(data.getEntryCount());
     }
 
     @Override
