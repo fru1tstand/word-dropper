@@ -63,7 +63,19 @@ public enum ColorTheme {
         Color.parseColor("#"), // textOnPrimaryLight
         Color.parseColor("#") // textOnPrimaryDark
     */
-
+    
+    // Keep synced with attrs.xml
+    private static final int ENUM_PRIMARY = 0;
+    private static final int ENUM_PRIMARY_DARK = 1;
+    private static final int ENUM_PRIMARY_LIGHT = 2;
+    private static final int ENUM_BACKGROUND = 3;
+    private static final int ENUM_BACKGROUND_LIGHT = 4;
+    private static final int ENUM_TEXT = 5;
+    private static final int ENUM_TEXT_BLEND = 6;
+    private static final int ENUM_TEXT_ON_PRIMARY = 7;
+    private static final int ENUM_TEXT_ON_PRIMARY_LIGHT = 8;
+    private static final int ENUM_TEXT_ON_PRIMARY_DARK = 9;
+    
     public final String displayName;
     public final int primary;
     public final int primaryDark;
@@ -90,6 +102,36 @@ public enum ColorTheme {
         this.textOnPrimary = textOnPrimary;
         this.textOnPrimaryLight = textOnPrimaryLight;
         this.textOnPrimaryDark = textOnPrimaryDark;
+    }
+
+    /**
+     * Retrieves the color associated to the enum value specified in attrs.xml. Quietly fails any
+     * invalid enum values by returning the primary color.
+     */
+    public int getColorFromXmlEnum(int enumValue) {
+        switch (enumValue) {
+            case ENUM_PRIMARY_DARK:
+                return primaryDark;
+            case ENUM_PRIMARY_LIGHT:
+                return primaryLight;
+            case ENUM_BACKGROUND:
+                return background;
+            case ENUM_BACKGROUND_LIGHT:
+                return backgroundLight;
+            case ENUM_TEXT:
+                return text;
+            case ENUM_TEXT_BLEND:
+                return textBlend;
+            case ENUM_TEXT_ON_PRIMARY:
+                return textOnPrimary;
+            case ENUM_TEXT_ON_PRIMARY_LIGHT:
+                return textOnPrimaryLight;
+            case ENUM_TEXT_ON_PRIMARY_DARK:
+                return textOnPrimaryDark;
+            case ENUM_PRIMARY:
+            default:
+                return primary;
+        }
     }
 
     /**

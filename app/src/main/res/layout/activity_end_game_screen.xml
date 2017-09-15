@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="32dp" />
     <TextView
-            android:text="WordDropper"
+            android:text="@string/endGameScreen_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="30sp"
@@ -22,7 +22,7 @@
             android:gravity="center_horizontal"
             android:id="@+id/endGameScreenGlobalTitle"/>
     <TextView
-            android:text="Game Overview"
+            android:text="@string/endGameScreen_subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/endGameScreenGlobalSubtitle"
@@ -262,6 +262,41 @@
             <Space
                     android:layout_width="match_parent"
                     android:layout_height="5dp" />
+            <me.fru1t.worddropper.widget.Divider
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    app:colorTheme="primary" />
+            <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp" />
+
+            <!-- Summary -->
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:baselineAligned="false">
+                <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight=".5">
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/endGameScreen_summaryDifficulty"
+                            android:id="@+id/endGameScreenSummaryDifficulty"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight=".5">
+
+                </LinearLayout>
+            </LinearLayout> <!-- Summary -->
 
             <TextView
                     android:layout_width="match_parent"

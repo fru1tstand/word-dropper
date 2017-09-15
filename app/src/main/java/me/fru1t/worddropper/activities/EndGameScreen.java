@@ -16,12 +16,14 @@ import java.util.Locale;
 
 import me.fru1t.android.annotations.VisibleForXML;
 import me.fru1t.android.database.Row;
+import me.fru1t.android.widget.ViewUtils;
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
 import me.fru1t.worddropper.database.tables.Game;
 import me.fru1t.worddropper.database.tables.GameWord;
 import me.fru1t.worddropper.settings.ColorTheme;
 import me.fru1t.worddropper.settings.Difficulty;
+import me.fru1t.worddropper.widget.Divider;
 
 public class EndGameScreen extends AppCompatActivity {
     public static final String EXTRA_GAME_ID = "extra_game_id"; // Long
@@ -56,9 +58,11 @@ public class EndGameScreen extends AppCompatActivity {
     private TextView wordsList;
 
     private final ArrayList<TextView> unimportantTextViews;
+    private final ArrayList<Divider> dividers;
 
     public EndGameScreen() {
         unimportantTextViews = new ArrayList<>();
+        dividers = new ArrayList<>();
     }
 
     @Override
@@ -111,6 +115,10 @@ public class EndGameScreen extends AppCompatActivity {
         unimportantTextViews.clear();
         unimportantTextViews.addAll(findAllById(UNIMPORTANT_TEXT_VIEW_IDS));
 
+        // Find all dividers
+        dividers.clear();
+        dividers.addAll(ViewUtils.getElementsByTagName(root, Divider.class));
+
         // Populate words
         ArrayList<String> gameMovesList =
                 app.getDatabaseUtils().getGameMoves(getIntent().getLongExtra(EXTRA_GAME_ID, -1));
@@ -128,6 +136,7 @@ public class EndGameScreen extends AppCompatActivity {
                 score, level, scramblesEarned, scramblesUsed, words);
         ColorTheme.set(TextView::setTextColor, app.getColorTheme().text,
                 unimportantTextViews.toArray(new TextView[unimportantTextViews.size()]));
+        dividers.forEach(Divider::updateColor);
     }
 
     private ArrayList<TextView> findAllById(int... ids) {
