@@ -1,4 +1,4 @@
-<FrameLayout
+<me.fru1t.worddropper.widget.colortheme.ColoredFrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -12,11 +12,10 @@
             android:layout_height="match_parent"
             android:id="@+id/mainMenuScreenBackgroundView" />
 
+    <!-- Logo -->
     <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/mainMenuScreenTitleWrapper">
-
+            android:layout_height="wrap_content">
         <android.support.constraint.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -26,26 +25,27 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="40dp">
-
-            <TextView
+            <me.fru1t.worddropper.widget.colortheme.ColoredTextView
                     android:text="@string/mainMenuScreen_titleWord"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/mainMenuScreenTitleWord"
                     android:layout_marginTop="0dp"
-                    android:textSize="@dimen/mainMenuScreen_titleTextSize" />
-
-            <TextView
+                    android:textSize="@dimen/mainMenuScreen_titleTextSize"
+                    app:textColorTheme="primary" />
+            <me.fru1t.worddropper.widget.colortheme.ColoredTextView
                     android:text="@string/mainMenuScreen_titleDropper"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintLeft_toRightOf="@+id/mainMenuScreenTitleWord"
                     app:layout_constraintTop_toBottomOf="@+id/mainMenuScreenTitleWord"
                     android:id="@+id/mainMenuScreenTitleDropper"
-                    android:textSize="@dimen/mainMenuScreen_titleTextSize" />
+                    android:textSize="@dimen/mainMenuScreen_titleTextSize"
+                    app:textColorTheme="primary" />
         </android.support.constraint.ConstraintLayout>
-    </android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout> <!-- Logo -->
 
+    <!-- Menu Options -->
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -53,36 +53,31 @@
             android:orientation="vertical"
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
-            android:layout_marginBottom="30dp"
-            android:id="@+id/mainMenuScreenOptionsWrapper">
-        <TextView
+            android:layout_marginBottom="30dp">
+        <me.fru1t.worddropper.widget.colortheme.ColoredTextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/mainMenuScreen_optionHeight"
                 android:gravity="center_vertical"
                 android:text="@string/mainMenuScreen_optionPlay"
                 android:textSize="@dimen/mainMenuScreen_optionFontSize"
                 android:clickable="true"
-                android:onClick="onOptionPlayClick"
-                android:id="@+id/mainMenuScreenOptionPlay"/>
-        <TextView
+                android:onClick="onOptionPlayClick" />
+        <me.fru1t.worddropper.widget.colortheme.ColoredTextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/mainMenuScreen_optionHeight"
                 android:gravity="center_vertical"
                 android:text="@string/mainMenuScreen_optionStats"
                 android:textSize="@dimen/mainMenuScreen_optionFontSize"
                 android:clickable="true"
-                android:onClick="onOptionStatsClick"
-                android:id="@+id/mainMenuScreenOptionStats"/>
-        <TextView
+                android:onClick="onOptionStatsClick" />
+        <me.fru1t.worddropper.widget.colortheme.ColoredTextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/mainMenuScreen_optionHeight"
                 android:gravity="center_vertical"
                 android:text="@string/mainMenuScreen_optionSettings"
                 android:textSize="@dimen/mainMenuScreen_optionFontSize"
                 android:clickable="true"
-                android:onClick="onOptionSettingsClick"
-                android:id="@+id/mainMenuScreenOptionSettings"/>
+                android:onClick="onOptionSettingsClick" />
+    </LinearLayout> <!-- Menu Options -->
 
-    </LinearLayout>
-
-</FrameLayout>
+</me.fru1t.worddropper.widget.colortheme.ColoredFrameLayout>

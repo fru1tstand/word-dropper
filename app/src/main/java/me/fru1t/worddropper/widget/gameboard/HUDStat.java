@@ -11,13 +11,14 @@ import android.widget.TextView;
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
 import me.fru1t.worddropper.settings.ColorTheme;
+import me.fru1t.worddropper.settings.colortheme.ColorThemeEventHandler;
 
 /**
  * A single statistic within the HUD
  */
-public class HUDStat extends FrameLayout {
+public class HUDStat extends FrameLayout implements ColorThemeEventHandler {
     private final WordDropperApplication app;
-    
+
     private final TextView titleTextView;
     private final TextView valueTextView;
 
@@ -41,18 +42,6 @@ public class HUDStat extends FrameLayout {
         titleSize = new Rect();
     }
 
-    public void updateColors() {
-        ColorTheme.set(TextView::setTextColor, app.getColorTheme().textBlend,
-                titleTextView, valueTextView);
-        postInvalidate();
-    }
-
-    @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
-        relayout();
-    }
-
     public void setTitle(@StringRes int stringId) {
         titleTextView.setText(app.getResources().getString(stringId));
         relayout();
@@ -61,6 +50,31 @@ public class HUDStat extends FrameLayout {
     public void setValue(String value) {
         valueTextView.setText(value);
         relayout();
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        relayout();
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        app.addColorThemeEventHandler(this);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        app.removeColorThemeEventHandler(this);
+    }
+
+    @Override
+    public void onColorThemeChange(ColorTheme colorTheme) {
+        titleTextView.setTextColor(colorTheme.textBlend);
+        valueTextView.setTextColor(colorTheme.textBlend);
+        postInvalidate();
     }
 
     private void relayout() {

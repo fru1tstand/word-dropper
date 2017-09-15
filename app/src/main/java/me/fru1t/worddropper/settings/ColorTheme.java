@@ -2,8 +2,6 @@ package me.fru1t.worddropper.settings;
 
 import android.graphics.Color;
 
-import java.util.function.BiConsumer;
-
 /**
  * Presets for colors within the game.
  */
@@ -63,19 +61,7 @@ public enum ColorTheme {
         Color.parseColor("#"), // textOnPrimaryLight
         Color.parseColor("#") // textOnPrimaryDark
     */
-    
-    // Keep synced with attrs.xml
-    private static final int ENUM_PRIMARY = 0;
-    private static final int ENUM_PRIMARY_DARK = 1;
-    private static final int ENUM_PRIMARY_LIGHT = 2;
-    private static final int ENUM_BACKGROUND = 3;
-    private static final int ENUM_BACKGROUND_LIGHT = 4;
-    private static final int ENUM_TEXT = 5;
-    private static final int ENUM_TEXT_BLEND = 6;
-    private static final int ENUM_TEXT_ON_PRIMARY = 7;
-    private static final int ENUM_TEXT_ON_PRIMARY_LIGHT = 8;
-    private static final int ENUM_TEXT_ON_PRIMARY_DARK = 9;
-    
+
     public final String displayName;
     public final int primary;
     public final int primaryDark;
@@ -102,51 +88,5 @@ public enum ColorTheme {
         this.textOnPrimary = textOnPrimary;
         this.textOnPrimaryLight = textOnPrimaryLight;
         this.textOnPrimaryDark = textOnPrimaryDark;
-    }
-
-    /**
-     * Retrieves the color associated to the enum value specified in attrs.xml. Quietly fails any
-     * invalid enum values by returning the primary color.
-     */
-    public int getColorFromXmlEnum(int enumValue) {
-        switch (enumValue) {
-            case ENUM_PRIMARY_DARK:
-                return primaryDark;
-            case ENUM_PRIMARY_LIGHT:
-                return primaryLight;
-            case ENUM_BACKGROUND:
-                return background;
-            case ENUM_BACKGROUND_LIGHT:
-                return backgroundLight;
-            case ENUM_TEXT:
-                return text;
-            case ENUM_TEXT_BLEND:
-                return textBlend;
-            case ENUM_TEXT_ON_PRIMARY:
-                return textOnPrimary;
-            case ENUM_TEXT_ON_PRIMARY_LIGHT:
-                return textOnPrimaryLight;
-            case ENUM_TEXT_ON_PRIMARY_DARK:
-                return textOnPrimaryDark;
-            case ENUM_PRIMARY:
-            default:
-                return primary;
-        }
-    }
-
-    /**
-     * Performs an action, passing the given color to the given targets. For example, when setting
-     * multiple TextViews' text color, one can do the following:
-     * <code>ColorTheme.set(TextView::setTextColor, Color.WHITE, textView1, textView2...);</code>
-     * @param action Usually passed as a method reference, but can be made arbitrarily. To pass as a
-     *               method reference, the method given must only accept a single integer parameter.
-     * @param color The color to pass the action.
-     * @param targets The instances to target.
-     * @param <T> The type of the target.
-     */
-    public static <T> void set(BiConsumer<T, Integer> action, int color, T... targets) {
-        for (T target : targets) {
-            action.accept(target, color);
-        }
     }
 }

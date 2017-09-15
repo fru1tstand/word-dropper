@@ -1,10 +1,8 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<me.fru1t.worddropper.widget.colortheme.ColoredFrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#0099cc"
-        tools:context="me.fru1t.worddropper.activities.GameScreen"
         android:id="@+id/gameBoardRoot"
-        android:keepScreenOn="true" >
-
-</FrameLayout>
+        android:keepScreenOn="true"
+        tools:context="me.fru1t.worddropper.activities.GameScreen" />

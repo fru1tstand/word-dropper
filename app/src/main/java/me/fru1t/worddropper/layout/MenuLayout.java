@@ -21,13 +21,15 @@ import lombok.Getter;
 import lombok.Setter;
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
+import me.fru1t.worddropper.settings.ColorTheme;
+import me.fru1t.worddropper.settings.colortheme.ColorThemeEventHandler;
 
 /**
  * Styles a menu. This is the driver to layout_menu.xml.
  */
-public class MenuLayout extends RelativeLayout {
+public class MenuLayout extends RelativeLayout implements ColorThemeEventHandler {
     private static final int MENU_WRAPPER_BACKGROUND_COLOR = Color.argb(128, 0, 0, 0);
-    
+
     private final WordDropperApplication app;
     private @Getter boolean isOpen;
     private @Nullable @Setter Runnable onShowListener;
@@ -57,18 +59,6 @@ public class MenuLayout extends RelativeLayout {
         isOpen = false;
     }
 
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-
-        menu = (LinearLayout) findViewById(R.id.menuMenu);
-        menu.setBackgroundColor(app.getColorTheme().backgroundLight);
-
-        setClickable(true);
-        setOnClickListener(v -> hide());
-        setBackgroundColor(MENU_WRAPPER_BACKGROUND_COLOR);
-    }
-
     /**
      * Adds a menu option to this menu.
      * @param resId The display title string resource id.
@@ -89,7 +79,6 @@ public class MenuLayout extends RelativeLayout {
             }
             action.run();
         });
-        result.setTextColor(app.getColorTheme().text);
 
         menu.addView(result);
         result.getLayoutParams().height =
@@ -106,10 +95,6 @@ public class MenuLayout extends RelativeLayout {
      * colors.
      */
     public void show() {
-        // Update colors
-        menu.setBackgroundColor(app.getColorTheme().backgroundLight);
-        menuOptions.forEach(tv -> tv.setTextColor(app.getColorTheme().text));
-
         if (isOpen) {
             if (onShowListener != null) {
                 onShowListener.run();
@@ -173,5 +158,34 @@ public class MenuLayout extends RelativeLayout {
             public void onAnimationStart(Animation animation) { }
         });
         startAnimation(aa);
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+
+        menu = (LinearLayout) findViewById(R.id.menuMenu);
+
+        setClickable(true);
+        setOnClickListener(v -> hide());
+        setBackgroundColor(MENU_WRAPPER_BACKGROUND_COLOR);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        app.addColorThemeEventHandler(this);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        app.removeColorThemeEventHandler(this);
+    }
+
+    @Override
+    public void onColorThemeChange(ColorTheme colorTheme) {
+        menu.setBackgroundColor(colorTheme.backgroundLight);
+        menuOptions.forEach(tv -> tv.setTextColor(colorTheme.text));
     }
 }

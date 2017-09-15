@@ -10,23 +10,51 @@
     </declare-styleable>
 
     <!-- Mapped to fields within ColorTheme by using ColorTheme#getColorFromXmlEnum(int). Keep
-         synced with ColorTheme.java -->
-    <attr name="colorTheme" format="enum">
-        <enum name="primary" value="0" />
-        <enum name="primary_dark" value="1" />
-        <enum name="primary_light" value="2" />
-        <enum name="background" value="3" />
-        <enum name="background_light" value="4" />
-        <enum name="text" value="5" />
-        <enum name="text_blend" value="6" />
-        <enum name="text_on_primary" value="7" />
-        <enum name="text_on_primary_light" value="8" />
-        <enum name="text_on_primary_dark" value="9" />
+         synced with ColorThemeXml.java -->
+    <attr name="textColorTheme" format="enum">
+        <enum name="transparent" value="0" />
+        <enum name="primary" value="1" />
+        <enum name="primary_dark" value="2" />
+        <enum name="primary_light" value="3" />
+        <enum name="background" value="4" />
+        <enum name="background_light" value="5" />
+        <enum name="text" value="6" />
+        <enum name="text_blend" value="7" />
+        <enum name="text_on_primary" value="8" />
+        <enum name="text_on_primary_light" value="9" />
+        <enum name="text_on_primary_dark" value="10" />
+    </attr>
+
+    <attr name="backgroundColorTheme" format="enum">
+        <enum name="transparent" value="0" />
+        <enum name="primary" value="1" />
+        <enum name="primary_dark" value="2" />
+        <enum name="primary_light" value="3" />
+        <enum name="background" value="4" />
+        <enum name="background_light" value="5" />
+        <enum name="text" value="6" />
+        <enum name="text_blend" value="7" />
+        <enum name="text_on_primary" value="8" />
+        <enum name="text_on_primary_light" value="9" />
+        <enum name="text_on_primary_dark" value="10" />
     </attr>
 
     <!-- Defines a colored divider -->
     <declare-styleable name="Divider">
         <!-- The color the divider should take on, determined by the active ColorTheme. -->
-        <attr name="colorTheme" />
+        <attr name="backgroundColorTheme" />
+    </declare-styleable>
+
+    <declare-styleable name="ColoredTextView">
+        <attr name="backgroundColorTheme" />
+        <attr name="textColorTheme" />
+    </declare-styleable>
+
+    <declare-styleable name="ColoredFrameLayout">
+        <attr name="backgroundColorTheme" />
+    </declare-styleable>
+
+    <declare-styleable name="ColoredLinearLayout">
+        <attr name="backgroundColorTheme" />
     </declare-styleable>
 </resources>

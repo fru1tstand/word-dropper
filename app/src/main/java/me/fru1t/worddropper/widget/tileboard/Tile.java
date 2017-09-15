@@ -10,11 +10,13 @@ import lombok.Getter;
 import lombok.Setter;
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
+import me.fru1t.worddropper.settings.ColorTheme;
+import me.fru1t.worddropper.settings.colortheme.ColorThemeEventHandler;
 
 /**
  * A single interactable tile within the tile board
  */
-public class Tile extends View {
+public class Tile extends View implements ColorThemeEventHandler {
     private @Getter @Setter int size;
     private @Getter @Setter char letter;
 
@@ -22,6 +24,8 @@ public class Tile extends View {
     private final @Getter Paint textPaint;
     private final Paint backgroundColor;
     private final Rect textBounds;
+
+    private ColorTheme activeColorTheme;
 
     public Tile(Context context) {
         super(context);
@@ -36,14 +40,14 @@ public class Tile extends View {
     }
 
     public void press() {
-        backgroundColor.setColor(app.getColorTheme().primary);
-        textPaint.setColor(app.getColorTheme().textOnPrimary);
+        backgroundColor.setColor(activeColorTheme.primary);
+        textPaint.setColor(activeColorTheme.textOnPrimary);
         postInvalidate();
     }
 
     public void release() {
-        backgroundColor.setColor(app.getColorTheme().background);
-        textPaint.setColor(app.getColorTheme().text);
+        backgroundColor.setColor(activeColorTheme.background);
+        textPaint.setColor(activeColorTheme.text);
         postInvalidate();
     }
 
@@ -55,5 +59,23 @@ public class Tile extends View {
                 size / 2 - textBounds.centerX(),
                 size / 2 - textBounds.centerY(),
                 textPaint);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        app.addColorThemeEventHandler(this);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        app.removeColorThemeEventHandler(this);
+    }
+
+    @Override
+    public void onColorThemeChange(ColorTheme colorTheme) {
+        activeColorTheme = colorTheme;
+        release();
     }
 }

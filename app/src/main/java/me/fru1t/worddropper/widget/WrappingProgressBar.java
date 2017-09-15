@@ -15,12 +15,14 @@ import lombok.Getter;
 import lombok.Setter;
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
+import me.fru1t.worddropper.settings.ColorTheme;
+import me.fru1t.worddropper.settings.colortheme.ColorThemeEventHandler;
 
 /**
  * A minimalist-designed progress bar that shows the progress via text. On hitting the maximum, the
  * progress bar will wrap and start at zero again.
  */
-public class WrappingProgressBar extends View {
+public class WrappingProgressBar extends View implements ColorThemeEventHandler {
     @FunctionalInterface
     public interface NextMaximumFunction {
         /**
@@ -82,41 +84,6 @@ public class WrappingProgressBar extends View {
 
         nextMaximumFunction = null;
         onWrapEventListener = null;
-    }
-
-    public void updateColors() {
-        backgroundColor.setColor(app.getColorTheme().background);
-        progressColor.setColor(app.getColorTheme().primaryDark);
-        progressCalculatedColor.setColor(app.getColorTheme().primaryLight);
-        textPaint.setColor(app.getColorTheme().textOnPrimaryDark);
-        postInvalidate();
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        // Fill background
-        canvas.drawRect(0, 0, getWidth(), getHeight(), backgroundColor);
-
-        // Fill progress bar
-        canvas.drawRect(
-                0,
-                0,
-                (float) (progress * 1.0 / max * getWidth()),
-                getHeight(),
-                progressCalculatedColor);
-        canvas.drawRect(
-                0,
-                0,
-                calculatedProgressBarWidth,
-                getHeight(),
-                progressColor);
-
-        // Draw text
-        String text = "Level: " + wraps + " (" + progress + " / " + max + ")";
-        textPaint.getTextBounds(text, 0, text.length(), calculatedTextBounds);
-        canvas.drawText(text, 10,
-                calculatedTextBounds.height() + (getHeight() - calculatedTextBounds.height()) / 2,
-                textPaint);
     }
 
     /**
@@ -199,5 +166,53 @@ public class WrappingProgressBar extends View {
         });
 
         va.start();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        app.removeColorThemeEventHandler(this);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        app.addColorThemeEventHandler(this);
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        // Fill background
+        canvas.drawRect(0, 0, getWidth(), getHeight(), backgroundColor);
+
+        // Fill progress bar
+        canvas.drawRect(
+                0,
+                0,
+                (float) (progress * 1.0 / max * getWidth()),
+                getHeight(),
+                progressCalculatedColor);
+        canvas.drawRect(
+                0,
+                0,
+                calculatedProgressBarWidth,
+                getHeight(),
+                progressColor);
+
+        // Draw text
+        String text = "Level: " + wraps + " (" + progress + " / " + max + ")";
+        textPaint.getTextBounds(text, 0, text.length(), calculatedTextBounds);
+        canvas.drawText(text, 10,
+                calculatedTextBounds.height() + (getHeight() - calculatedTextBounds.height()) / 2,
+                textPaint);
+    }
+
+    @Override
+    public void onColorThemeChange(ColorTheme colorTheme) {
+        backgroundColor.setColor(colorTheme.background);
+        progressColor.setColor(colorTheme.primaryDark);
+        progressCalculatedColor.setColor(colorTheme.primaryLight);
+        textPaint.setColor(colorTheme.textOnPrimaryDark);
+        postInvalidate();
     }
 }

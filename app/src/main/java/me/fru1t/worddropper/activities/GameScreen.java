@@ -18,13 +18,12 @@ import me.fru1t.worddropper.settings.Difficulty;
 import me.fru1t.worddropper.widget.TileBoard;
 import me.fru1t.worddropper.widget.WrappingProgressBar;
 import me.fru1t.worddropper.widget.gameboard.GameBoardHUD;
-import me.fru1t.worddropper.widget.tileboard.Tile;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class GameScreen extends AppCompatActivity {
+public class GameScreen extends AppCompatActivity  {
     public static final String EXTRA_DIFFICULTY = "extra_difficulty";
 
     private static final long NO_GAME = -1;
@@ -238,29 +237,20 @@ public class GameScreen extends AppCompatActivity {
         int hudHeight = (int) getResources().getDimension(R.dimen.gameScreen_hudHeight);
         int progressHeight = (int) getResources().getDimension(R.dimen.gameScreen_progressHeight);
 
+        // TODO: Can we move the sizing into the create or onlayout?
         Point screenSize = new Point();
         getWindowManager().getDefaultDisplay().getSize(screenSize);
 
-        if (tileBoard != null) {
-            tileBoard.setY(hudHeight);
-            tileBoard.getLayoutParams().height = screenSize.y - hudHeight - progressHeight;
-            tileBoard.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
-            tileBoard.setBackgroundColor(app.getColorTheme().background);
-            tileBoard.forEachTile(Tile::release); // Essentially, updateColors.
-        }
+        tileBoard.setY(hudHeight);
+        tileBoard.getLayoutParams().height = screenSize.y - hudHeight - progressHeight;
+        tileBoard.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
 
-        if (progressBar != null) {
-            progressBar.setY(screenSize.y - progressHeight);
-            progressBar.getLayoutParams().height = progressHeight;
-            progressBar.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
-            progressBar.updateColors();
-        }
+        progressBar.setY(screenSize.y - progressHeight);
+        progressBar.getLayoutParams().height = progressHeight;
+        progressBar.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
 
-        if (hud != null) {
-            hud.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
-            hud.getLayoutParams().height = hudHeight;
-            hud.updateColors();
-        }
+        hud.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+        hud.getLayoutParams().height = hudHeight;
     }
 
     private void startGame() {

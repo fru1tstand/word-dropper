@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -17,7 +16,6 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.google.common.base.Strings;
 
 import java.util.LinkedList;
@@ -25,13 +23,15 @@ import java.util.LinkedList;
 import lombok.Setter;
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
+import me.fru1t.worddropper.settings.ColorTheme;
+import me.fru1t.worddropper.settings.colortheme.ColorThemeEventHandler;
 
 /**
  * Shows the status, metrics, move left, and current tile path in game. Essentially, the header
  * of the game board. This class isn't technically a widget as you can't inflate it, but rather,
  * a wrapper for one that is already inflated.
  */
-public class GameBoardHUD extends FrameLayout {
+public class GameBoardHUD extends FrameLayout implements ColorThemeEventHandler {
     private static final int CHART_ELEMENTS = 30;
 
     private @Setter Runnable onLevelClickEventListener;
@@ -51,6 +51,8 @@ public class GameBoardHUD extends FrameLayout {
 
     private int currentWordHorizontalPadding;
     private int currentWordVerticalPadding;
+    private int currentWordActiveColor;
+    private int currentWordDefaultColor;
 
     public GameBoardHUD(@NonNull Context context) {
         super(context);
@@ -146,19 +148,6 @@ public class GameBoardHUD extends FrameLayout {
         });
     }
 
-    public void updateColors() {
-        setBackgroundColor(app.getColorTheme().background);
-
-        wordHistoryChart.getData().setValueTextColor(app.getColorTheme().textBlend);
-        wordHistoryDataSet.setColor(app.getColorTheme().textBlend);
-        currentWordTextView.setBackgroundColor(app.getColorTheme().background);
-
-        movesRemaining.updateColors();
-        scramblesRemaining.updateColors();
-        currentLevel.updateColors();
-        postInvalidate();
-    }
-
     private boolean touchListenerHandler(MotionEvent event, @Nullable Runnable action) {
         if (event.getActionIndex() != 0
                 || action == null
@@ -201,7 +190,7 @@ public class GameBoardHUD extends FrameLayout {
     public void setCurrentWordTextView(@Nullable String s) {
         if (Strings.isNullOrEmpty(s)) {
             currentWordTextView.setText("");
-            currentWordTextView.setTextColor(app.getColorTheme().text);
+            currentWordTextView.setTextColor(currentWordDefaultColor);
             currentWordTextView
                     .setPadding(0, currentWordVerticalPadding, 0, currentWordVerticalPadding);
             return;
@@ -209,9 +198,9 @@ public class GameBoardHUD extends FrameLayout {
 
         if (app.getDictionary().isWord(s)) {
             s += " (" + app.getDictionary().getWordValue(s) + ")";
-            currentWordTextView.setTextColor(app.getColorTheme().primary);
+            currentWordTextView.setTextColor(currentWordActiveColor);
         } else {
-            currentWordTextView.setTextColor(app.getColorTheme().text);
+            currentWordTextView.setTextColor(currentWordDefaultColor);
         }
 
         s = s.substring(0, 1).toUpperCase() + s.substring(1);
@@ -261,5 +250,29 @@ public class GameBoardHUD extends FrameLayout {
             scramblesRemaining.post(scramblesRemaining::requestLayout);
             currentLevel.post(scramblesRemaining::requestLayout);
         }
+    }
+
+    @Override
+    public void onColorThemeChange(ColorTheme colorTheme) {
+        setBackgroundColor(colorTheme.background);
+        currentWordDefaultColor = colorTheme.text;
+        currentWordActiveColor = colorTheme.primary;
+        currentWordTextView.setBackgroundColor(colorTheme.background);
+
+        wordHistoryChart.getData().setValueTextColor(colorTheme.textBlend);
+        wordHistoryDataSet.setColor(colorTheme.textBlend);
+        postInvalidate();
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        app.addColorThemeEventHandler(this);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        app.removeColorThemeEventHandler(this);
     }
 }
