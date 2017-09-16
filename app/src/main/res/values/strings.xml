@@ -3,6 +3,8 @@
     <string name="app_name">WordDropper</string>
     <string name="app_sharedPreferencesFileName">worddropper-shared-preferences</string>
 
+    <string name="integer">%d</string>
+
     <!-- activities/EndGameScreen -->
     <string name="endGameScreen_title">WordDropper</string>
     <string name="endGameScreen_subtitle">Game Overview</string>

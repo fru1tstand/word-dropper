@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<me.fru1t.worddropper.layout.MenuLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/menuMenuWrapper">
+<merge
+        xmlns:android="http://schemas.android.com/apk/res/android">
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,4 +21,4 @@
                 android:layout_height="match_parent"
                 android:layout_weight=".165" />
     </LinearLayout>
-</me.fru1t.worddropper.layout.MenuLayout>
+</merge>

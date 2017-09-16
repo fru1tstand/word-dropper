@@ -2,6 +2,7 @@ package me.fru1t.worddropper.widget.tileboard;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.View;

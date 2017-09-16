@@ -1,11 +1,9 @@
-package me.fru1t.worddropper.widget.colortheme;
+package me.fru1t.worddropper.widget.base;
 
 import android.content.Context;
-import android.support.annotation.AttrRes;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
@@ -13,27 +11,26 @@ import me.fru1t.worddropper.settings.colortheme.ColorThemeViewProxy;
 import me.fru1t.worddropper.settings.colortheme.ColorThemeXml;
 
 /**
- * A FrameLayout that's automatically colored by the color theme.
+ * An automatically colored LinearLayout
  */
-public class ColoredFrameLayout extends FrameLayout {
+public class ColoredLinearLayout extends LinearLayout {
     private final WordDropperApplication app;
     private final ColorThemeViewProxy proxy;
 
-    public ColoredFrameLayout(@NonNull Context context) {
+    public ColoredLinearLayout(Context context) {
         this(context, null, 0);
     }
 
-    public ColoredFrameLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public ColoredLinearLayout(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ColoredFrameLayout(@NonNull Context context, @Nullable AttributeSet attrs,
-            @AttrRes int defStyleAttr) {
+    public ColoredLinearLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         app = (WordDropperApplication) context.getApplicationContext();
-        proxy = new ColorThemeViewProxy(this, attrs, R.styleable.ColoredFrameLayout,
+        proxy = new ColorThemeViewProxy(this, attrs, R.styleable.ColoredLinearLayout,
                 new ColorThemeViewProxy.AttributeMap(
-                        R.styleable.ColoredFrameLayout_backgroundColorTheme,
+                        R.styleable.ColoredLinearLayout_backgroundColorTheme,
                         ColorThemeXml.BACKGROUND,
                         this::setBackgroundColor));
     }

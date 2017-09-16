@@ -1,4 +1,4 @@
-<me.fru1t.worddropper.widget.colortheme.ColoredFrameLayout
+<me.fru1t.worddropper.widget.base.ColoredFrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -25,7 +25,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="40dp">
-            <me.fru1t.worddropper.widget.colortheme.ColoredTextView
+            <me.fru1t.worddropper.widget.base.ColoredTextView
                     android:text="@string/mainMenuScreen_titleWord"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
                     android:layout_marginTop="0dp"
                     android:textSize="@dimen/mainMenuScreen_titleTextSize"
                     app:textColorTheme="primary" />
-            <me.fru1t.worddropper.widget.colortheme.ColoredTextView
+            <me.fru1t.worddropper.widget.base.ColoredTextView
                     android:text="@string/mainMenuScreen_titleDropper"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
             android:layout_marginBottom="30dp">
-        <me.fru1t.worddropper.widget.colortheme.ColoredTextView
+        <me.fru1t.worddropper.widget.base.ColoredTextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/mainMenuScreen_optionHeight"
                 android:gravity="center_vertical"
@@ -62,7 +62,7 @@
                 android:textSize="@dimen/mainMenuScreen_optionFontSize"
                 android:clickable="true"
                 android:onClick="onOptionPlayClick" />
-        <me.fru1t.worddropper.widget.colortheme.ColoredTextView
+        <me.fru1t.worddropper.widget.base.ColoredTextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/mainMenuScreen_optionHeight"
                 android:gravity="center_vertical"
@@ -70,7 +70,7 @@
                 android:textSize="@dimen/mainMenuScreen_optionFontSize"
                 android:clickable="true"
                 android:onClick="onOptionStatsClick" />
-        <me.fru1t.worddropper.widget.colortheme.ColoredTextView
+        <me.fru1t.worddropper.widget.base.ColoredTextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/mainMenuScreen_optionHeight"
                 android:gravity="center_vertical"
@@ -80,4 +80,4 @@
                 android:onClick="onOptionSettingsClick" />
     </LinearLayout> <!-- Menu Options -->
 
-</me.fru1t.worddropper.widget.colortheme.ColoredFrameLayout>
+</me.fru1t.worddropper.widget.base.ColoredFrameLayout>

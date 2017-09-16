@@ -1,8 +1,142 @@
-<me.fru1t.worddropper.widget.colortheme.ColoredFrameLayout
+<me.fru1t.worddropper.widget.base.ColoredFrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/gameBoardRoot"
+        android:id="@+id/gameScreenRoot"
         android:keepScreenOn="true"
-        tools:context="me.fru1t.worddropper.activities.GameScreen" />
+        android:clipChildren="false"
+        tools:context="me.fru1t.worddropper.activities.GameScreen">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <!-- Hud -->
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/gameScreen_hudHeight"
+                android:orientation="vertical">
+
+            <!-- Stats -->
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/gameScreen_hudStatsPaddingTop"
+                    android:paddingBottom="@dimen/gameScreen_hudStatsPaddingBottom"
+                    android:orientation="horizontal">
+
+                <!-- Level -->
+                <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".33"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:clickable="true"
+                        android:onClick="onLevelClick">
+                    <me.fru1t.worddropper.widget.base.ColoredTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/gameScreen_hudStatLevel"
+                            android:textSize="@dimen/gameScreen_hudStatsTitleTextSize"
+                            app:textColorTheme="text_blend" />
+                    <me.fru1t.worddropper.widget.base.ColoredTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/gameScreenHudStatLevel"
+                            android:textSize="@dimen/gameScreen_hudStatsValueTextSize"
+                            app:textColorTheme="text_blend"/>
+                </LinearLayout>
+
+                <!-- Scrambles -->
+                <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".33"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:clickable="true"
+                        android:onClick="onScramblesClick">
+                    <me.fru1t.worddropper.widget.base.ColoredTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/gameScreen_hudStatLevel"
+                            android:textSize="@dimen/gameScreen_hudStatsTitleTextSize"
+                            app:textColorTheme="text_blend" />
+                    <me.fru1t.worddropper.widget.base.ColoredTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/gameScreenHudStatScrambles"
+                            android:textSize="@dimen/gameScreen_hudStatsValueTextSize"
+                            app:textColorTheme="text_blend"/>
+                </LinearLayout>
+
+                <!-- Moves Left -->
+                <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".33"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:clickable="true"
+                        android:onClick="onMovesLeftClick">
+                    <me.fru1t.worddropper.widget.base.ColoredTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/gameScreen_hudStatLevel"
+                            android:textSize="@dimen/gameScreen_hudStatsTitleTextSize"
+                            app:textColorTheme="text_blend" />
+                    <me.fru1t.worddropper.widget.base.ColoredTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/gameScreenHudStatMovesLeft"
+                            android:textSize="@dimen/gameScreen_hudStatsValueTextSize"
+                            app:textColorTheme="text_blend"/>
+                </LinearLayout>
+            </LinearLayout> <!-- Stats -->
+
+            <!-- Current word and graph -->
+            <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:clipChildren="false"
+                    android:clickable="true"
+                    android:onClick="onGraphicClick">
+                <com.github.mikephil.charting.charts.BarChart
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/gameScreenHudChart" />
+                <me.fru1t.worddropper.widget.base.ColoredTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:paddingTop="@dimen/gameScreen_hudCurrentWordVerticalPadding"
+                        android:paddingBottom="@dimen/gameScreen_hudCurrentWordVerticalPadding"
+                        android:textSize="@dimen/gameScreen_hudCurrentWordTextSize"
+                        android:id="@+id/gameScreenHudActiveWord"
+                        app:backgroundColorTheme="background" />
+            </FrameLayout> <!-- Current word and graph -->
+        </LinearLayout> <!-- hud -->
+
+        <me.fru1t.worddropper.widget.TileBoard
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:id="@+id/gameScreenTileBoard"/>
+        <me.fru1t.worddropper.widget.WrappingProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/gameScreen_progressHeight"
+                android:id="@+id/gameScreenProgress"/>
+    </LinearLayout>
+
+    <me.fru1t.worddropper.widget.MenuLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/gameScreenPauseMenu"
+            android:visibility="gone"
+            android:background="@color/menu_wrapperBackground" />
+</me.fru1t.worddropper.widget.base.ColoredFrameLayout>

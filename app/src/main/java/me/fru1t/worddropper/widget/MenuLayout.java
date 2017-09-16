@@ -1,4 +1,4 @@
-package me.fru1t.worddropper.layout;
+package me.fru1t.worddropper.widget;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -7,6 +7,8 @@ import android.support.annotation.StringRes;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
@@ -28,8 +30,6 @@ import me.fru1t.worddropper.settings.colortheme.ColorThemeEventHandler;
  * Styles a menu. This is the driver to layout_menu.xml.
  */
 public class MenuLayout extends RelativeLayout implements ColorThemeEventHandler {
-    private static final int MENU_WRAPPER_BACKGROUND_COLOR = Color.argb(128, 0, 0, 0);
-
     private final WordDropperApplication app;
     private @Getter boolean isOpen;
     private @Nullable @Setter Runnable onShowListener;
@@ -39,21 +39,17 @@ public class MenuLayout extends RelativeLayout implements ColorThemeEventHandler
     private final ArrayList<TextView> menuOptions;
 
     public MenuLayout(Context context) {
-        super(context);
-        app = (WordDropperApplication) context.getApplicationContext();
-        menuOptions = new ArrayList<>();
-        isOpen = false;
+        this(context, null);
     }
 
     public MenuLayout(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        app = (WordDropperApplication) context.getApplicationContext();
-        menuOptions = new ArrayList<>();
-        isOpen = false;
+        this(context, attrs, 0);
     }
 
     public MenuLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        View.inflate(context, R.layout.layout_menu, this);
+
         app = (WordDropperApplication) context.getApplicationContext();
         menuOptions = new ArrayList<>();
         isOpen = false;
@@ -168,7 +164,6 @@ public class MenuLayout extends RelativeLayout implements ColorThemeEventHandler
 
         setClickable(true);
         setOnClickListener(v -> hide());
-        setBackgroundColor(MENU_WRAPPER_BACKGROUND_COLOR);
     }
 
     @Override

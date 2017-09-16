@@ -8,6 +8,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.support.annotation.Nullable;
+import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
 
@@ -63,7 +65,15 @@ public class WrappingProgressBar extends View implements ColorThemeEventHandler 
     private final Rect calculatedTextBounds;
 
     public WrappingProgressBar(Context context) {
-        super(context);
+        this(context, null);
+    }
+
+    public WrappingProgressBar(Context context, @Nullable AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public WrappingProgressBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
         app = (WordDropperApplication) context.getApplicationContext();
 
         backgroundColor = new Paint();

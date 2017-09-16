@@ -1,9 +1,9 @@
-package me.fru1t.worddropper.widget.colortheme;
+package me.fru1t.worddropper.widget.base;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
-import android.widget.LinearLayout;
 
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
@@ -11,27 +11,31 @@ import me.fru1t.worddropper.settings.colortheme.ColorThemeViewProxy;
 import me.fru1t.worddropper.settings.colortheme.ColorThemeXml;
 
 /**
- * An automatically colored LinearLayout
+ * A text view wrapper that automatically updates its colors on colorTheme change.
  */
-public class ColoredLinearLayout extends LinearLayout {
+public class ColoredTextView extends AppCompatTextView {
     private final WordDropperApplication app;
     private final ColorThemeViewProxy proxy;
 
-    public ColoredLinearLayout(Context context) {
-        this(context, null, 0);
+    public ColoredTextView(Context context) {
+        this(context, null);
     }
 
-    public ColoredLinearLayout(Context context, @Nullable AttributeSet attrs) {
+    public ColoredTextView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ColoredLinearLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ColoredTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         app = (WordDropperApplication) context.getApplicationContext();
-        proxy = new ColorThemeViewProxy(this, attrs, R.styleable.ColoredLinearLayout,
+        proxy = new ColorThemeViewProxy(this, attrs, R.styleable.ColoredTextView,
                 new ColorThemeViewProxy.AttributeMap(
-                        R.styleable.ColoredLinearLayout_backgroundColorTheme,
-                        ColorThemeXml.BACKGROUND,
+                        R.styleable.ColoredTextView_textColorTheme,
+                        ColorThemeXml.TEXT,
+                        this::setTextColor),
+                new ColorThemeViewProxy.AttributeMap(
+                        R.styleable.ColoredTextView_backgroundColorTheme,
+                        ColorThemeXml.TRANSPARENT,
                         this::setBackgroundColor));
     }
 

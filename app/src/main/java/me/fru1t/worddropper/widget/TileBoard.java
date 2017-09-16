@@ -4,7 +4,10 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Handler;
+import android.support.annotation.AttrRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
@@ -116,7 +119,15 @@ public class TileBoard extends FrameLayout {
     private @Getter boolean enableTouching;
 
     public TileBoard(Context context) {
-        super(context);
+        this(context, null);
+    }
+
+    public TileBoard(@NonNull Context context, @Nullable AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public TileBoard(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
         app = (WordDropperApplication) context.getApplicationContext();
 
         eventHandler = null;
@@ -216,9 +227,6 @@ public class TileBoard extends FrameLayout {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        if (!changed) {
-            return;
-        }
 
         // Use the smallest edge for calculating
         int width = right - left;
@@ -245,6 +253,8 @@ public class TileBoard extends FrameLayout {
         effectiveBoardOffset.set( // This is where one can set the positioning of the board
                 (width - effectiveBoardSize.x) / 2, // Middle
                 (height - effectiveBoardSize.y) / 2); // Middle
+
+        updateTilePosition();
     }
 
     @Override
@@ -300,9 +310,14 @@ public class TileBoard extends FrameLayout {
     }
 
     /**
-     * Calculates all tiles positions based onWrapEventListener their positions within the data structures.
+     * Calculates all tiles positions based onWrapEventListener their positions within the data
+     * structures.
      */
     private void updateTilePosition() {
+        if (tileSize == 0) {
+            return;
+        }
+
         int tileToAnimate = 0;
 
         for (int col = 0; col < TILE_COLUMNS; col++) {
@@ -326,6 +341,7 @@ public class TileBoard extends FrameLayout {
                     continue;
                 }
 
+                tile.clearAnimation();
                 ObjectAnimator animation = ObjectAnimator.ofFloat(tile, "y", newY);
                 animation.setDuration(
                         getResources().getInteger(R.integer.animation_durationGameBoardTileDrop));
