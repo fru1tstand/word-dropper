@@ -24,9 +24,9 @@ import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
 import me.fru1t.worddropper.database.tables.Game;
 import me.fru1t.worddropper.settings.ColorTheme;
+import me.fru1t.worddropper.settings.Difficulty;
 import me.fru1t.worddropper.settings.colortheme.ColorThemeEventHandler;
 import me.fru1t.worddropper.widget.MenuLayout;
-import me.fru1t.worddropper.settings.Difficulty;
 import me.fru1t.worddropper.widget.TileBoard;
 import me.fru1t.worddropper.widget.WrappingProgressBar;
 
