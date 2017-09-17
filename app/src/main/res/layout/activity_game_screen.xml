@@ -63,7 +63,7 @@
                     <me.fru1t.worddropper.widget.base.ColoredTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/gameScreen_hudStatLevel"
+                            android:text="@string/gameScreen_hudStatScrambles"
                             android:textSize="@dimen/gameScreen_hudStatsTitleTextSize"
                             app:textColorTheme="text_blend" />
                     <me.fru1t.worddropper.widget.base.ColoredTextView
@@ -86,7 +86,7 @@
                     <me.fru1t.worddropper.widget.base.ColoredTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/gameScreen_hudStatLevel"
+                            android:text="@string/gameScreen_hudStatMovesLeft"
                             android:textSize="@dimen/gameScreen_hudStatsTitleTextSize"
                             app:textColorTheme="text_blend" />
                     <me.fru1t.worddropper.widget.base.ColoredTextView
