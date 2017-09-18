@@ -1,5 +1,4 @@
 <resources>
-
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
@@ -27,6 +26,7 @@
         <!--<item name="android:background">@color/black_overlay</item>-->
     </style>
 
+
     <!-- End Game Screen -->
     <style name="EndGameScreen_GraphButtonSpacer">
         <item name="android:layout_width">@dimen/endGameScreen_graphButtonSpacing</item>
@@ -42,6 +42,27 @@
         <item name="android:paddingTop">2dp</item>
         <item name="android:paddingBottom">2dp</item>
         <item name="android:textSize">@dimen/endGameScreen_graphButtonTextSize</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+
+    <!-- Main Menu Screen -->
+    <style name="MainMenuScreen_MenuWrapper">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">bottom</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_marginBottom">30dp</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="MainMenuScreen_MenuOption">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/mainMenuScreen_optionHeight</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">30dp</item>
+        <item name="android:paddingRight">30dp</item>
+        <item name="android:textSize">@dimen/mainMenuScreen_optionFontSize</item>
         <item name="android:clickable">true</item>
     </style>
 </resources>

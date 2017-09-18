@@ -49,4 +49,12 @@
     <string name="mainMenuScreen_optionPlay">Play</string>
     <string name="mainMenuScreen_optionStats">Stats</string>
     <string name="mainMenuScreen_optionSettings">Settings</string>
+
+    <string name="mainMenuScreen_optionPlayZen">Zen</string>
+    <string name="mainMenuScreen_optionPlayEasy">Easy</string>
+    <string name="mainMenuScreen_optionPlayMedium">Medium</string>
+    <string name="mainMenuScreen_optionPlayHard">Hard</string>
+    <string name="mainMenuScreen_optionPlayExpert">Expert</string>
+
+    <string name="mainMenuScreen_optionsGoBackToMainMenu">Back to Main Menu</string>
 </resources>

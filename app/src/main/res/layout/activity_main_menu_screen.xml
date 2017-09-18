@@ -5,7 +5,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="me.fru1t.worddropper.activities.MainMenuScreen"
-        android:id="@+id/mainMenuScreenRoot">
+        android:id="@+id/mainMenuScreenRoot"
+        android:keepScreenOn="true">
 
     <View
             android:layout_width="match_parent"
@@ -46,38 +47,64 @@
     </android.support.constraint.ConstraintLayout> <!-- Logo -->
 
     <!-- Menu Options -->
+    <!--    Root Menu -->
     <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:orientation="vertical"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:layout_marginBottom="30dp">
+            style="@style/MainMenuScreen_MenuWrapper"
+            android:id="@+id/mainMenuScreenRootMenu">
         <me.fru1t.worddropper.widget.base.ColoredTextView
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/mainMenuScreen_optionHeight"
-                android:gravity="center_vertical"
+                style="@style/MainMenuScreen_MenuOption"
                 android:text="@string/mainMenuScreen_optionPlay"
-                android:textSize="@dimen/mainMenuScreen_optionFontSize"
-                android:clickable="true"
-                android:onClick="onOptionPlayClick" />
+                android:onClick="onPlayClick" />
         <me.fru1t.worddropper.widget.base.ColoredTextView
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/mainMenuScreen_optionHeight"
-                android:gravity="center_vertical"
+                style="@style/MainMenuScreen_MenuOption"
                 android:text="@string/mainMenuScreen_optionStats"
-                android:textSize="@dimen/mainMenuScreen_optionFontSize"
-                android:clickable="true"
-                android:onClick="onOptionStatsClick" />
+                android:onClick="onStatsClick" />
         <me.fru1t.worddropper.widget.base.ColoredTextView
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/mainMenuScreen_optionHeight"
-                android:gravity="center_vertical"
+                style="@style/MainMenuScreen_MenuOption"
                 android:text="@string/mainMenuScreen_optionSettings"
-                android:textSize="@dimen/mainMenuScreen_optionFontSize"
-                android:clickable="true"
-                android:onClick="onOptionSettingsClick" />
-    </LinearLayout> <!-- Menu Options -->
+                android:onClick="onSettingsClick" />
+    </LinearLayout> <!--    Root Menu -->
+
+    <!--    Play Menu -->
+    <LinearLayout
+            style="@style/MainMenuScreen_MenuWrapper"
+            android:id="@+id/mainMenuScreenPlayMenu">
+        <me.fru1t.worddropper.widget.base.ColoredTextView
+                style="@style/MainMenuScreen_MenuOption"
+                android:text="@string/mainMenuScreen_optionPlayZen"
+                android:onClick="onPlayZenClick" />
+        <me.fru1t.worddropper.widget.base.ColoredTextView
+                style="@style/MainMenuScreen_MenuOption"
+                android:text="@string/mainMenuScreen_optionPlayEasy"
+                android:onClick="onPlayEasyClick" />
+        <me.fru1t.worddropper.widget.base.ColoredTextView
+                style="@style/MainMenuScreen_MenuOption"
+                android:text="@string/mainMenuScreen_optionPlayMedium"
+                android:onClick="onPlayMediumClick" />
+        <me.fru1t.worddropper.widget.base.ColoredTextView
+                style="@style/MainMenuScreen_MenuOption"
+                android:text="@string/mainMenuScreen_optionPlayHard"
+                android:onClick="onPlayHardClick" />
+        <me.fru1t.worddropper.widget.base.ColoredTextView
+                style="@style/MainMenuScreen_MenuOption"
+                android:text="@string/mainMenuScreen_optionPlayExpert"
+                android:onClick="onPlayExpertClick" />
+
+        <me.fru1t.worddropper.widget.base.ColoredTextView
+                style="@style/MainMenuScreen_MenuOption"
+                android:text="@string/mainMenuScreen_optionsGoBackToMainMenu"
+                android:onClick="openRootMenu" />
+    </LinearLayout> <!--    Play Menu -->
+
+    <!--    Stats Menu -->
+    <LinearLayout
+            style="@style/MainMenuScreen_MenuWrapper"
+            android:id="@+id/mainMenuScreenStatsMenu">
+        <me.fru1t.worddropper.widget.base.ColoredTextView
+                style="@style/MainMenuScreen_MenuOption"
+                android:text="@string/mainMenuScreen_optionsGoBackToMainMenu"
+                android:onClick="openRootMenu" />
+    </LinearLayout> <!--    Stats Menu -->
+    <!-- /Menu Options -->
 
 </me.fru1t.worddropper.widget.base.ColoredFrameLayout>
