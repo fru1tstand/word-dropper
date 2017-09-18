@@ -96,7 +96,7 @@ public class GameScreen extends AppCompatActivity implements ColorThemeEventHand
         activeWordHorizontalPadding = (int)
                 getResources().getDimension(R.dimen.gameScreen_hudCurrentWordHorizontalPadding);
 
-        // Set up graph
+        // Set up chart
         wordHistoryChart.setDrawBarShadow(false);
         wordHistoryChart.setDrawValueAboveBar(true);
         wordHistoryChart.getDescription().setEnabled(false);

@@ -8,6 +8,7 @@
     <!-- activities/EndGameScreen -->
     <string name="endGameScreen_title">WordDropper</string>
     <string name="endGameScreen_subtitle">Game Overview</string>
+    <string name="endGameScreen_gameNotFoundError">The requested game couldn\'t be found.</string>
 
     <string name="endGameScreen_wordsCreatedTitle">Words Created</string>
     <string name="endGameScreen_scramblesUsedTitle">Scrambles Used</string>
@@ -15,11 +16,13 @@
     <string name="endGameScreen_scoreTitle">Score</string>
     <string name="endGameScreen_levelTitle">Level</string>
 
+    <string name="endGameScreen_graphPointDistribution">Point Distribution</string>
+    <string name="endGameScreen_graphWordLengths">Word Lengths</string>
+
     <string name="endGameScreen_actionPlayAgain">Play Again</string>
     <string name="endGameScreen_actionMainMenu">Main Menu</string>
 
-    <string name="endGameScreen_gameNotFoundError">The requested game couldn\'t be found.</string>
-
+    <string name="endGameScreen_graphWordLengthsLabel">%d letters</string>
     <string name="endGameScreen_summaryDifficulty">Difficulty: </string>
 
     <!-- activities/GameScreen -->

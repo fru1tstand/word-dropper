@@ -5,6 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:keepScreenOn="true"
         android:orientation="vertical"
         android:id="@+id/endGameScreenRoot"
         tools:context=".activities.EndGameScreen">
@@ -37,7 +38,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
-
         <!-- Scroll Wrapper -->
         <LinearLayout
                 android:layout_width="match_parent"
@@ -245,18 +245,39 @@
                 </android.support.constraint.ConstraintLayout>
             </LinearLayout> <!-- Side-by-side scrambles and words-->
 
-            <Space
+            <!-- Graphs-->
+            <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="5dp" />
-            <me.fru1t.worddropper.widget.base.Divider
+                    android:layout_height="wrap_content">
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/endGameScreen_sectionSpacing"
+                        android:paddingBottom="2dp"
+                        android:paddingLeft="@dimen/endGameScreen_edgeSpacing"
+                        android:paddingRight="@dimen/endGameScreen_edgeSpacing"
+                        android:id="@+id/endGameScreenGraphButtonsWrapper">
+                    <TextView
+                            android:text="@string/endGameScreen_graphWordLengths"
+                            android:id="@+id/endGameScreenGraphWordLengths"
+                            android:onClick="loadWordLengthGraph"
+                            style="@style/EndGameScreen_GraphButton"/>
+                    <Space style="@style/EndGameScreen_GraphButtonSpacer" />
+                    <TextView
+                            android:text="@string/endGameScreen_graphPointDistribution"
+                            android:onClick="loadPointDistributionGraph"
+                            android:id="@+id/endGameScreenGraphPointDistributionButton"
+                            style="@style/EndGameScreen_GraphButton" />
+                </LinearLayout>
+            </HorizontalScrollView>
+            <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    app:backgroundColorTheme="primary" />
-            <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="5dp" />
+                    android:layout_height="@dimen/endGameScreen_graphHeight"
+                    android:id="@+id/endGameScreenGraphWrapper" />
+            <!-- Graphs -->
 
-            <!-- Summary -->
+            <!-- Summary Statistics/Game info -->
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -283,12 +304,14 @@
                 </LinearLayout>
             </LinearLayout> <!-- Summary -->
 
+            <!-- Word list -->
             <me.fru1t.worddropper.widget.base.ColoredTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/endGameScreenWordsList" />
-        </LinearLayout>
-    </ScrollView> <!-- Scroll Wrapper -->
+
+        </LinearLayout> <!-- Scroll Wrapper -->
+    </ScrollView>
 
     <!-- Actions footer -->
     <me.fru1t.worddropper.widget.base.ColoredLinearLayout

@@ -2,43 +2,83 @@ package me.fru1t.worddropper.activities;
 
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatTextView;
+import android.util.SparseArray;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.Chart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+
 import java.util.ArrayList;
-import java.util.Locale;
+import java.util.function.Consumer;
 
 import me.fru1t.android.annotations.VisibleForXML;
 import me.fru1t.android.database.Row;
+import me.fru1t.android.widget.ViewUtils;
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
 import me.fru1t.worddropper.database.tables.Game;
 import me.fru1t.worddropper.database.tables.GameWord;
+import me.fru1t.worddropper.settings.ColorTheme;
 import me.fru1t.worddropper.settings.Difficulty;
+import me.fru1t.worddropper.settings.colortheme.ColorThemeEventHandler;
 
-public class EndGameScreen extends AppCompatActivity {
+public class EndGameScreen extends AppCompatActivity implements ColorThemeEventHandler {
+    private static class GraphAction {
+        Chart chart;
+        TextView button;
+    }
+
     public static final String EXTRA_GAME_ID = "extra_game_id"; // Long
 
-    private static final String STAT_FORMAT_STRING = "%s";
-
+    private WordDropperApplication app;
+    private long gameId;
     private String difficulty;
+    private ColorTheme activeColorTheme;
+    private final SparseArray<GraphAction> memoizedGraphs;
+    private final ArrayList<TextView> graphButtons;
+    private Consumer<View> activeGraphFunction;
+
+    private FrameLayout graphWrapper;
+    private LinearLayout graphButtonsWrapper;
+
+    public EndGameScreen() {
+        memoizedGraphs = new SparseArray<>();
+        graphButtons = new ArrayList<>();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end_game_screen);
-        WordDropperApplication app = (WordDropperApplication) getApplicationContext();
+        app = (WordDropperApplication) getApplicationContext();
+        gameId = getIntent().getLongExtra(EXTRA_GAME_ID, -1);
 
-        LinearLayout root = (LinearLayout) findViewById(R.id.endGameScreenRoot);
+        graphWrapper = (FrameLayout) findViewById(R.id.endGameScreenGraphWrapper);
+        graphButtonsWrapper = (LinearLayout) findViewById(R.id.endGameScreenGraphButtonsWrapper);
 
         // Fetch data
-        long gameId = getIntent().getLongExtra(EXTRA_GAME_ID, -1);
         Row gameData = app.getDatabaseUtils().getRowFromId(
                 Game.TABLE_NAME,
                 gameId,
@@ -56,27 +96,37 @@ public class EndGameScreen extends AppCompatActivity {
                 GameWord.TABLE_NAME,
                 GameWord.COLUMN_GAME_ID + " = ?",
                 new String[] { gameId + "" });
-
-        // Populate data
-        // TODO: Show difficulty somewhere.
         difficulty = gameData.getString(Game.COLUMN_DIFFICULTY, Difficulty.ZEN.name());
-        TextView score = (TextView) root.findViewById(R.id.endGameScreenScore);
-        TextView level = (TextView) root.findViewById(R.id.endGameScreenLevel);
-        TextView scramblesUsed = (TextView) root.findViewById(R.id.endGameScreenScramblesUsed);
-        TextView scramblesEarned = (TextView) root.findViewById(R.id.endGameScreenScramblesEarned);
-        TextView words = (TextView) root.findViewById(R.id.endGameScreenWords);
-        TextView wordsList = (TextView) root.findViewById(R.id.endGameScreenWordsList);
 
-        animateValue(gameData.getInt(Game.COLUMN_LEVEL, 0), level, 0);
-        animateValue(gameData.getInt(Game.COLUMN_SCORE, 0), score, 50);
-        animateValue(gameData.getInt(Game.COLUMN_SCRAMBLES_EARNED, 0), scramblesEarned, 50);
-        animateValue(gameData.getInt(Game.COLUMN_SCRAMBLES_USED, 0), scramblesUsed, 100);
-        animateValue(gameDataWords, words, 150);
+        // Side by side level and score
+        animateValue(gameData.getInt(Game.COLUMN_LEVEL, 0),
+                (TextView) findViewById(R.id.endGameScreenLevel), 0);
+        animateValue(gameData.getInt(Game.COLUMN_SCORE, 0),
+                (TextView) findViewById(R.id.endGameScreenScore), 50);
+        animateValue(gameData.getInt(Game.COLUMN_SCRAMBLES_EARNED, 0),
+                (TextView) findViewById(R.id.endGameScreenScramblesEarned), 50);
+        animateValue(gameData.getInt(Game.COLUMN_SCRAMBLES_USED, 0),
+                (TextView) findViewById(R.id.endGameScreenScramblesUsed), 100);
+        animateValue(gameDataWords, (TextView) findViewById(R.id.endGameScreenWords), 150);
 
-        // Populate words
+        // The chart will load once the color theme has been set
+        activeGraphFunction = this::loadWordLengthGraph;
+
+        // Word List
+        TextView wordsList = (TextView) findViewById(R.id.endGameScreenWordsList);
         ArrayList<String> gameMovesList =
                 app.getDatabaseUtils().getGameMoves(getIntent().getLongExtra(EXTRA_GAME_ID, -1));
         gameMovesList.forEach(s -> wordsList.append(s + ", "));
+
+        // Color theme
+        app.addColorThemeEventHandler(this);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        app.removeColorThemeEventHandler(this);
     }
 
     private void animateValue(int value, TextView target, int delay) {
@@ -84,13 +134,161 @@ public class EndGameScreen extends AppCompatActivity {
         animator.setInterpolator(new AccelerateDecelerateInterpolator());
         animator.setDuration(getResources().getInteger(R.integer.animation_durationLag));
         animator.addUpdateListener(animation -> target.setText(
-                String.format(Locale.ENGLISH, STAT_FORMAT_STRING, animation.getAnimatedValue())));
+                getString(R.string.integer, (int) animation.getAnimatedValue())));
 
         if (delay > 0) {
             (new Handler()).postDelayed(animator::start, delay);
         } else {
             animator.start();
         }
+    }
+
+    private void showGraph(GraphAction action) {
+        // Reset
+        graphWrapper.removeAllViews();
+        if (graphButtons.size() == 0) {
+            graphButtons.addAll(ViewUtils.getElementsByTagName(graphButtonsWrapper,
+                    AppCompatTextView.class, false));
+        }
+        for (TextView tv : graphButtons) {
+            tv.setTextColor(activeColorTheme.text);
+            tv.setBackgroundColor(activeColorTheme.backgroundLight);
+        }
+
+        graphWrapper.addView(action.chart);
+        action.chart.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+        action.chart.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+        action.chart.animateX(getResources().getInteger(R.integer.animation_durationLag));
+
+        action.button.setTextColor(activeColorTheme.textOnPrimary);
+        action.button.setBackgroundColor(activeColorTheme.primary);
+    }
+
+    @VisibleForXML
+    public void loadPointDistributionGraph(View v) {
+        activeGraphFunction = this::loadPointDistributionGraph;
+        if (memoizedGraphs.get(R.id.endGameScreenGraphPointDistributionButton) != null) {
+            showGraph(memoizedGraphs.get(R.id.endGameScreenGraphPointDistributionButton));
+            return;
+        }
+
+        // Data backend
+        BarDataSet dataSet = new BarDataSet(new ArrayList<>(), "");
+        dataSet.setColor(activeColorTheme.textBlend);
+        dataSet.setDrawValues(false);
+        BarData data = new BarData(dataSet);
+
+        // Get Data from db into chart backend
+        Cursor cursor = app.getDatabaseUtils().getReadableDatabase().rawQuery("SELECT"
+                        + " COUNT(*) AS frequency,"
+                        + " " + GameWord.COLUMN_POINT_VALUE
+                        + " FROM " + GameWord.TABLE_NAME
+                        + " WHERE " + GameWord.COLUMN_GAME_ID + " = ?"
+                        + " GROUP BY " + GameWord.COLUMN_POINT_VALUE
+                        + " ORDER BY " + GameWord.COLUMN_POINT_VALUE + " ASC",
+                new String[] { gameId + "" });
+        if (cursor.moveToFirst()) {
+            do {
+                data.addEntry(new BarEntry(cursor.getInt(1), cursor.getInt(0), ""), 0);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        data.notifyDataChanged();
+
+        // Set up chart
+        BarChart chart = new BarChart(app);
+        chart.setData(data);
+        chart.setDrawBarShadow(false);
+        chart.getDescription().setEnabled(false);
+        chart.setPinchZoom(false);
+        chart.setTouchEnabled(false);
+
+        XAxis x = chart.getXAxis();
+        x.setPosition(XAxis.XAxisPosition.BOTTOM);
+        x.setGranularity(1);
+        x.setTextColor(activeColorTheme.text);
+        x.setGridColor(activeColorTheme.textBlend);
+        x.setAxisLineColor(activeColorTheme.textBlend);
+
+        YAxis y = chart.getAxisLeft();
+        y.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+        y.setTextColor(activeColorTheme.text);
+        y.setGridColor(activeColorTheme.textBlend);
+        y.setAxisLineColor(activeColorTheme.textBlend);
+        y.setGranularity(1);
+        y.setAxisMinimum(0);
+
+        chart.getAxisRight().setEnabled(false);
+        chart.getLegend().setEnabled(false);
+
+        GraphAction action = new GraphAction();
+        action.chart = chart;
+        action.button = (TextView) findViewById(R.id.endGameScreenGraphPointDistributionButton);
+        memoizedGraphs.put(R.id.endGameScreenGraphPointDistributionButton, action);
+
+        showGraph(action);
+    }
+
+    @VisibleForXML
+    public void loadWordLengthGraph(View v) {
+        activeGraphFunction = this::loadWordLengthGraph;
+        if (memoizedGraphs.get(R.id.endGameScreenGraphWordLengths) != null) {
+            showGraph(memoizedGraphs.get(R.id.endGameScreenGraphWordLengths));
+            return;
+        }
+
+        // Data backend
+        PieDataSet dataSet = new PieDataSet(new ArrayList<>(), "");
+        dataSet.setColor(activeColorTheme.backgroundLight);
+        dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        dataSet.setValueLineColor(activeColorTheme.primary);
+        dataSet.setSliceSpace(2);
+        PieData data = new PieData(dataSet);
+        data.setValueFormatter(new PercentFormatter());
+        data.setValueTextColor(activeColorTheme.text);
+        data.setValueTextSize(10);
+
+        // Get data from db
+        Cursor cursor = app.getDatabaseUtils().getReadableDatabase().rawQuery("SELECT"
+                + " COUNT(*) AS quantity,"
+                + " LENGTH(" + GameWord.COLUMN_WORD + ") AS word_length"
+                + " FROM " + GameWord.TABLE_NAME
+                + " WHERE " + GameWord.COLUMN_GAME_ID + " = ?"
+                + " GROUP BY word_length"
+                + " ORDER BY quantity ASC",
+                new String[] { gameId + "" });
+        if (cursor.moveToFirst()) {
+            do {
+                dataSet.addEntry(new PieEntry(cursor.getInt(0),
+                        getString(R.string.endGameScreen_graphWordLengthsLabel, cursor.getInt(1))));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        data.notifyDataChanged();
+
+        // Set up chart
+        PieChart chart = new PieChart(app);
+        chart.setData(data);
+        chart.setUsePercentValues(true);
+        chart.getDescription().setEnabled(false);
+        chart.setDrawHoleEnabled(true);
+        chart.setHoleColor(activeColorTheme.background);
+        chart.setTransparentCircleColor(Color.TRANSPARENT);
+        chart.setTransparentCircleAlpha(255);
+        chart.setTransparentCircleRadius(54);
+        chart.setHoleRadius(54);
+        chart.setDrawCenterText(false);
+        chart.setRotationEnabled(true);
+        chart.setHighlightPerTapEnabled(false);
+
+        chart.getLegend().setEnabled(false);
+
+        GraphAction action = new GraphAction();
+        action.chart = chart;
+        action.button = (TextView) findViewById(R.id.endGameScreenGraphWordLengths);
+        memoizedGraphs.put(R.id.endGameScreenGraphWordLengths, action);
+
+        showGraph(action);
     }
 
     @VisibleForXML
@@ -103,5 +301,15 @@ public class EndGameScreen extends AppCompatActivity {
     @VisibleForXML
     public void onActionMainMenuClick(View v) {
         startActivity(new Intent(this, MainMenuScreen.class));
+    }
+
+    @Override
+    public void onColorThemeChange(ColorTheme colorTheme) {
+        activeColorTheme = colorTheme;
+
+        // Re-load chart to apply colors
+        if (activeGraphFunction != null) {
+            activeGraphFunction.accept(null);
+        }
     }
 }
