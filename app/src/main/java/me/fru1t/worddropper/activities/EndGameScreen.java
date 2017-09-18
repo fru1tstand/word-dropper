@@ -324,6 +324,7 @@ public class EndGameScreen extends AppCompatActivity implements ColorThemeEventH
         chart.setDrawCenterText(false);
         chart.setRotationEnabled(true);
         chart.setHighlightPerTapEnabled(false);
+        chart.setEntryLabelColor(activeColorTheme.text); // Labels outside the chart
 
         chart.getLegend().setEnabled(false);
 

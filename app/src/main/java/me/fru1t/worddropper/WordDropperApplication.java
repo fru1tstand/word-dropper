@@ -78,7 +78,7 @@ public class WordDropperApplication extends Application {
 
     private void updateFromSettings() {
         ColorTheme newTheme = ColorTheme.valueOf(
-                getStringPreference(R.string.pref_colorTheme, ColorTheme.INVERSE_ORANGE.name()));
+                getStringPreference(R.string.pref_colorTheme, ColorTheme.ORANGE.name()));
         if (newTheme != colorTheme) {
             colorTheme = newTheme;
             colorThemeEventHandlers.forEach(handler -> handler.onColorThemeChange(newTheme));

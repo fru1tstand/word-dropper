@@ -30,7 +30,7 @@ public enum ColorTheme {
             Color.BLACK, // text
             Color.parseColor("#aaaaaa"), // textBlend
             Color.WHITE, // textOnPrimary
-            Color.BLACK, // textOnPrimaryLight
+            Color.WHITE, // textOnPrimaryLight
             Color.WHITE // textOnPrimaryDark
     ),
 
