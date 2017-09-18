@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.SparseArray;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -25,10 +26,13 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
@@ -144,8 +148,10 @@ public class EndGameScreen extends AppCompatActivity implements ColorThemeEventH
     }
 
     private void showGraph(GraphAction action) {
-        // Reset
+        // Reset Graphs
         graphWrapper.removeAllViews();
+
+        // Reset buttons
         if (graphButtons.size() == 0) {
             graphButtons.addAll(ViewUtils.getElementsByTagName(graphButtonsWrapper,
                     AppCompatTextView.class, false));
@@ -155,13 +161,28 @@ public class EndGameScreen extends AppCompatActivity implements ColorThemeEventH
             tv.setBackgroundColor(activeColorTheme.backgroundLight);
         }
 
-        graphWrapper.addView(action.chart);
-        action.chart.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
-        action.chart.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
-        action.chart.animateX(getResources().getInteger(R.integer.animation_durationLag));
-
+        // Activate button
         action.button.setTextColor(activeColorTheme.textOnPrimary);
         action.button.setBackgroundColor(activeColorTheme.primary);
+
+        // Show graph
+        if (action.chart != null) {
+            graphWrapper.addView(action.chart);
+            action.chart.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+            action.chart.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+            action.chart.animateX(getResources().getInteger(R.integer.animation_durationLag));
+        } else {
+            TextView textView = new TextView(app);
+            textView.setText(R.string.endGameScreen_graphNoData);
+            textView.setGravity(Gravity.CENTER);
+            textView.setTextColor(activeColorTheme.text);
+            View view = new View(app);
+            view.setBackgroundColor(activeColorTheme.backgroundLight);
+            graphWrapper.addView(view);
+            graphWrapper.addView(textView);
+            view.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+            view.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+        }
     }
 
     @VisibleForXML
@@ -172,8 +193,14 @@ public class EndGameScreen extends AppCompatActivity implements ColorThemeEventH
             return;
         }
 
+        // Prepare
+        GraphAction action = new GraphAction();
+        action.button = (TextView) findViewById(R.id.endGameScreenGraphPointDistributionButton);
+        memoizedGraphs.put(R.id.endGameScreenGraphPointDistributionButton, action);
+
         // Data backend
-        BarDataSet dataSet = new BarDataSet(new ArrayList<>(), "");
+        ArrayList<BarEntry> rawData = new ArrayList<>();
+        BarDataSet dataSet = new BarDataSet(rawData, "");
         dataSet.setColor(activeColorTheme.textBlend);
         dataSet.setDrawValues(false);
         BarData data = new BarData(dataSet);
@@ -194,6 +221,13 @@ public class EndGameScreen extends AppCompatActivity implements ColorThemeEventH
         }
         cursor.close();
         data.notifyDataChanged();
+
+        // No data? No graph.
+        if (rawData.size() == 0) {
+            action.chart = null;
+            showGraph(action);
+            return;
+        }
 
         // Set up chart
         BarChart chart = new BarChart(app);
@@ -221,11 +255,8 @@ public class EndGameScreen extends AppCompatActivity implements ColorThemeEventH
         chart.getAxisRight().setEnabled(false);
         chart.getLegend().setEnabled(false);
 
-        GraphAction action = new GraphAction();
+        // Finally, show the graph
         action.chart = chart;
-        action.button = (TextView) findViewById(R.id.endGameScreenGraphPointDistributionButton);
-        memoizedGraphs.put(R.id.endGameScreenGraphPointDistributionButton, action);
-
         showGraph(action);
     }
 
@@ -237,14 +268,19 @@ public class EndGameScreen extends AppCompatActivity implements ColorThemeEventH
             return;
         }
 
+        // Prepare
+        GraphAction action = new GraphAction();
+        action.button = (TextView) findViewById(R.id.endGameScreenGraphWordLengths);
+        memoizedGraphs.put(R.id.endGameScreenGraphWordLengths, action);
+
         // Data backend
-        PieDataSet dataSet = new PieDataSet(new ArrayList<>(), "");
+        ArrayList<PieEntry> rawData = new ArrayList<>();
+        PieDataSet dataSet = new PieDataSet(rawData, "");
         dataSet.setColor(activeColorTheme.backgroundLight);
         dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
         dataSet.setValueLineColor(activeColorTheme.primary);
         dataSet.setSliceSpace(2);
         PieData data = new PieData(dataSet);
-        data.setValueFormatter(new PercentFormatter());
         data.setValueTextColor(activeColorTheme.text);
         data.setValueTextSize(10);
 
@@ -257,19 +293,27 @@ public class EndGameScreen extends AppCompatActivity implements ColorThemeEventH
                 + " GROUP BY word_length"
                 + " ORDER BY quantity ASC",
                 new String[] { gameId + "" });
+        int total = 0;
         if (cursor.moveToFirst()) {
             do {
-                dataSet.addEntry(new PieEntry(cursor.getInt(0),
+                total += cursor.getInt(0);
+                dataSet.addEntry(new PieEntry(
+                        cursor.getInt(0),
                         getString(R.string.endGameScreen_graphWordLengthsLabel, cursor.getInt(1))));
             } while (cursor.moveToNext());
         }
         cursor.close();
         data.notifyDataChanged();
+        if (rawData.size() == 0) {
+            action.chart = null;
+            showGraph(action);
+            return;
+        }
 
         // Set up chart
         PieChart chart = new PieChart(app);
         chart.setData(data);
-        chart.setUsePercentValues(true);
+        chart.setUsePercentValues(false);
         chart.getDescription().setEnabled(false);
         chart.setDrawHoleEnabled(true);
         chart.setHoleColor(activeColorTheme.background);
@@ -283,11 +327,14 @@ public class EndGameScreen extends AppCompatActivity implements ColorThemeEventH
 
         chart.getLegend().setEnabled(false);
 
-        GraphAction action = new GraphAction();
-        action.chart = chart;
-        action.button = (TextView) findViewById(R.id.endGameScreenGraphWordLengths);
-        memoizedGraphs.put(R.id.endGameScreenGraphWordLengths, action);
+        // One last thing
+        final int finalTotal = total;
+        data.setValueFormatter((value, entry, dataSetIndex, viewPortHandler)
+                -> Math.round(value)
+                + " (" + (Math.round(1000.0 * value / finalTotal) / 10.0) + "%)");
 
+        // Finally show graph.
+        action.chart = chart;
         showGraph(action);
     }
 

@@ -17,12 +17,14 @@
     <string name="endGameScreen_levelTitle">Level</string>
 
     <string name="endGameScreen_graphPointDistribution">Point Distribution</string>
-    <string name="endGameScreen_graphWordLengths">Word Lengths</string>
+    <string name="endGameScreen_graphWordLengths">Word Length</string>
+
+    <string name="endGameScreen_graphNoData">No Data :(</string>
+    <string name="endGameScreen_graphWordLengthsLabel">%d letters</string>
 
     <string name="endGameScreen_actionPlayAgain">Play Again</string>
     <string name="endGameScreen_actionMainMenu">Main Menu</string>
 
-    <string name="endGameScreen_graphWordLengthsLabel">%d letters</string>
     <string name="endGameScreen_summaryDifficulty">Difficulty: </string>
 
     <!-- activities/GameScreen -->
