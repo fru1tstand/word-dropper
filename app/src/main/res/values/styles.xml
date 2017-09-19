@@ -58,11 +58,23 @@
 
     <style name="MainMenuScreen_MenuOption">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/mainMenuScreen_optionHeight</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:paddingLeft">30dp</item>
         <item name="android:paddingRight">30dp</item>
         <item name="android:textSize">@dimen/mainMenuScreen_optionFontSize</item>
         <item name="android:clickable">true</item>
+    </style>
+
+    <style name="MainMenuScreen_MenuOptionDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginTop">1dp</item>
+        <item name="android:layout_marginBottom">1dp</item>
+        <item name="android:layout_marginLeft">30dp</item>
+        <item name="android:layout_marginRight">30dp</item>
+        <item name="backgroundColorTheme">primary</item>
     </style>
 </resources>

@@ -73,6 +73,8 @@
                 style="@style/MainMenuScreen_MenuOption"
                 android:text="@string/mainMenuScreen_optionPlayZen"
                 android:onClick="onPlayZenClick" />
+
+        <me.fru1t.worddropper.widget.base.Divider style="@style/MainMenuScreen_MenuOptionDivider"/>
         <me.fru1t.worddropper.widget.base.ColoredTextView
                 style="@style/MainMenuScreen_MenuOption"
                 android:text="@string/mainMenuScreen_optionPlayEasy"
@@ -90,6 +92,7 @@
                 android:text="@string/mainMenuScreen_optionPlayExpert"
                 android:onClick="onPlayExpertClick" />
 
+        <me.fru1t.worddropper.widget.base.Divider style="@style/MainMenuScreen_MenuOptionDivider"/>
         <me.fru1t.worddropper.widget.base.ColoredTextView
                 style="@style/MainMenuScreen_MenuOption"
                 android:text="@string/mainMenuScreen_optionsGoBackToMainMenu"
@@ -100,6 +103,8 @@
     <LinearLayout
             style="@style/MainMenuScreen_MenuWrapper"
             android:id="@+id/mainMenuScreenStatsMenu">
+
+        <me.fru1t.worddropper.widget.base.Divider style="@style/MainMenuScreen_MenuOptionDivider"/>
         <me.fru1t.worddropper.widget.base.ColoredTextView
                 style="@style/MainMenuScreen_MenuOption"
                 android:text="@string/mainMenuScreen_optionsGoBackToMainMenu"

@@ -55,6 +55,7 @@ public class MainMenuScreen extends AppCompatActivity {
         LinearLayout newMenu = cachedMenus.get(menuResourceId);
         LayoutParams newMenuParams = (LayoutParams) newMenu.getLayoutParams();
         newMenuParams.leftMargin = -1 * width;
+        newMenuParams.rightMargin = width;
         newMenu.setLayoutParams(newMenuParams);
         ValueAnimator newMenuAnimator = ValueAnimator.ofInt(width, 0);
         newMenuAnimator.setDuration(
@@ -62,6 +63,7 @@ public class MainMenuScreen extends AppCompatActivity {
         newMenuAnimator.setInterpolator(new DecelerateInterpolator());
         newMenuAnimator.addUpdateListener(animation -> {
             newMenuParams.leftMargin = -1 * (int) animation.getAnimatedValue();
+            newMenuParams.rightMargin = (int) animation.getAnimatedValue();
             newMenu.setLayoutParams(newMenuParams);
         });
 
@@ -73,6 +75,7 @@ public class MainMenuScreen extends AppCompatActivity {
         oldMenuAnimator.setInterpolator(new AccelerateInterpolator());
         oldMenuAnimator.addUpdateListener(animation -> {
             oldMenuParams.leftMargin = -1 * (int) animation.getAnimatedValue();
+            oldMenuParams.rightMargin = (int) animation.getAnimatedValue();
             activeMenu.setLayoutParams(oldMenuParams);
         });
         oldMenuAnimator.addListener(new Animator.AnimatorListener() {
