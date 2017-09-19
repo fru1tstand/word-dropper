@@ -56,5 +56,9 @@
     <string name="mainMenuScreen_optionPlayHard">Hard</string>
     <string name="mainMenuScreen_optionPlayExpert">Expert</string>
 
+    <string name="mainMenuScreen_optionStatsProfile">Global Profile</string>
+    <string name="mainMenuScreen_optionStatsSpecial">Special</string>
+    <string name="mainMenuScreen_optionStatsGames">Games</string>
+
     <string name="mainMenuScreen_optionsGoBackToMainMenu">Back to Main Menu</string>
 </resources>

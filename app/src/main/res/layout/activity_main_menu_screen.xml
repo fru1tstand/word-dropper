@@ -103,6 +103,18 @@
     <LinearLayout
             style="@style/MainMenuScreen_MenuWrapper"
             android:id="@+id/mainMenuScreenStatsMenu">
+        <me.fru1t.worddropper.widget.base.ColoredTextView
+                style="@style/MainMenuScreen_MenuOption"
+                android:text="@string/mainMenuScreen_optionStatsProfile"
+                android:onClick="onStatsProfileClick" />
+        <me.fru1t.worddropper.widget.base.ColoredTextView
+                style="@style/MainMenuScreen_MenuOption"
+                android:text="@string/mainMenuScreen_optionStatsSpecial"
+                android:onClick="onStatsSpecialClick" />
+        <me.fru1t.worddropper.widget.base.ColoredTextView
+                style="@style/MainMenuScreen_MenuOption"
+                android:text="@string/mainMenuScreen_optionStatsGames"
+                android:onClick="onStatsGamesClick" />
 
         <me.fru1t.worddropper.widget.base.Divider style="@style/MainMenuScreen_MenuOptionDivider"/>
         <me.fru1t.worddropper.widget.base.ColoredTextView

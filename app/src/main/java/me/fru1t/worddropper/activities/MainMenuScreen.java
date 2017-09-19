@@ -125,14 +125,14 @@ public class MainMenuScreen extends AppCompatActivity {
     public void onPlayClick(View view) {
         animateOpenMenu(R.id.mainMenuScreenPlayMenu);
     }
-
     @VisibleForXML
     public void onStatsClick(View view) {
         animateOpenMenu(R.id.mainMenuScreenStatsMenu);
     }
-
     @VisibleForXML
-    public void onSettingsClick(View view) { }
+    public void onSettingsClick(View view) {
+        // TODO: Go to settings activity
+    }
 
     // Play Menu
     @VisibleForXML
@@ -154,5 +154,19 @@ public class MainMenuScreen extends AppCompatActivity {
     @VisibleForXML
     public void onPlayZenClick(View v) {
         play(Difficulty.ZEN);
+    }
+
+    // Stats
+    @VisibleForXML
+    public void onStatsProfileClick(View v) {
+        // TODO: Go to global profile activity
+    }
+    @VisibleForXML
+    public void onStatsSpecialClick(View v) {
+        // TODO: Go to special selectors activity
+    }
+    @VisibleForXML
+    public void onStatsGamesClick(View v) {
+        // TODO: Go to game select activity
     }
 }
