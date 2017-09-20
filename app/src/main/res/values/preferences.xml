@@ -3,6 +3,6 @@
         xmlns:tools="http://schemas.android.com/tools"
         tools:ignore="MissingTranslation">
 
-    <bool name="app_debug">true</bool>
+    <bool name="app_debug">false</bool>
     <string name="pref_colorTheme">color-theme</string>
 </resources>

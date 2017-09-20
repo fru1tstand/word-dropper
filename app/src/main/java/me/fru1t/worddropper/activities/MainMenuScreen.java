@@ -104,7 +104,6 @@ public class MainMenuScreen extends AppCompatActivity {
         }
 
         if (activeMenu != null) {
-            System.out.println("Hiding " + activeMenu.getId());
             activeMenu.setVisibility(View.GONE);
         }
 
