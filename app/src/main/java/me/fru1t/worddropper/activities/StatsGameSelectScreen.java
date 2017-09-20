@@ -2,7 +2,6 @@ package me.fru1t.worddropper.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -89,44 +88,39 @@ public class StatsGameSelectScreen extends AppCompatActivity {
 
         // Fetch data
         ArrayList<GameData> data = new ArrayList<>();
-        Cursor cursor = app.getDatabaseUtils().getReadableDatabase().rawQuery("SELECT "
-                + Game._ID + ", "                   // 0
-                + Game.COLUMN_DIFFICULTY + ", "     // 1
-                + Game.COLUMN_UNIX_START + ", "     // 2
-                + Game.COLUMN_STATUS + ", "         // 3
-                + "agg_words.score AS score, "      // 4
-                + "agg_words.words AS words "       // 5
+        if (!app.getDatabaseUtils().forEachResult(
+                "SELECT "
+                    + Game._ID + ", "                   // 0
+                    + Game.COLUMN_DIFFICULTY + ", "     // 1
+                    + Game.COLUMN_UNIX_START + ", "     // 2
+                    + Game.COLUMN_STATUS + ", "         // 3
+                    + "agg_words.score AS score, "      // 4
+                    + "agg_words.words AS words "       // 5
                 + "FROM " + Game.TABLE_NAME + " "
                 + "INNER JOIN ("
                     + "SELECT "
-                    + GameWord.COLUMN_GAME_ID + ", "
-                    + "SUM(" + GameWord.COLUMN_POINT_VALUE + ") AS score, "
-                    + "COUNT(*) AS words "
+                        + GameWord.COLUMN_GAME_ID + ", "
+                        + "SUM(" + GameWord.COLUMN_POINT_VALUE + ") AS score, "
+                        + "COUNT(*) AS words "
                     + "FROM " + GameWord.TABLE_NAME + " "
                     + "GROUP BY " + GameWord.COLUMN_GAME_ID
-                + ") agg_words ON agg_words." + GameWord.COLUMN_GAME_ID + " = " + Game.TABLE_NAME + "." + Game._ID + " "
+                + ") agg_words ON agg_words." + GameWord.COLUMN_GAME_ID
+                        + " = " + Game.TABLE_NAME + "." + Game._ID + " "
                 + "ORDER BY " + Game.COLUMN_UNIX_START + " DESC",
-                null);
-        if (cursor.moveToFirst()) {
-            do {
-                data.add(new GameData(
+                null,
+                cursor -> data.add(new GameData(
                         cursor.getLong(0),
-                        cursor.getString(1).toUpperCase()
-                                + " - " + TITLE_DATE_FORMAT.format(new Date(cursor.getLong(2) * 1000)),
+                        cursor.getString(1).toUpperCase() + " - "
+                                + TITLE_DATE_FORMAT.format(new Date(cursor.getLong(2) * 1000)),
                         cursor.getInt(5) + " words"
                                 + " - " + cursor.getInt(4) + " points"
                                 + ((cursor.getInt(3) == Game.STATUS_IN_PROGRESS)
-                                        ? " - in progress" : "")
-                ));
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-
-        // Populate list
-        if (data.size() == 0) {
+                                ? " - in progress" : "")
+                )))) {
             findViewById(R.id.noDataWarning).setVisibility(View.VISIBLE);
         }
 
+        // Populate list
         ListView gameList = (ListView) findViewById(R.id.gameList);
         gameList.setAdapter(
                 new GameListAdapter(this, R.layout.layout_stats_game_select_list_element, data));

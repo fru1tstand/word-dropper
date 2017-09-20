@@ -58,12 +58,6 @@ public class Game implements BaseColumns {
      */
     public static final String COLUMN_LEVEL = "level";
 
-    /**
-     * INTEGER: The score of the game. Yes it's redundant.
-     * TODO: Remove field
-     */
-    public static final String COLUMN_SCORE = "score";
-
     public static final int STATUS_COMPLETED = 0;
     public static final int STATUS_IN_PROGRESS = 1;
 
@@ -75,7 +69,6 @@ public class Game implements BaseColumns {
             + COLUMN_SCRAMBLES_EARNED   + " INTEGER NOT NULL,"
             + COLUMN_SCRAMBLES_USED     + " INTEGER NOT NULL,"
             + COLUMN_LEVEL              + " INTEGER NOT NULL,"
-            + COLUMN_SCORE              + " INTEGER NOT NULL,"
             + COLUMN_DIFFICULTY         + " TEXT NOT NULL,"
             + COLUMN_BOARD_STATE        + " TEXT NOT NULL"
             + ");";

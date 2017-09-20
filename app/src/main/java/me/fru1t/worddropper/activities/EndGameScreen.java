@@ -85,29 +85,40 @@ public class EndGameScreen extends AppCompatActivity implements ColorThemeEventH
                 new String[] { Game.COLUMN_UNIX_START, Game.COLUMN_STATUS, Game.COLUMN_DIFFICULTY,
                         Game.COLUMN_BOARD_STATE, Game.COLUMN_MOVES_EARNED, Game.COLUMN_BOARD_STATE,
                         Game.COLUMN_MOVES_EARNED, Game.COLUMN_SCRAMBLES_USED,
-                        Game.COLUMN_SCRAMBLES_EARNED, Game.COLUMN_LEVEL, Game.COLUMN_SCORE });
+                        Game.COLUMN_SCRAMBLES_EARNED, Game.COLUMN_LEVEL });
         if (gameData == null) {
             Toast.makeText(this, R.string.endGameScreen_gameNotFoundError, Toast.LENGTH_LONG)
                     .show();
             finish();
             return;
         }
-        int gameDataWords = app.getDatabaseUtils().getRowCount(
-                GameWord.TABLE_NAME,
-                GameWord.COLUMN_GAME_ID + " = ?",
-                new String[] { gameId + "" });
+
+        // Yes. This can be done in the above query. But a) readability, and b) low overhead.
+        int[] extraGameData = new int[2]; // [0] = words; [1] = score
+        app.getDatabaseUtils().forEachResult("SELECT"
+                + " COUNT(*) AS words,"                                 // 0
+                + " SUM(" + GameWord.COLUMN_POINT_VALUE + ") AS score"  // 1
+                + " FROM " + GameWord.TABLE_NAME
+                + " WHERE " + GameWord.COLUMN_GAME_ID + " = ?",
+                new String[] { gameId + "" },
+                cursor -> {
+                    extraGameData[0] = cursor.getInt(0);
+                    extraGameData[1] = cursor.getInt(1);
+                });
+
+        // We have to set this for later
         difficulty = gameData.getString(Game.COLUMN_DIFFICULTY, Difficulty.ZEN.name());
 
         // Side by side level and score
         animateValue(gameData.getInt(Game.COLUMN_LEVEL, 0),
                 (TextView) findViewById(R.id.endGameScreenLevel), 0);
-        animateValue(gameData.getInt(Game.COLUMN_SCORE, 0),
+        animateValue(extraGameData[1],
                 (TextView) findViewById(R.id.endGameScreenScore), 50);
         animateValue(gameData.getInt(Game.COLUMN_SCRAMBLES_EARNED, 0),
                 (TextView) findViewById(R.id.endGameScreenScramblesEarned), 50);
         animateValue(gameData.getInt(Game.COLUMN_SCRAMBLES_USED, 0),
                 (TextView) findViewById(R.id.endGameScreenScramblesUsed), 100);
-        animateValue(gameDataWords, (TextView) findViewById(R.id.endGameScreenWords), 150);
+        animateValue(extraGameData[0], (TextView) findViewById(R.id.endGameScreenWords), 150);
 
         // The chart will load once the color theme has been set
         activeGraphFunction = this::loadWordLengthGraph;

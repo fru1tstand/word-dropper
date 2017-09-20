@@ -75,7 +75,6 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         values.put(Game.COLUMN_SCRAMBLES_EARNED, scramblesEarned);
         values.put(Game.COLUMN_SCRAMBLES_USED, 0);
         values.put(Game.COLUMN_LEVEL, 1);
-        values.put(Game.COLUMN_SCORE, 0);
 
         return getWritableDatabase().insert(Game.TABLE_NAME, null, values);
     }
@@ -122,7 +121,6 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         // Update board state in Game
         ContentValues gameValues = new ContentValues();
         gameValues.put(Game.COLUMN_BOARD_STATE, newBoardState);
-        gameValues.put(Game.COLUMN_SCORE, score);
         Game.updateById(getWritableDatabase(), gameValues, gameId);
 
         return true;
@@ -185,17 +183,28 @@ public class DatabaseUtils extends SQLiteOpenHelper {
     }
 
     /**
-     * Retrieves the number of rows that satisfy the given conditions.
+     * Performs a query executing an action for every result. Returns false if the query returned
+     * no results.
+     * @param query The raw SQL query.
+     * @param args Any selection arguments within the raw query.
+     * @param action What to do with the row.
+     * @return False if the query returned no results; otherwise, true.
      */
-    public int getRowCount(String tableName, String where, String[] whereArgs) {
-        int result = 0;
-        Cursor c = getReadableDatabase()
-                .rawQuery("SELECT COUNT(*) FROM " + tableName + " WHERE " + where, whereArgs);
-        if (c.moveToFirst()) {
-            result = c.getInt(0);
+    public boolean forEachResult(String query, @Nullable String[] args, Consumer<Cursor> action) {
+        Cursor c = null;
+        try {
+            c = getReadableDatabase().rawQuery(query, args);
+            if (!c.moveToFirst()) {
+                return false;
+            }
+            do {
+                action.accept(c);
+            } while (c.moveToNext());
+            return true;
+        } finally {
+            if (c != null) {
+                c.close();
+            }
         }
-
-        c.close();
-        return result;
     }
 }
