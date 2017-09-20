@@ -33,6 +33,7 @@ import me.fru1t.worddropper.widget.WrappingProgressBar;
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
+ * TODO: Change footer buttons depending on the origin of startActivity.
  */
 public class GameScreen extends AppCompatActivity implements ColorThemeEventHandler {
     public static final String EXTRA_DIFFICULTY = "extra_difficulty";

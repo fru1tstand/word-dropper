@@ -59,7 +59,8 @@ public class Game implements BaseColumns {
     public static final String COLUMN_LEVEL = "level";
 
     /**
-     * INTEGER: The score of the game
+     * INTEGER: The score of the game. Yes it's redundant.
+     * TODO: Remove field
      */
     public static final String COLUMN_SCORE = "score";
 

@@ -167,6 +167,6 @@ public class MainMenuScreen extends AppCompatActivity {
     }
     @VisibleForXML
     public void onStatsGamesClick(View v) {
-        // TODO: Go to game select activity
+        startActivity(new Intent(this, StatsGameSelectScreen.class));
     }
 }

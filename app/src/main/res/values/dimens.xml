@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App globals -->
+    <dimen name="app_hEdgeSpacing">30dp</dimen>
+
     <!-- Main Menu Screen -->
     <dimen name="mainMenuScreen_optionFontSize">25sp</dimen>
     <dimen name="mainMenuScreen_titleTextSize">48sp</dimen>
