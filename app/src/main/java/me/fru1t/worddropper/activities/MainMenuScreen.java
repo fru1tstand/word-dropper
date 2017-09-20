@@ -34,10 +34,13 @@ public class MainMenuScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu_screen);
-
-        openMenu(R.id.mainMenuScreenRootMenu);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        openMenu(R.id.mainMenuScreenRootMenu);
+    }
 
     private void animateOpenMenu(@IdRes int menuResourceId) {
         if (cachedMenus.get(menuResourceId) == null) {
@@ -101,10 +104,15 @@ public class MainMenuScreen extends AppCompatActivity {
         }
 
         if (activeMenu != null) {
+            System.out.println("Hiding " + activeMenu.getId());
             activeMenu.setVisibility(View.GONE);
         }
 
         activeMenu = cachedMenus.get(menuResourceId);
+        LayoutParams layout = (LayoutParams) activeMenu.getLayoutParams();
+        layout.leftMargin = 0;
+        layout.rightMargin = 0;
+        activeMenu.setLayoutParams(layout);
         activeMenu.setVisibility(View.VISIBLE);
     }
 

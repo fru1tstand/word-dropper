@@ -300,6 +300,7 @@ public class GameScreen extends AppCompatActivity implements ColorThemeEventHand
         Intent endGameIntent = new Intent(this, EndGameScreen.class);
         endGameIntent.putExtra(EndGameScreen.EXTRA_GAME_ID, gameId);
         startActivity(endGameIntent);
+        finish();
     }
 
     private void addWordToGraph(String word, int value) {

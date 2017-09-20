@@ -55,7 +55,9 @@ public class SplashScreen extends AppCompatActivity {
 
     private void goToMainMenu(int delayMs) {
         addTextView("Moving to main menu in " + delayMs + "ms.");
-        (new android.os.Handler()).postDelayed(
-                () -> startActivity(new Intent(SplashScreen.this, MainMenuScreen.class)), delayMs);
+        (new android.os.Handler()).postDelayed(() -> {
+            startActivity(new Intent(SplashScreen.this, MainMenuScreen.class));
+            finish();
+        }, delayMs);
     }
 }

@@ -26,13 +26,9 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.IValueFormatter;
-import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
@@ -93,7 +89,7 @@ public class EndGameScreen extends AppCompatActivity implements ColorThemeEventH
         if (gameData == null) {
             Toast.makeText(this, R.string.endGameScreen_gameNotFoundError, Toast.LENGTH_LONG)
                     .show();
-            startActivity(new Intent(this, MainMenuScreen.class));
+            finish();
             return;
         }
         int gameDataWords = app.getDatabaseUtils().getRowCount(
@@ -344,11 +340,12 @@ public class EndGameScreen extends AppCompatActivity implements ColorThemeEventH
         Intent gameScreenIntent = new Intent(this, GameScreen.class);
         gameScreenIntent.putExtra(GameScreen.EXTRA_DIFFICULTY, difficulty);
         startActivity(gameScreenIntent);
+        finish();
     }
 
     @VisibleForXML
     public void onActionMainMenuClick(View v) {
-        startActivity(new Intent(this, MainMenuScreen.class));
+        finish();
     }
 
     @Override
