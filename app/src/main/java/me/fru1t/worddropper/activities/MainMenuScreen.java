@@ -26,6 +26,8 @@ public class MainMenuScreen extends AppCompatActivity {
     private @Nullable LinearLayout activeMenu;
     private final SparseArray<LinearLayout> cachedMenus;
 
+
+
     public MainMenuScreen() {
         cachedMenus = new SparseArray<>();
     }
@@ -40,6 +42,8 @@ public class MainMenuScreen extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         openMenu(R.id.mainMenuScreenRootMenu);
+
+        // Load games
     }
 
     private void animateOpenMenu(@IdRes int menuResourceId) {
@@ -128,6 +132,10 @@ public class MainMenuScreen extends AppCompatActivity {
     }
 
     // Root Menu
+    @VisibleForXML
+    public void onResumeClick(View view) {
+        animateOpenMenu(R.id.mainMenuScreenResumeMenu);
+    }
     @VisibleForXML
     public void onPlayClick(View view) {
         animateOpenMenu(R.id.mainMenuScreenPlayMenu);

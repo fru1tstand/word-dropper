@@ -57,4 +57,8 @@
     <declare-styleable name="ColoredLinearLayout">
         <attr name="backgroundColorTheme" />
     </declare-styleable>
+
+    <declare-styleable name="ColoredListView">
+        <attr name="backgroundColorTheme" />
+    </declare-styleable>
 </resources>

@@ -46,6 +46,7 @@
     <string name="mainMenuScreen_titleWord">Word</string>
     <string name="mainMenuScreen_titleDropper">Dropper</string>
 
+    <string name="mainMenuScreen_optionResume">Resume</string>
     <string name="mainMenuScreen_optionPlay">Play</string>
     <string name="mainMenuScreen_optionStats">Stats</string>
     <string name="mainMenuScreen_optionSettings">Settings</string>

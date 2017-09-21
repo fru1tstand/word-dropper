@@ -43,7 +43,7 @@
             android:gravity="center"
             android:textSize="14sp"
             android:id="@+id/noDataWarning"/>
-    <ListView
+    <me.fru1t.worddropper.widget.GameListView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"

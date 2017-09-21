@@ -250,6 +250,7 @@ public class EndGameScreen extends AppCompatActivity implements ColorThemeEventH
         x.setTextColor(activeColorTheme.text);
         x.setGridColor(activeColorTheme.textBlend);
         x.setAxisLineColor(activeColorTheme.textBlend);
+        x.setAxisMinimum(0);
 
         YAxis y = chart.getAxisLeft();
         y.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);

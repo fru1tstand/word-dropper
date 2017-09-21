@@ -53,6 +53,12 @@
             android:id="@+id/mainMenuScreenRootMenu">
         <me.fru1t.worddropper.widget.base.ColoredTextView
                 style="@style/MainMenuScreen_MenuOption"
+                android:text="@string/mainMenuScreen_optionResume"
+                android:onClick="onResumeClick"
+                android:visibility="gone"
+                android:id="@+id/mainMenuScreenResumeButton" />
+        <me.fru1t.worddropper.widget.base.ColoredTextView
+                style="@style/MainMenuScreen_MenuOption"
                 android:text="@string/mainMenuScreen_optionPlay"
                 android:onClick="onPlayClick" />
         <me.fru1t.worddropper.widget.base.ColoredTextView
@@ -64,6 +70,22 @@
                 android:text="@string/mainMenuScreen_optionSettings"
                 android:onClick="onSettingsClick" />
     </LinearLayout> <!--    Root Menu -->
+
+    <!--    Resume Menu -->
+    <LinearLayout
+            style="@style/MainMenuScreen_MenuWrapper"
+            android:id="@+id/mainMenuScreenResumeMenu">
+        <me.fru1t.worddropper.widget.base.ColoredListView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/mainMenuScreenResumeGameList" />
+
+        <me.fru1t.worddropper.widget.base.Divider style="@style/MainMenuScreen_MenuOptionDivider"/>
+        <me.fru1t.worddropper.widget.base.ColoredTextView
+                style="@style/MainMenuScreen_MenuOption"
+                android:text="@string/mainMenuScreen_optionsGoBackToMainMenu"
+                android:onClick="openRootMenu" />
+    </LinearLayout> <!--    Resume Menu -->
 
     <!--    Play Menu -->
     <LinearLayout

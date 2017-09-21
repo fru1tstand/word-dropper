@@ -24,6 +24,7 @@ import static me.fru1t.worddropper.WordDropperApplication.LOG_TAG;
  * Methods to manipulate and retrieve data from the database.
  */
 public class DatabaseUtils extends SQLiteOpenHelper {
+
     private static final String DATABASE_NAME = "word_dropper.db";
     private static final int DATABASE_VERSION = 1;
 
