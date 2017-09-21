@@ -215,11 +215,12 @@ public class GameScreen extends AppCompatActivity implements ColorThemeEventHand
 
         // Pause menu comes last so it's onWrapEventListener top
         pauseMenu.setOnHideListener(() -> pauseMenu.setVisibility(View.GONE));
-        pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuSaveAndQuit, false, () -> {});
+        pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuSaveAndQuit, false, this::finish);
         pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuSettings, true, () -> {});
         pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuRestartOption, true, () -> {
-                gameId = NEW_GAME;
-                startGame();
+            app.getDatabaseUtils().endGame(gameId); // End game in db
+            gameId = NEW_GAME; // Prepare for new game
+            startGame(); // Set up and start new game
         });
         pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuEndGameOption, false, this::endGame);
         if (app.isDebugging()) {
