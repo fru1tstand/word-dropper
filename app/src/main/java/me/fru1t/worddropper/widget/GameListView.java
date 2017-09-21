@@ -32,7 +32,7 @@ public class GameListView extends ColoredListView {
     public static class GameData {
         public long gameId;
         public String difficulty;
-        public int unixStart;
+        public long unixStart;
         public int gameStatus;
         public int score;
         public int words;
@@ -141,7 +141,8 @@ public class GameListView extends ColoredListView {
                 + "ORDER BY " + Game.COLUMN_UNIX_START + " DESC",
                 whereArgs,
                 cursor -> adapter.add(new GameData(cursor.getLong(0), cursor.getString(1),
-                        cursor.getInt(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5))))) {
+                        cursor.getLong(2), cursor.getInt(3), cursor.getInt(4),
+                        cursor.getInt(5))))) {
             adapter.notifyDataSetChanged();
             return true;
         }
