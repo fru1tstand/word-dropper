@@ -11,22 +11,34 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.AdapterView;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import me.fru1t.android.annotations.VisibleForXML;
 import me.fru1t.worddropper.R;
+import me.fru1t.worddropper.database.tables.Game;
 import me.fru1t.worddropper.settings.Difficulty;
+import me.fru1t.worddropper.widget.GameListView;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
 public class MainMenuScreen extends AppCompatActivity {
+    private static final SimpleDateFormat RESUME_GAME_DATE_FORMAT =
+            new SimpleDateFormat("MM/dd/yy hh:mm aa", Locale.US);
+
+    private GameListView resumeGameList;
+    private TextView resumeGameButton;
+
     private @Nullable LinearLayout activeMenu;
     private final SparseArray<LinearLayout> cachedMenus;
-
-
 
     public MainMenuScreen() {
         cachedMenus = new SparseArray<>();
@@ -36,6 +48,20 @@ public class MainMenuScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu_screen);
+
+        // Resume Game Logic
+        resumeGameButton = (TextView) findViewById(R.id.mainMenuScreenResumeButton);
+        resumeGameList = (GameListView) findViewById(R.id.mainMenuScreenResumeGameList);
+        resumeGameList.setTitleFunction(data -> data.difficulty.toUpperCase() + " - "
+                + RESUME_GAME_DATE_FORMAT.format(new Date(data.unixStart * 1000)));
+        resumeGameList.setDescriptionFunction(data -> data.words + " words - "
+                + data.score + " points");
+        resumeGameList.setOnItemClickListener((parent, view, position, id) -> {
+            Intent gameIntent = new Intent(this, GameScreen.class);
+            gameIntent.putExtra(GameScreen.EXTRA_GAME_ID,
+                    ((GameListView.GameData) parent.getItemAtPosition(position)).gameId);
+            startActivity(gameIntent);
+        });
     }
 
     @Override
@@ -43,7 +69,14 @@ public class MainMenuScreen extends AppCompatActivity {
         super.onResume();
         openMenu(R.id.mainMenuScreenRootMenu);
 
-        // Load games
+        // Do we have any games to resume?
+        if (resumeGameList.populate(
+                new String[] { Game.COLUMN_STATUS },
+                new String[] { Game.STATUS_IN_PROGRESS + "" })) {
+            resumeGameButton.setVisibility(View.VISIBLE);
+        } else {
+            resumeGameButton.setVisibility(View.GONE);
+        }
     }
 
     private void animateOpenMenu(@IdRes int menuResourceId) {
@@ -122,6 +155,7 @@ public class MainMenuScreen extends AppCompatActivity {
     private void play(Difficulty difficulty) {
         Intent gameScreenIntent = new Intent(this, GameScreen.class);
         gameScreenIntent.putExtra(GameScreen.EXTRA_DIFFICULTY, difficulty.name());
+        gameScreenIntent.putExtra(GameScreen.EXTRA_GAME_ID, GameScreen.NEW_GAME);
         startActivity(gameScreenIntent);
     }
 

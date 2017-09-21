@@ -128,6 +128,34 @@ public class WrappingProgressBar extends View implements ColorThemeEventHandler 
     }
 
     /**
+     * Sets the total of the progress bar, wrapping as necessary, and obtaining the resulting
+     * progress.
+     * @param total The total to set the progress bar to (not simply the progress for the current
+     *              level).
+     */
+    public void setTotal(int total) {
+        reset();
+        addProgress(total);
+    }
+
+    public void addProgress(int progressDelta) {
+        while (progressDelta > 0) {
+            int levelRemainder = max - progress;
+            if (levelRemainder > progressDelta) {
+                progress += progressDelta;
+                progressDelta = 0;
+                calculatedProgressBarWidth = (float) (progress * 1.0 / max * getWidth());
+            } else {
+                progressDelta -= levelRemainder;
+                ++wraps;
+                progress = 0;
+                calculatedProgressBarWidth = 0;
+            }
+        }
+        invalidate();
+    }
+
+    /**
      * Adds the given progress to the current progress amount. Animates overflow by filling the bar
      * and recursively calling animateAddProgress until all progressDelta is consumed.
      */

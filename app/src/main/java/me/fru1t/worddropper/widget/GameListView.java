@@ -102,8 +102,24 @@ public class GameListView extends ColoredListView {
         return populate(null, null);
     }
 
-    public boolean populate(@Nullable String where, @Nullable String[] whereArgs) {
+    public boolean populate(@Nullable String[] whereCols, @Nullable String[] whereArgs) {
+        if ((whereCols != null && whereArgs == null)
+                || (whereCols == null && whereArgs != null)
+                || (whereArgs != null && whereCols.length != whereArgs.length)) {
+            throw new IllegalArgumentException(
+                    "The number of columns and arguments specified must be equal");
+        }
+
+        StringBuilder where = new StringBuilder(" ");
+        if (whereCols != null) {
+            where.append("WHERE 1 = 1 ");
+            for (String whereCol : whereCols) {
+                where.append("AND ").append(whereCol).append(" = ? ");
+            }
+        }
+
         adapter.setNotifyOnChange(false);
+        adapter.clear();
         if (app.getDatabaseUtils().forEachResult("SELECT "
                     + Game._ID + ", "                   // 0
                     + Game.COLUMN_DIFFICULTY + ", "     // 1
@@ -121,7 +137,7 @@ public class GameListView extends ColoredListView {
                     + "GROUP BY " + GameWord.COLUMN_GAME_ID
                 + ") agg_words ON agg_words." + GameWord.COLUMN_GAME_ID + " = "
                         + Game.TABLE_NAME + "." + Game._ID
-                + ((where != null) ? " " + where + " " : " ")
+                + where.toString()
                 + "ORDER BY " + Game.COLUMN_UNIX_START + " DESC",
                 whereArgs,
                 cursor -> adapter.add(new GameData(cursor.getLong(0), cursor.getString(1),

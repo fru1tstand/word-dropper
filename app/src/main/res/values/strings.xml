@@ -2,13 +2,13 @@
     <!-- App -->
     <string name="app_name">WordDropper</string>
     <string name="app_sharedPreferencesFileName">worddropper-shared-preferences</string>
+    <string name="app_gameNotFoundError">The requested game couldn\'t be found.</string>
 
     <string name="integer">%d</string>
 
     <!-- activities/EndGameScreen -->
     <string name="endGameScreen_title">WordDropper</string>
     <string name="endGameScreen_subtitle">Game Overview</string>
-    <string name="endGameScreen_gameNotFoundError">The requested game couldn\'t be found.</string>
 
     <string name="endGameScreen_wordsCreatedTitle">Words Created</string>
     <string name="endGameScreen_scramblesUsedTitle">Scrambles Used</string>

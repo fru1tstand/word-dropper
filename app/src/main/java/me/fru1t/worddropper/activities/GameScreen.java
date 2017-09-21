@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -20,9 +21,11 @@ import com.google.common.base.Strings;
 import java.util.LinkedList;
 
 import me.fru1t.android.annotations.VisibleForXML;
+import me.fru1t.android.database.Row;
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
 import me.fru1t.worddropper.database.tables.Game;
+import me.fru1t.worddropper.database.tables.GameWord;
 import me.fru1t.worddropper.settings.ColorTheme;
 import me.fru1t.worddropper.settings.Difficulty;
 import me.fru1t.worddropper.settings.colortheme.ColorThemeEventHandler;
@@ -37,9 +40,10 @@ import me.fru1t.worddropper.widget.WrappingProgressBar;
  */
 public class GameScreen extends AppCompatActivity implements ColorThemeEventHandler {
     public static final String EXTRA_DIFFICULTY = "extra_difficulty";
+    public static final String EXTRA_GAME_ID = "extra_game_id";
 
     private static final int CHART_ELEMENTS = 30;
-    private static final long NO_GAME = -1;
+    public static final long NEW_GAME = -1;
 
     private Difficulty difficulty;
     private int movesEarned;
@@ -68,8 +72,6 @@ public class GameScreen extends AppCompatActivity implements ColorThemeEventHand
     private long gameId;
 
     public GameScreen() {
-        gameId = NO_GAME;
-
         // Data backend setup for chart
         wordHistoryDataList = new LinkedList<>();
         wordHistoryDataSet = new BarDataSet(wordHistoryDataList, "");
@@ -93,7 +95,6 @@ public class GameScreen extends AppCompatActivity implements ColorThemeEventHand
         wordHistoryChart = (BarChart) findViewById(R.id.gameScreenHudChart);
         activeWord = (TextView) findViewById(R.id.gameScreenHudActiveWord);
 
-        difficulty = Difficulty.valueOf(getIntent().getStringExtra(EXTRA_DIFFICULTY));
         activeWordHorizontalPadding = (int)
                 getResources().getDimension(R.dimen.gameScreen_hudCurrentWordHorizontalPadding);
 
@@ -216,7 +217,10 @@ public class GameScreen extends AppCompatActivity implements ColorThemeEventHand
         pauseMenu.setOnHideListener(() -> pauseMenu.setVisibility(View.GONE));
         pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuSaveAndQuit, false, () -> {});
         pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuSettings, true, () -> {});
-        pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuRestartOption, true, this::startGame);
+        pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuRestartOption, true, () -> {
+                gameId = NEW_GAME;
+                startGame();
+        });
         pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuEndGameOption, false, this::endGame);
         if (app.isDebugging()) {
             pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuDebugSubmitWords, true, () -> {
@@ -234,8 +238,13 @@ public class GameScreen extends AppCompatActivity implements ColorThemeEventHand
         pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuCloseMenuOption, false,
                 pauseMenu::hide);
 
-        // Post completion
+        // Colorize
         app.addColorThemeEventHandler(this);
+
+        // Set GameID if we're resuming a game.
+        gameId = getIntent().getLongExtra(EXTRA_GAME_ID, NEW_GAME);
+
+        // Start the game
         startGame();
     }
 
@@ -257,14 +266,62 @@ public class GameScreen extends AppCompatActivity implements ColorThemeEventHand
     }
 
     private void startGame() {
-        progressBar.reset();
-        int currentLevel = progressBar.getWraps() + 1;
+        // Shared setup
+        clearGraph();
 
-        // Set initial values
-        scramblesUsed = 0;
-        scramblesEarned = 0;
-        movesEarned = (int) Math.round(1.0 * progressBar.getMax() / difficulty.wordPointAverage);
-        movesUsed = 0;
+        // Set up board
+        if (gameId == NEW_GAME) {
+            // Set initial values
+            difficulty = Difficulty.valueOf(getIntent().getStringExtra(EXTRA_DIFFICULTY));
+            scramblesUsed = 0;
+            scramblesEarned = 0;
+            movesEarned = (int) Math.round(1.0 * progressBar.getMax() / difficulty.wordPointAverage);
+            movesUsed = 0;
+
+            // Reset
+            progressBar.reset();
+            tileBoard.scramble();
+
+            // Create new game
+            gameId = app.getDatabaseUtils().startGame(difficulty, tileBoard.getBoardState(),
+                    movesEarned, scramblesEarned);
+        } else {
+            // Load game data
+            Row row = app.getDatabaseUtils().getRowFromId(Game.TABLE_NAME, gameId, new String[] {
+                    Game.COLUMN_BOARD_STATE, Game.COLUMN_STATUS, Game.COLUMN_SCRAMBLES_EARNED,
+                    Game.COLUMN_SCRAMBLES_USED, Game.COLUMN_DIFFICULTY, Game.COLUMN_MOVES_EARNED
+            });
+            if (row == null) {
+                Toast.makeText(this, R.string.app_gameNotFoundError, Toast.LENGTH_LONG).show();
+                finish();
+                return;
+            }
+
+            // Extra data from the game word table.
+            int[] extraGameData = new int[2]; // [0] = words; [1] = score
+            app.getDatabaseUtils().forEachResult("SELECT"
+                        + " COUNT(*) AS words,"                                 // 0
+                        + " SUM(" + GameWord.COLUMN_POINT_VALUE + ") AS score"  // 1
+                    + " FROM " + GameWord.TABLE_NAME
+                    + " WHERE " + GameWord.COLUMN_GAME_ID + " = ?",
+                    new String[] { gameId + "" },
+                    cursor -> {
+                        extraGameData[0] = cursor.getInt(0);
+                        extraGameData[1] = cursor.getInt(1);
+                    });
+
+            // Set values
+            difficulty = Difficulty.valueOf(
+                    row.getString(Game.COLUMN_DIFFICULTY, Difficulty.ZEN.name()));
+            scramblesUsed = row.getInt(Game.COLUMN_SCRAMBLES_USED, 0);
+            scramblesEarned = row.getInt(Game.COLUMN_SCRAMBLES_EARNED, 0);
+            movesEarned = row.getInt(Game.COLUMN_MOVES_EARNED, 0);
+            movesUsed = extraGameData[0];
+
+            // Update modules
+            progressBar.setTotal(extraGameData[1]);
+            tileBoard.setBoardState(row.getString(Game.COLUMN_BOARD_STATE, ""));
+        }
 
         // Update hud
         if (!difficulty.isScramblingAllowed()) {
@@ -281,15 +338,7 @@ public class GameScreen extends AppCompatActivity implements ColorThemeEventHand
             movesLeft.setText(getString(R.string.integer, movesEarned - movesUsed));
         }
 
-        level.setText(getString(R.string.integer, currentLevel));
-        clearGraph();
-
-        // Update tile board
-        tileBoard.scramble();
-
-        // Get game id from database
-        gameId = app.getDatabaseUtils().startGame(difficulty, tileBoard.getBoardState(),
-                movesEarned, scramblesEarned);
+        level.setText(getString(R.string.integer, progressBar.getWraps() + 1));
     }
 
     private void endGame() {

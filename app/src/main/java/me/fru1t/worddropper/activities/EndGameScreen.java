@@ -87,7 +87,7 @@ public class EndGameScreen extends AppCompatActivity implements ColorThemeEventH
                         Game.COLUMN_MOVES_EARNED, Game.COLUMN_SCRAMBLES_USED,
                         Game.COLUMN_SCRAMBLES_EARNED, Game.COLUMN_LEVEL });
         if (gameData == null) {
-            Toast.makeText(this, R.string.endGameScreen_gameNotFoundError, Toast.LENGTH_LONG)
+            Toast.makeText(this, R.string.app_gameNotFoundError, Toast.LENGTH_LONG)
                     .show();
             finish();
             return;

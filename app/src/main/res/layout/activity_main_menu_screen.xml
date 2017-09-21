@@ -75,9 +75,11 @@
     <LinearLayout
             style="@style/MainMenuScreen_MenuWrapper"
             android:id="@+id/mainMenuScreenResumeMenu">
-        <me.fru1t.worddropper.widget.base.ColoredListView
+        <me.fru1t.worddropper.widget.GameListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
                 android:id="@+id/mainMenuScreenResumeGameList" />
 
         <me.fru1t.worddropper.widget.base.Divider style="@style/MainMenuScreen_MenuOptionDivider"/>
