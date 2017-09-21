@@ -11,7 +11,6 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.AdapterView;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,6 +24,7 @@ import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.database.tables.Game;
 import me.fru1t.worddropper.settings.Difficulty;
 import me.fru1t.worddropper.widget.GameListView;
+import me.fru1t.worddropper.widget.base.ColoredFrameLayout;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -34,6 +34,7 @@ public class MainMenuScreen extends AppCompatActivity {
     private static final SimpleDateFormat RESUME_GAME_DATE_FORMAT =
             new SimpleDateFormat("MM/dd/yy hh:mm aa", Locale.US);
 
+    private ColoredFrameLayout root;
     private GameListView resumeGameList;
     private TextView resumeGameButton;
 
@@ -62,6 +63,9 @@ public class MainMenuScreen extends AppCompatActivity {
                     ((GameListView.GameData) parent.getItemAtPosition(position)).gameId);
             startActivity(gameIntent);
         });
+
+        root = (ColoredFrameLayout) findViewById(R.id.mainMenuScreenRoot);
+        root.post(() -> resumeGameList.setMaxHeight(root.getHeight() / 2));
     }
 
     @Override
@@ -152,17 +156,21 @@ public class MainMenuScreen extends AppCompatActivity {
         activeMenu.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (activeMenu == null || activeMenu.getId() == R.id.mainMenuScreenRootMenu) {
+            super.onBackPressed();
+            return;
+        }
+
+        animateOpenMenu(R.id.mainMenuScreenRootMenu);
+    }
+
     private void play(Difficulty difficulty) {
         Intent gameScreenIntent = new Intent(this, GameScreen.class);
         gameScreenIntent.putExtra(GameScreen.EXTRA_DIFFICULTY, difficulty.name());
         gameScreenIntent.putExtra(GameScreen.EXTRA_GAME_ID, GameScreen.NEW_GAME);
         startActivity(gameScreenIntent);
-    }
-
-    // Shared
-    @VisibleForXML
-    public void openRootMenu(View v) {
-        animateOpenMenu(R.id.mainMenuScreenRootMenu);
     }
 
     // Root Menu

@@ -15,21 +15,12 @@
             app:backgroundColorTheme="background_light"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
+            android:paddingLeft="@dimen/app_edgeSpace"
+            android:paddingRight="@dimen/app_edgeSpace"
             android:orientation="horizontal">
         <me.fru1t.worddropper.widget.base.ColoredTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/statsGameSelectScreen_back"
-                android:textSize="22sp"
-                android:clickable="true"
-                android:onClick="onBackClick"
-                android:paddingStart="@dimen/app_edgeSpace"
-                android:paddingEnd="20dp"/>
-        <me.fru1t.worddropper.widget.base.ColoredTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingEnd="@dimen/app_edgeSpace"
-                android:paddingStart="0dp"
                 android:textSize="22sp"
                 android:text="@string/statsGameSelectScreen_title" />
     </me.fru1t.worddropper.widget.base.ColoredLinearLayout>

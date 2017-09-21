@@ -64,7 +64,6 @@
     <string name="mainMenuScreen_optionsGoBackToMainMenu">Back to Main Menu</string>
 
     <!-- Stats game select screen -->
-    <string name="statsGameSelectScreen_back">&lt;</string>
     <string name="statsGameSelectScreen_title">Game Select</string>
     <string name="statsGameSelectScreen_noGames">No games have been played :(</string>
 </resources>

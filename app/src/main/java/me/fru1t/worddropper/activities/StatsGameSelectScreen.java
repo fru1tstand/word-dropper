@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import me.fru1t.android.annotations.VisibleForXML;
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.database.tables.Game;
 import me.fru1t.worddropper.widget.GameListView;
@@ -43,10 +42,5 @@ public class StatsGameSelectScreen extends AppCompatActivity {
         if (!gameList.populate()) {
             findViewById(R.id.noDataWarning).setVisibility(View.VISIBLE);
         }
-    }
-
-    @VisibleForXML
-    public void onBackClick(View v) {
-        finish();
     }
 }

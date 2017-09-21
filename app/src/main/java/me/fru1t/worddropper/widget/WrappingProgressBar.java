@@ -11,7 +11,7 @@ import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.animation.BounceInterpolator;
+import android.view.animation.AccelerateInterpolator;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -61,7 +61,8 @@ public class WrappingProgressBar extends View implements ColorThemeEventHandler 
     private @Setter OnWrapEventListener onWrapEventListener;
     private @Setter Runnable onAnimateAddEndEventListener;
 
-    private float calculatedProgressBarWidth;
+    private boolean isAnimatingWidth;
+    private float animatedProgressWidth;
     private final Rect calculatedTextBounds;
 
     public WrappingProgressBar(Context context) {
@@ -89,7 +90,8 @@ public class WrappingProgressBar extends View implements ColorThemeEventHandler 
         progress = 0;
         total = 0;
 
-        calculatedProgressBarWidth = 0;
+        isAnimatingWidth = false;
+        animatedProgressWidth = 0;
         calculatedTextBounds = new Rect();
 
         nextMaximumFunction = null;
@@ -138,18 +140,23 @@ public class WrappingProgressBar extends View implements ColorThemeEventHandler 
         addProgress(total);
     }
 
+    /**
+     * Adds progress to the current progress amount immediately.
+     */
     public void addProgress(int progressDelta) {
+        total += progressDelta;
         while (progressDelta > 0) {
             int levelRemainder = max - progress;
             if (levelRemainder > progressDelta) {
                 progress += progressDelta;
                 progressDelta = 0;
-                calculatedProgressBarWidth = (float) (progress * 1.0 / max * getWidth());
+                animatedProgressWidth = (float) (progress * 1.0 / max * getWidth());
             } else {
                 progressDelta -= levelRemainder;
                 ++wraps;
                 progress = 0;
-                calculatedProgressBarWidth = 0;
+                animatedProgressWidth = 0;
+                max = (nextMaximumFunction != null) ? nextMaximumFunction.next(wraps) : max;
             }
         }
         invalidate();
@@ -168,8 +175,9 @@ public class WrappingProgressBar extends View implements ColorThemeEventHandler 
         total += progressDelta;
 
         ValueAnimator va = ValueAnimator.ofFloat(
-                calculatedProgressBarWidth, (float) (progress * 1.0 / max * getWidth()));
-        va.setInterpolator(new BounceInterpolator());
+                animatedProgressWidth,
+                (float) (progress * 1.0 / max * getWidth()));
+        va.setInterpolator(new AccelerateInterpolator());
         va.setDuration(Math.min(
                 getResources().getInteger(R.integer.animation_durationWrappingProgressBarBase)
                         + getResources().getInteger(
@@ -177,13 +185,14 @@ public class WrappingProgressBar extends View implements ColorThemeEventHandler 
                         * progressDelta,
                 getResources().getInteger(R.integer.animation_durationWrappingProgressBarMax)));
         va.addUpdateListener(animation -> {
-            calculatedProgressBarWidth = (float) animation.getAnimatedValue();
+            animatedProgressWidth = (float) animation.getAnimatedValue();
             postInvalidate();
         });
         va.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 if (progressRemainder < 0) {
+                    isAnimatingWidth = false;
                     if (onAnimateAddEndEventListener != null) {
                         onAnimateAddEndEventListener.run();
                     }
@@ -192,7 +201,7 @@ public class WrappingProgressBar extends View implements ColorThemeEventHandler 
 
                 ++wraps;
                 progress = 0;
-                calculatedProgressBarWidth = 0;
+                animatedProgressWidth = 0;
                 if (nextMaximumFunction != null) {
                     max = nextMaximumFunction.next(wraps);
                 }
@@ -201,8 +210,12 @@ public class WrappingProgressBar extends View implements ColorThemeEventHandler 
                 }
                 animateAddProgress(progressRemainder);
             }
-        });
 
+            @Override
+            public void onAnimationStart(Animator animation) {
+                isAnimatingWidth = true;
+            }
+        });
         va.start();
     }
 
@@ -224,21 +237,25 @@ public class WrappingProgressBar extends View implements ColorThemeEventHandler 
         canvas.drawRect(0, 0, getWidth(), getHeight(), backgroundColor);
 
         // Fill progress bar
+        float progressWidth = (float) (progress * 1.0 / max * getWidth());
+        if (!isAnimatingWidth) {
+            animatedProgressWidth = progressWidth;
+        }
         canvas.drawRect(
                 0,
                 0,
-                (float) (progress * 1.0 / max * getWidth()),
+                progressWidth,
                 getHeight(),
                 progressCalculatedColor);
         canvas.drawRect(
                 0,
                 0,
-                calculatedProgressBarWidth,
+                isAnimatingWidth ? animatedProgressWidth : progressWidth,
                 getHeight(),
                 progressColor);
 
         // Draw text
-        String text = "Level: " + wraps + " (" + progress + " / " + max + ")";
+        String text = progress + " / " + max + " (total: " + total + ")";
         textPaint.getTextBounds(text, 0, text.length(), calculatedTextBounds);
         canvas.drawText(text, 10,
                 calculatedTextBounds.height() + (getHeight() - calculatedTextBounds.height()) / 2,
