@@ -44,6 +44,9 @@ import me.fru1t.worddropper.settings.ColorTheme;
 import me.fru1t.worddropper.settings.Difficulty;
 import me.fru1t.worddropper.settings.colortheme.ColorThemeEventHandler;
 
+/**
+ * Shows detailed information and graphics about a single game.
+ */
 public class EndGameScreen extends AppCompatActivity implements ColorThemeEventHandler {
     private static class GraphAction {
         Chart chart;

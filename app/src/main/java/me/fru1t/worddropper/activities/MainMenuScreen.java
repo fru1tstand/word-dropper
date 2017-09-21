@@ -27,8 +27,9 @@ import me.fru1t.worddropper.widget.GameListView;
 import me.fru1t.worddropper.widget.base.ColoredFrameLayout;
 
 /**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
+ * This is the base screen "main activity" of the game, when all other activities are disposed of.
+ * This screen has links to all other parts of the game (the actual game, high scores, settings,
+ * etc). This activity is never disposed of internally, unless acted upon by the OS itself.
  */
 public class MainMenuScreen extends AppCompatActivity {
     private static final SimpleDateFormat RESUME_GAME_DATE_FORMAT =

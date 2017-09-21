@@ -14,6 +14,11 @@ import com.google.common.base.Strings;
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
 
+/**
+ * An intermediate screen shown to the user while the application is loading. This screen should
+ * never be opened by any other activity and serves as the entry point to the application ensuring
+ * any pre-loaded data is available for the rest of the services.
+ */
 public class SplashScreen extends AppCompatActivity {
 
     private WordDropperApplication app;

@@ -31,7 +31,6 @@
     <string name="gameScreen_pauseMenuSaveAndQuit">Save and Quit</string>
     <string name="gameScreen_pauseMenuSettings">Settings</string>
     <string name="gameScreen_pauseMenuRestartOption">Restart Game</string>
-    <string name="gameScreen_pauseMenuCloseMenuOption">Close</string>
     <string name="gameScreen_pauseMenuEndGameOption">End Game</string>
     <string name="gameScreen_pauseMenuDebugSubmitWords">Submit Words</string>
 

@@ -34,9 +34,10 @@ import me.fru1t.worddropper.widget.TileBoard;
 import me.fru1t.worddropper.widget.WrappingProgressBar;
 
 /**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- * TODO: Change footer buttons depending on the origin of startActivity.
+ * The interactive game that shows the tile board, level progress, etc. This activity can be started
+ * anywhere so long as it's passed a gameId (use {@link #NEW_GAME} for a new game alongside a
+ * difficulty). This activity will always dispose of itself after completion (which could be due to
+ * the game finishing, or user specification).
  */
 public class GameScreen extends AppCompatActivity implements ColorThemeEventHandler {
     public static final String EXTRA_DIFFICULTY = "extra_difficulty";
@@ -236,8 +237,6 @@ public class GameScreen extends AppCompatActivity implements ColorThemeEventHand
             });
 
         }
-        pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuCloseMenuOption, false,
-                pauseMenu::hide);
 
         // Colorize
         app.addColorThemeEventHandler(this);

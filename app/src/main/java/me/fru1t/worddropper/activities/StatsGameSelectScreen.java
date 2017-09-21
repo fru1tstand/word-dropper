@@ -13,6 +13,10 @@ import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.database.tables.Game;
 import me.fru1t.worddropper.widget.GameListView;
 
+/**
+ * Shows the user their list of games played in order to navigate to that game's more detailed
+ * stats.
+ */
 public class StatsGameSelectScreen extends AppCompatActivity {
     private static final SimpleDateFormat TITLE_DATE_FORMAT =
             new SimpleDateFormat("MM/dd/yy hh:mm aa", Locale.US);
