@@ -8,12 +8,12 @@
         android:paddingRight="@dimen/app_edgeSpace"
         android:paddingTop="14dp"
         android:paddingBottom="14dp">
-    <me.fru1t.worddropper.widget.base.ColoredTextView
+    <me.fru1t.worddropper.ui.widget.ColoredTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:id="@+id/title" />
-    <me.fru1t.worddropper.widget.base.ColoredTextView
+    <me.fru1t.worddropper.ui.widget.ColoredTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="12sp"

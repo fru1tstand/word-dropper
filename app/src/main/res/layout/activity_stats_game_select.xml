@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<me.fru1t.worddropper.widget.base.ColoredLinearLayout
+<me.fru1t.worddropper.ui.widget.ColoredLinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,9 +7,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:keepScreenOn="true"
-        tools:context="me.fru1t.worddropper.activities.StatsGameSelectScreen">
+        tools:context="me.fru1t.worddropper.ui.statsgameselect.StatsGameSelectActivity">
     <!-- Header -->
-    <me.fru1t.worddropper.widget.base.ColoredLinearLayout
+    <me.fru1t.worddropper.ui.widget.ColoredLinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:backgroundColorTheme="background_light"
@@ -18,15 +18,15 @@
             android:paddingLeft="@dimen/app_edgeSpace"
             android:paddingRight="@dimen/app_edgeSpace"
             android:orientation="horizontal">
-        <me.fru1t.worddropper.widget.base.ColoredTextView
+        <me.fru1t.worddropper.ui.widget.ColoredTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="22sp"
                 android:text="@string/statsGameSelectScreen_title" />
-    </me.fru1t.worddropper.widget.base.ColoredLinearLayout>
+    </me.fru1t.worddropper.ui.widget.ColoredLinearLayout>
 
     <!-- Game List -->
-    <me.fru1t.worddropper.widget.base.ColoredTextView
+    <me.fru1t.worddropper.ui.widget.ColoredTextView
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:visibility="gone"
@@ -34,9 +34,9 @@
             android:gravity="center"
             android:textSize="14sp"
             android:id="@+id/noDataWarning"/>
-    <me.fru1t.worddropper.widget.GameListView
+    <me.fru1t.worddropper.ui.widget.GameListView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:id="@+id/gameList" />
-</me.fru1t.worddropper.widget.base.ColoredLinearLayout>
+</me.fru1t.worddropper.ui.widget.ColoredLinearLayout>

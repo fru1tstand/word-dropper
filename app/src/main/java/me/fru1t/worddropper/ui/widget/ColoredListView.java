@@ -1,4 +1,4 @@
-package me.fru1t.worddropper.widget.base;
+package me.fru1t.worddropper.ui.widget;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;

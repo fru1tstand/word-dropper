@@ -1,4 +1,4 @@
-package me.fru1t.worddropper.activities;
+package me.fru1t.worddropper.ui.game;
 
 import android.animation.ValueAnimator;
 import android.content.Intent;
@@ -29,9 +29,8 @@ import me.fru1t.worddropper.database.tables.GameWord;
 import me.fru1t.worddropper.settings.ColorTheme;
 import me.fru1t.worddropper.settings.Difficulty;
 import me.fru1t.worddropper.settings.colortheme.ColorThemeEventHandler;
-import me.fru1t.worddropper.widget.MenuLayout;
-import me.fru1t.worddropper.widget.TileBoard;
-import me.fru1t.worddropper.widget.WrappingProgressBar;
+import me.fru1t.worddropper.ui.gamestats.GameStatsActivity;
+import me.fru1t.worddropper.ui.widget.MenuLayout;
 
 /**
  * The interactive game that shows the tile board, level progress, etc. This activity can be started
@@ -39,7 +38,7 @@ import me.fru1t.worddropper.widget.WrappingProgressBar;
  * difficulty). This activity will always dispose of itself after completion (which could be due to
  * the game finishing, or user specification).
  */
-public class GameScreen extends AppCompatActivity implements ColorThemeEventHandler {
+public class GameActivity extends AppCompatActivity implements ColorThemeEventHandler {
     public static final String EXTRA_DIFFICULTY = "extra_difficulty";
     public static final String EXTRA_GAME_ID = "extra_game_id";
 
@@ -72,7 +71,7 @@ public class GameScreen extends AppCompatActivity implements ColorThemeEventHand
 
     private long gameId;
 
-    public GameScreen() {
+    public GameActivity() {
         // Data backend setup for chart
         wordHistoryDataList = new LinkedList<>();
         wordHistoryDataSet = new BarDataSet(wordHistoryDataList, "");
@@ -83,7 +82,7 @@ public class GameScreen extends AppCompatActivity implements ColorThemeEventHand
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_screen);
+        setContentView(R.layout.activity_game);
         app = (WordDropperApplication) getApplicationContext();
 
         // Fetch elements we need to poke around with
@@ -346,8 +345,8 @@ public class GameScreen extends AppCompatActivity implements ColorThemeEventHand
         app.getDatabaseUtils().endGame(gameId);
 
         // Open end game screen
-        Intent endGameIntent = new Intent(this, EndGameScreen.class);
-        endGameIntent.putExtra(EndGameScreen.EXTRA_GAME_ID, gameId);
+        Intent endGameIntent = new Intent(this, GameStatsActivity.class);
+        endGameIntent.putExtra(GameStatsActivity.EXTRA_GAME_ID, gameId);
         startActivity(endGameIntent);
         finish();
     }

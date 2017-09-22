@@ -1,4 +1,4 @@
-package me.fru1t.worddropper.widget;
+package me.fru1t.worddropper.ui.widget;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -7,6 +7,8 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import me.fru1t.worddropper.ui.game.WrappingProgressBar;
 
 @RunWith(AndroidJUnit4.class)
 public class WrappingProgressBarTest {

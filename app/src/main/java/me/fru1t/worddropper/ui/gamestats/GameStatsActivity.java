@@ -1,4 +1,4 @@
-package me.fru1t.worddropper.activities;
+package me.fru1t.worddropper.ui.gamestats;
 
 import android.animation.ValueAnimator;
 import android.content.Intent;
@@ -38,6 +38,7 @@ import me.fru1t.android.database.Row;
 import me.fru1t.android.widget.ViewUtils;
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
+import me.fru1t.worddropper.ui.game.GameActivity;
 import me.fru1t.worddropper.database.tables.Game;
 import me.fru1t.worddropper.database.tables.GameWord;
 import me.fru1t.worddropper.settings.ColorTheme;
@@ -47,7 +48,7 @@ import me.fru1t.worddropper.settings.colortheme.ColorThemeEventHandler;
 /**
  * Shows detailed information and graphics about a single game.
  */
-public class EndGameScreen extends AppCompatActivity implements ColorThemeEventHandler {
+public class GameStatsActivity extends AppCompatActivity implements ColorThemeEventHandler {
     private static class GraphAction {
         Chart chart;
         TextView button;
@@ -66,7 +67,7 @@ public class EndGameScreen extends AppCompatActivity implements ColorThemeEventH
     private FrameLayout graphWrapper;
     private LinearLayout graphButtonsWrapper;
 
-    public EndGameScreen() {
+    public GameStatsActivity() {
         memoizedGraphs = new SparseArray<>();
         graphButtons = new ArrayList<>();
     }
@@ -74,7 +75,7 @@ public class EndGameScreen extends AppCompatActivity implements ColorThemeEventH
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_end_game_screen);
+        setContentView(R.layout.activity_game_stats);
         app = (WordDropperApplication) getApplicationContext();
         gameId = getIntent().getLongExtra(EXTRA_GAME_ID, -1);
 
@@ -352,8 +353,8 @@ public class EndGameScreen extends AppCompatActivity implements ColorThemeEventH
 
     @VisibleForXML
     public void onActionPlayAgainClick(View v) {
-        Intent gameScreenIntent = new Intent(this, GameScreen.class);
-        gameScreenIntent.putExtra(GameScreen.EXTRA_DIFFICULTY, difficulty);
+        Intent gameScreenIntent = new Intent(this, GameActivity.class);
+        gameScreenIntent.putExtra(GameActivity.EXTRA_DIFFICULTY, difficulty);
         startActivity(gameScreenIntent);
         finish();
     }

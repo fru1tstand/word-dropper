@@ -1,4 +1,4 @@
-package me.fru1t.worddropper.activities;
+package me.fru1t.worddropper.ui.mainmenu;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
@@ -23,15 +23,17 @@ import me.fru1t.android.annotations.VisibleForXML;
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.database.tables.Game;
 import me.fru1t.worddropper.settings.Difficulty;
-import me.fru1t.worddropper.widget.GameListView;
-import me.fru1t.worddropper.widget.base.ColoredFrameLayout;
+import me.fru1t.worddropper.ui.game.GameActivity;
+import me.fru1t.worddropper.ui.statsgameselect.StatsGameSelectActivity;
+import me.fru1t.worddropper.ui.widget.GameListView;
+import me.fru1t.worddropper.ui.widget.ColoredFrameLayout;
 
 /**
  * This is the base screen "main activity" of the game, when all other activities are disposed of.
  * This screen has links to all other parts of the game (the actual game, high scores, settings,
  * etc). This activity is never disposed of internally, unless acted upon by the OS itself.
  */
-public class MainMenuScreen extends AppCompatActivity {
+public class MainMenuActivity extends AppCompatActivity {
     private static final SimpleDateFormat RESUME_GAME_DATE_FORMAT =
             new SimpleDateFormat("MM/dd/yy hh:mm aa", Locale.US);
 
@@ -42,14 +44,14 @@ public class MainMenuScreen extends AppCompatActivity {
     private @Nullable LinearLayout activeMenu;
     private final SparseArray<LinearLayout> cachedMenus;
 
-    public MainMenuScreen() {
+    public MainMenuActivity() {
         cachedMenus = new SparseArray<>();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_menu_screen);
+        setContentView(R.layout.activity_main_menu);
 
         // Resume Game Logic
         resumeGameButton = (TextView) findViewById(R.id.mainMenuScreenResumeButton);
@@ -59,8 +61,8 @@ public class MainMenuScreen extends AppCompatActivity {
         resumeGameList.setDescriptionFunction(data -> data.words + " words - "
                 + data.score + " points");
         resumeGameList.setOnItemClickListener((parent, view, position, id) -> {
-            Intent gameIntent = new Intent(this, GameScreen.class);
-            gameIntent.putExtra(GameScreen.EXTRA_GAME_ID,
+            Intent gameIntent = new Intent(this, GameActivity.class);
+            gameIntent.putExtra(GameActivity.EXTRA_GAME_ID,
                     ((GameListView.GameData) parent.getItemAtPosition(position)).gameId);
             startActivity(gameIntent);
         });
@@ -168,9 +170,9 @@ public class MainMenuScreen extends AppCompatActivity {
     }
 
     private void play(Difficulty difficulty) {
-        Intent gameScreenIntent = new Intent(this, GameScreen.class);
-        gameScreenIntent.putExtra(GameScreen.EXTRA_DIFFICULTY, difficulty.name());
-        gameScreenIntent.putExtra(GameScreen.EXTRA_GAME_ID, GameScreen.NEW_GAME);
+        Intent gameScreenIntent = new Intent(this, GameActivity.class);
+        gameScreenIntent.putExtra(GameActivity.EXTRA_DIFFICULTY, difficulty.name());
+        gameScreenIntent.putExtra(GameActivity.EXTRA_GAME_ID, GameActivity.NEW_GAME);
         startActivity(gameScreenIntent);
     }
 
@@ -219,6 +221,6 @@ public class MainMenuScreen extends AppCompatActivity {
     public void onStatsSpecialClick(View v) { }
     @VisibleForXML
     public void onStatsGamesClick(View v) {
-        startActivity(new Intent(this, StatsGameSelectScreen.class));
+        startActivity(new Intent(this, StatsGameSelectActivity.class));
     }
 }

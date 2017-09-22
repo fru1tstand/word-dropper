@@ -1,4 +1,4 @@
-package me.fru1t.worddropper.widget;
+package me.fru1t.worddropper.ui.widget;
 
 import android.content.Context;
 import android.support.annotation.AttrRes;
@@ -19,7 +19,6 @@ import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
 import me.fru1t.worddropper.database.tables.Game;
 import me.fru1t.worddropper.database.tables.GameWord;
-import me.fru1t.worddropper.widget.base.ColoredListView;
 
 /**
  * A colored list view that handles GameData.

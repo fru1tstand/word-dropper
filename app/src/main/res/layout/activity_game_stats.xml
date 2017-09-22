@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<me.fru1t.worddropper.widget.base.ColoredLinearLayout
+<me.fru1t.worddropper.ui.widget.ColoredLinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -8,13 +8,13 @@
         android:keepScreenOn="true"
         android:orientation="vertical"
         android:id="@+id/endGameScreenRoot"
-        tools:context=".activities.EndGameScreen">
+        tools:context=".ui.gamestats.GameStatsActivity">
 
     <!-- Title header -->
     <Space
             android:layout_width="match_parent"
             android:layout_height="32dp" />
-    <me.fru1t.worddropper.widget.base.ColoredTextView
+    <me.fru1t.worddropper.ui.widget.ColoredTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/endGameScreen_title"
@@ -22,7 +22,7 @@
             android:textStyle="bold"
             android:gravity="center_horizontal"
             android:id="@+id/endGameScreenGlobalTitle" />
-    <me.fru1t.worddropper.widget.base.ColoredTextView
+    <me.fru1t.worddropper.ui.widget.ColoredTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/endGameScreen_subtitle"
@@ -54,7 +54,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5">
-                    <me.fru1t.worddropper.widget.base.ColoredTextView
+                    <me.fru1t.worddropper.ui.widget.ColoredTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/endGameScreenLevelTitle"
@@ -67,7 +67,7 @@
                             android:layout_marginTop="8dp"
                             android:layout_marginStart="8dp"
                             android:layout_marginEnd="8dp" />
-                    <me.fru1t.worddropper.widget.base.ColoredTextView
+                    <me.fru1t.worddropper.ui.widget.ColoredTextView
                             android:id="@+id/endGameScreenLevel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/endGameScreenLevelTitle" />
                 </android.support.constraint.ConstraintLayout>
 
-                <me.fru1t.worddropper.widget.base.Divider
+                <me.fru1t.worddropper.ui.widget.Divider
                         android:layout_width="1px"
                         android:layout_height="match_parent"
                         app:backgroundColorTheme="primary" />
@@ -92,7 +92,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5">
-                    <me.fru1t.worddropper.widget.base.ColoredTextView
+                    <me.fru1t.worddropper.ui.widget.ColoredTextView
                             android:id="@+id/endGameScreenScoreTitle"
                             android:text="@string/endGameScreen_scoreTitle"
                             android:layout_width="wrap_content"
@@ -105,7 +105,7 @@
                             android:layout_marginTop="8dp"
                             android:layout_marginStart="8dp"
                             android:layout_marginEnd="8dp" />
-                    <me.fru1t.worddropper.widget.base.ColoredTextView
+                    <me.fru1t.worddropper.ui.widget.ColoredTextView
                             android:id="@+id/endGameScreenScore"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -136,7 +136,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.333">
-                    <me.fru1t.worddropper.widget.base.ColoredTextView
+                    <me.fru1t.worddropper.ui.widget.ColoredTextView
                             android:id="@+id/endGameScreenScramblesEarnedTitle"
                             android:text="@string/endGameScreen_scramblesEarnedTitle"
                             android:layout_width="wrap_content"
@@ -150,7 +150,7 @@
                             android:layout_marginStart="8dp"
                             android:layout_marginEnd="8dp"
                             android:textSize="12sp" />
-                    <me.fru1t.worddropper.widget.base.ColoredTextView
+                    <me.fru1t.worddropper.ui.widget.ColoredTextView
                             android:id="@+id/endGameScreenScramblesEarned"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -166,7 +166,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/endGameScreenScramblesEarnedTitle" />
                 </android.support.constraint.ConstraintLayout>
 
-                <me.fru1t.worddropper.widget.base.Divider
+                <me.fru1t.worddropper.ui.widget.Divider
                         android:layout_width="1px"
                         android:layout_height="match_parent"
                         app:backgroundColorTheme="primary" />
@@ -175,7 +175,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.333">
-                    <me.fru1t.worddropper.widget.base.ColoredTextView
+                    <me.fru1t.worddropper.ui.widget.ColoredTextView
                             android:id="@+id/endGameScreenScramblesUsedTitle"
                             android:text="@string/endGameScreen_scramblesUsedTitle"
                             android:layout_width="wrap_content"
@@ -189,7 +189,7 @@
                             android:layout_marginLeft="8dp"
                             app:layout_constraintLeft_toLeftOf="parent"
                             android:textSize="12sp" />
-                    <me.fru1t.worddropper.widget.base.ColoredTextView
+                    <me.fru1t.worddropper.ui.widget.ColoredTextView
                             android:id="@+id/endGameScreenScramblesUsed"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -205,7 +205,7 @@
                             android:layout_marginBottom="8dp" />
                 </android.support.constraint.ConstraintLayout>
 
-                <me.fru1t.worddropper.widget.base.Divider
+                <me.fru1t.worddropper.ui.widget.Divider
                         android:layout_width="1px"
                         android:layout_height="match_parent"
                         app:backgroundColorTheme="primary" />
@@ -214,7 +214,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.333">
-                    <me.fru1t.worddropper.widget.base.ColoredTextView
+                    <me.fru1t.worddropper.ui.widget.ColoredTextView
                             android:id="@+id/endGameScreenWordsTitle"
                             android:text="@string/endGameScreen_wordsCreatedTitle"
                             android:layout_width="wrap_content"
@@ -228,7 +228,7 @@
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             android:layout_marginTop="8dp" />
-                    <me.fru1t.worddropper.widget.base.ColoredTextView
+                    <me.fru1t.worddropper.ui.widget.ColoredTextView
                             android:id="@+id/endGameScreenWords"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -288,7 +288,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_weight=".5">
-                    <me.fru1t.worddropper.widget.base.ColoredTextView
+                    <me.fru1t.worddropper.ui.widget.ColoredTextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/endGameScreen_summaryDifficulty"
@@ -305,7 +305,7 @@
             </LinearLayout> <!-- Summary -->
 
             <!-- Word list -->
-            <me.fru1t.worddropper.widget.base.ColoredTextView
+            <me.fru1t.worddropper.ui.widget.ColoredTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/endGameScreenWordsList" />
@@ -314,12 +314,12 @@
     </ScrollView>
 
     <!-- Actions footer -->
-    <me.fru1t.worddropper.widget.base.ColoredLinearLayout
+    <me.fru1t.worddropper.ui.widget.ColoredLinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:backgroundColorTheme="background_light">
-        <me.fru1t.worddropper.widget.base.ColoredTextView
+        <me.fru1t.worddropper.ui.widget.ColoredTextView
                 android:text="@string/endGameScreen_actionPlayAgain"
                 android:textSize="@dimen/endGameScreen_actionTextSize"
                 android:gravity="center"
@@ -329,12 +329,12 @@
                 android:id="@+id/endGameScreenActionPlayAgain"
                 android:clickable="true"
                 android:onClick="onActionPlayAgainClick" />
-        <me.fru1t.worddropper.widget.base.Divider
+        <me.fru1t.worddropper.ui.widget.Divider
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:id="@+id/endGameScreenActionsSplitter"
                 app:backgroundColorTheme="background" />
-        <me.fru1t.worddropper.widget.base.ColoredTextView
+        <me.fru1t.worddropper.ui.widget.ColoredTextView
                 android:text="@string/endGameScreen_actionMainMenu"
                 android:textSize="@dimen/endGameScreen_actionTextSize"
                 android:gravity="center"
@@ -344,6 +344,6 @@
                 android:id="@+id/endGameScreenActionMainMenu"
                 android:clickable="true"
                 android:onClick="onActionMainMenuClick" />
-    </me.fru1t.worddropper.widget.base.ColoredLinearLayout> <!-- Actions Footer -->
+    </me.fru1t.worddropper.ui.widget.ColoredLinearLayout> <!-- Actions Footer -->
 
-</me.fru1t.worddropper.widget.base.ColoredLinearLayout>
+</me.fru1t.worddropper.ui.widget.ColoredLinearLayout>

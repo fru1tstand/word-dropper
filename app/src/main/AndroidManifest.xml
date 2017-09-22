@@ -12,7 +12,7 @@
 
         <!-- Splash screen -->
         <activity
-                android:name=".activities.SplashScreen"
+                android:name=".ui.splashscreen.SplashScreenActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize"
                 android:label="@string/app_name"
                 android:noHistory="true"
@@ -27,26 +27,26 @@
 
         <!-- Other Activities -->
         <activity
-                android:name=".activities.MainMenuScreen"
+                android:name=".ui.mainmenu.MainMenuActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize"
                 android:label="@string/app_name"
                 android:screenOrientation="portrait"
                 android:theme="@style/FullscreenTheme" />
         <activity
-                android:name=".activities.GameScreen"
+                android:name=".ui.game.GameActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize"
                 android:label="@string/app_name"
                 android:noHistory="true"
                 android:screenOrientation="portrait"
                 android:theme="@style/FullscreenTheme" />
         <activity
-                android:name=".activities.EndGameScreen"
+                android:name=".ui.gamestats.GameStatsActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize"
                 android:label="@string/app_name"
                 android:screenOrientation="portrait"
                 android:theme="@style/FullscreenTheme" />
         <activity
-                android:name=".activities.StatsGameSelectScreen"
+                android:name=".ui.statsgameselect.StatsGameSelectActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize"
                 android:label="@string/app_name"
                 android:screenOrientation="portrait"

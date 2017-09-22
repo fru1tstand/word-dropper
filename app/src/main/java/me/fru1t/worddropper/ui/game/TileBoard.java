@@ -1,4 +1,4 @@
-package me.fru1t.worddropper.widget;
+package me.fru1t.worddropper.ui.game;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -23,8 +23,6 @@ import lombok.Getter;
 import lombok.Setter;
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
-import me.fru1t.worddropper.widget.tileboard.Tile;
-import me.fru1t.worddropper.widget.tileboard.TileBoardColumn;
 
 /**
  * The main game board where players create words from.

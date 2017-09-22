@@ -1,4 +1,4 @@
-package me.fru1t.worddropper.activities;
+package me.fru1t.worddropper.ui.statsgameselect;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,20 +11,21 @@ import java.util.Locale;
 
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.database.tables.Game;
-import me.fru1t.worddropper.widget.GameListView;
+import me.fru1t.worddropper.ui.gamestats.GameStatsActivity;
+import me.fru1t.worddropper.ui.widget.GameListView;
 
 /**
  * Shows the user their list of games played in order to navigate to that game's more detailed
  * stats.
  */
-public class StatsGameSelectScreen extends AppCompatActivity {
+public class StatsGameSelectActivity extends AppCompatActivity {
     private static final SimpleDateFormat TITLE_DATE_FORMAT =
             new SimpleDateFormat("MM/dd/yy hh:mm aa", Locale.US);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_stats_game_select_screen);
+        setContentView(R.layout.activity_stats_game_select);
 
         // Set up how things look
         GameListView gameList = (GameListView) findViewById(R.id.gameList);
@@ -35,8 +36,8 @@ public class StatsGameSelectScreen extends AppCompatActivity {
 
         // Our action
         gameList.setOnItemClickListener((parent, view, position, id) -> {
-            Intent endGameIntent = new Intent(this, EndGameScreen.class);
-            endGameIntent.putExtra(EndGameScreen.EXTRA_GAME_ID,
+            Intent endGameIntent = new Intent(this, GameStatsActivity.class);
+            endGameIntent.putExtra(GameStatsActivity.EXTRA_GAME_ID,
                     ((GameListView.GameData) parent.getItemAtPosition(position)).gameId);
             startActivity(endGameIntent);
             finish();

@@ -1,10 +1,10 @@
-<me.fru1t.worddropper.widget.base.ColoredFrameLayout
+<me.fru1t.worddropper.ui.widget.ColoredFrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="me.fru1t.worddropper.activities.MainMenuScreen"
+        tools:context="me.fru1t.worddropper.ui.mainmenu.MainMenuActivity"
         android:id="@+id/mainMenuScreenRoot"
         android:keepScreenOn="true">
 
@@ -26,7 +26,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="40dp">
-            <me.fru1t.worddropper.widget.base.ColoredTextView
+            <me.fru1t.worddropper.ui.widget.ColoredTextView
                     android:text="@string/mainMenuScreen_titleWord"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
                     android:layout_marginTop="0dp"
                     android:textSize="@dimen/mainMenuScreen_titleTextSize"
                     app:textColorTheme="primary" />
-            <me.fru1t.worddropper.widget.base.ColoredTextView
+            <me.fru1t.worddropper.ui.widget.ColoredTextView
                     android:text="@string/mainMenuScreen_titleDropper"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -51,21 +51,21 @@
     <LinearLayout
             style="@style/MainMenuScreen_MenuWrapper"
             android:id="@+id/mainMenuScreenRootMenu">
-        <me.fru1t.worddropper.widget.base.ColoredTextView
+        <me.fru1t.worddropper.ui.widget.ColoredTextView
                 style="@style/MainMenuScreen_MenuOption"
                 android:text="@string/mainMenuScreen_optionResume"
                 android:onClick="onResumeClick"
                 android:visibility="gone"
                 android:id="@+id/mainMenuScreenResumeButton" />
-        <me.fru1t.worddropper.widget.base.ColoredTextView
+        <me.fru1t.worddropper.ui.widget.ColoredTextView
                 style="@style/MainMenuScreen_MenuOption"
                 android:text="@string/mainMenuScreen_optionPlay"
                 android:onClick="onPlayClick" />
-        <me.fru1t.worddropper.widget.base.ColoredTextView
+        <me.fru1t.worddropper.ui.widget.ColoredTextView
                 style="@style/MainMenuScreen_MenuOption"
                 android:text="@string/mainMenuScreen_optionStats"
                 android:onClick="onStatsClick" />
-        <me.fru1t.worddropper.widget.base.ColoredTextView
+        <me.fru1t.worddropper.ui.widget.ColoredTextView
                 style="@style/MainMenuScreen_MenuOption"
                 android:text="@string/mainMenuScreen_optionSettings"
                 android:onClick="onSettingsClick" />
@@ -75,7 +75,7 @@
     <LinearLayout
             style="@style/MainMenuScreen_MenuWrapper"
             android:id="@+id/mainMenuScreenResumeMenu">
-        <me.fru1t.worddropper.widget.GameListView
+        <me.fru1t.worddropper.ui.widget.GameListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/mainMenuScreenResumeGameList"
@@ -86,25 +86,25 @@
     <LinearLayout
             style="@style/MainMenuScreen_MenuWrapper"
             android:id="@+id/mainMenuScreenPlayMenu">
-        <me.fru1t.worddropper.widget.base.ColoredTextView
+        <me.fru1t.worddropper.ui.widget.ColoredTextView
                 style="@style/MainMenuScreen_MenuOption"
                 android:text="@string/mainMenuScreen_optionPlayZen"
                 android:onClick="onPlayZenClick" />
 
-        <me.fru1t.worddropper.widget.base.Divider style="@style/MainMenuScreen_MenuOptionDivider"/>
-        <me.fru1t.worddropper.widget.base.ColoredTextView
+        <me.fru1t.worddropper.ui.widget.Divider style="@style/MainMenuScreen_MenuOptionDivider"/>
+        <me.fru1t.worddropper.ui.widget.ColoredTextView
                 style="@style/MainMenuScreen_MenuOption"
                 android:text="@string/mainMenuScreen_optionPlayEasy"
                 android:onClick="onPlayEasyClick" />
-        <me.fru1t.worddropper.widget.base.ColoredTextView
+        <me.fru1t.worddropper.ui.widget.ColoredTextView
                 style="@style/MainMenuScreen_MenuOption"
                 android:text="@string/mainMenuScreen_optionPlayMedium"
                 android:onClick="onPlayMediumClick" />
-        <me.fru1t.worddropper.widget.base.ColoredTextView
+        <me.fru1t.worddropper.ui.widget.ColoredTextView
                 style="@style/MainMenuScreen_MenuOption"
                 android:text="@string/mainMenuScreen_optionPlayHard"
                 android:onClick="onPlayHardClick" />
-        <me.fru1t.worddropper.widget.base.ColoredTextView
+        <me.fru1t.worddropper.ui.widget.ColoredTextView
                 style="@style/MainMenuScreen_MenuOption"
                 android:text="@string/mainMenuScreen_optionPlayExpert"
                 android:onClick="onPlayExpertClick" />
@@ -114,19 +114,19 @@
     <LinearLayout
             style="@style/MainMenuScreen_MenuWrapper"
             android:id="@+id/mainMenuScreenStatsMenu">
-        <me.fru1t.worddropper.widget.base.ColoredTextView
+        <me.fru1t.worddropper.ui.widget.ColoredTextView
                 style="@style/MainMenuScreen_MenuOption"
                 android:text="@string/mainMenuScreen_optionStatsProfile"
                 android:onClick="onStatsProfileClick" />
-        <me.fru1t.worddropper.widget.base.ColoredTextView
+        <me.fru1t.worddropper.ui.widget.ColoredTextView
                 style="@style/MainMenuScreen_MenuOption"
                 android:text="@string/mainMenuScreen_optionStatsSpecial"
                 android:onClick="onStatsSpecialClick" />
-        <me.fru1t.worddropper.widget.base.ColoredTextView
+        <me.fru1t.worddropper.ui.widget.ColoredTextView
                 style="@style/MainMenuScreen_MenuOption"
                 android:text="@string/mainMenuScreen_optionStatsGames"
                 android:onClick="onStatsGamesClick" />
     </LinearLayout> <!--    Stats Menu -->
     <!-- /Menu Options -->
 
-</me.fru1t.worddropper.widget.base.ColoredFrameLayout>
+</me.fru1t.worddropper.ui.widget.ColoredFrameLayout>

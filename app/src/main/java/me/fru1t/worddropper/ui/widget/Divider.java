@@ -1,9 +1,9 @@
-package me.fru1t.worddropper.widget.base;
+package me.fru1t.worddropper.ui.widget;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.widget.LinearLayout;
+import android.view.View;
 
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
@@ -11,27 +11,32 @@ import me.fru1t.worddropper.settings.colortheme.ColorThemeViewProxy;
 import me.fru1t.worddropper.settings.colortheme.ColorThemeXml;
 
 /**
- * An automatically colored LinearLayout
+ * A wrapper for a color-able view to act like a divider.
  */
-public class ColoredLinearLayout extends LinearLayout {
+public class Divider extends View {
     private final WordDropperApplication app;
     private final ColorThemeViewProxy proxy;
 
-    public ColoredLinearLayout(Context context) {
-        this(context, null, 0);
+    public Divider(Context context) {
+        this(context, null);
     }
 
-    public ColoredLinearLayout(Context context, @Nullable AttributeSet attrs) {
+    public Divider(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ColoredLinearLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public Divider(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        if (attrs == null) {
+            throw new RuntimeException("Divider requires the backgroundColorTheme attribute, but " +
+                    "no attributes were given");
+        }
+
         app = (WordDropperApplication) context.getApplicationContext();
-        proxy = new ColorThemeViewProxy(this, attrs, R.styleable.ColoredLinearLayout,
+        proxy = new ColorThemeViewProxy(this, attrs, R.styleable.Divider,
                 new ColorThemeViewProxy.AttributeMap(
-                        R.styleable.ColoredLinearLayout_backgroundColorTheme,
-                        ColorThemeXml.BACKGROUND,
+                        R.styleable.Divider_backgroundColorTheme,
+                        ColorThemeXml.TEXT,
                         this::setBackgroundColor));
     }
 

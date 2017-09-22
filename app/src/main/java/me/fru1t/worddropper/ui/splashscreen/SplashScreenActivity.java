@@ -1,4 +1,4 @@
-package me.fru1t.worddropper.activities;
+package me.fru1t.worddropper.ui.splashscreen;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,13 +13,14 @@ import com.google.common.base.Strings;
 
 import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.WordDropperApplication;
+import me.fru1t.worddropper.ui.mainmenu.MainMenuActivity;
 
 /**
  * An intermediate screen shown to the user while the application is loading. This screen should
  * never be opened by any other activity and serves as the entry point to the application ensuring
  * any pre-loaded data is available for the rest of the services.
  */
-public class SplashScreen extends AppCompatActivity {
+public class SplashScreenActivity extends AppCompatActivity {
 
     private WordDropperApplication app;
     private LinearLayout root;
@@ -61,7 +62,7 @@ public class SplashScreen extends AppCompatActivity {
     private void goToMainMenu(int delayMs) {
         addTextView("Moving to main menu in " + delayMs + "ms.");
         (new android.os.Handler()).postDelayed(() -> {
-            startActivity(new Intent(SplashScreen.this, MainMenuScreen.class));
+            startActivity(new Intent(SplashScreenActivity.this, MainMenuActivity.class));
             finish();
         }, delayMs);
     }

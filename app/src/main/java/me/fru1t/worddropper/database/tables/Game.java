@@ -7,7 +7,7 @@ import android.provider.BaseColumns;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import me.fru1t.worddropper.settings.Difficulty;
-import me.fru1t.worddropper.widget.TileBoard;
+import me.fru1t.worddropper.ui.game.TileBoard;
 
 /**
  * Each row represents a single game. Contains information like the start date, game state, board
