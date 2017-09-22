@@ -309,6 +309,19 @@ public class GameActivity extends AppCompatActivity implements ColorThemeEventHa
                         extraGameData[1] = cursor.getInt(1);
                     });
 
+            // Chart data
+            app.getDatabaseUtils().forEachResult("SELECT * FROM ( SELECT "
+                        + GameWord._ID + ", "           // 0
+                        + GameWord.COLUMN_WORD + ", "   // 1
+                        + GameWord.COLUMN_POINT_VALUE   // 2
+                    + " FROM " + GameWord.TABLE_NAME
+                    + " WHERE " + GameWord.COLUMN_GAME_ID + " = ?"
+                    + " ORDER BY " + GameWord._ID + " DESC" // Order by newest first
+                    + " LIMIT " + CHART_ELEMENTS // Grab last n words
+                    + ") ORDER BY " + GameWord._ID + " ASC", // But digest by oldest first
+                    new String[] { gameId + "" },
+                    cursor -> addWordToGraph(cursor.getString(1), cursor.getInt(2)));
+
             // Set values
             difficulty = Difficulty.valueOf(
                     row.getString(Game.COLUMN_DIFFICULTY, Difficulty.ZEN.name()));

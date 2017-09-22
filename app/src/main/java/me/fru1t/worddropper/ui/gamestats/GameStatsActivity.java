@@ -100,8 +100,8 @@ public class GameStatsActivity extends AppCompatActivity implements ColorThemeEv
         // Yes. This can be done in the above query. But a) readability, and b) low overhead.
         int[] extraGameData = new int[2]; // [0] = words; [1] = score
         app.getDatabaseUtils().forEachResult("SELECT"
-                + " COUNT(*) AS words,"                                 // 0
-                + " SUM(" + GameWord.COLUMN_POINT_VALUE + ") AS score"  // 1
+                    + " COUNT(*) AS words,"                                 // 0
+                    + " SUM(" + GameWord.COLUMN_POINT_VALUE + ") AS score"  // 1
                 + " FROM " + GameWord.TABLE_NAME
                 + " WHERE " + GameWord.COLUMN_GAME_ID + " = ?",
                 new String[] { gameId + "" },
@@ -218,8 +218,8 @@ public class GameStatsActivity extends AppCompatActivity implements ColorThemeEv
 
         // Get Data from db into chart backend
         Cursor cursor = app.getDatabaseUtils().getReadableDatabase().rawQuery("SELECT"
-                        + " COUNT(*) AS frequency,"
-                        + " " + GameWord.COLUMN_POINT_VALUE
+                            + " COUNT(*) AS frequency,"
+                            + " " + GameWord.COLUMN_POINT_VALUE
                         + " FROM " + GameWord.TABLE_NAME
                         + " WHERE " + GameWord.COLUMN_GAME_ID + " = ?"
                         + " GROUP BY " + GameWord.COLUMN_POINT_VALUE
@@ -298,8 +298,8 @@ public class GameStatsActivity extends AppCompatActivity implements ColorThemeEv
 
         // Get data from db
         Cursor cursor = app.getDatabaseUtils().getReadableDatabase().rawQuery("SELECT"
-                + " COUNT(*) AS quantity,"
-                + " LENGTH(" + GameWord.COLUMN_WORD + ") AS word_length"
+                    + " COUNT(*) AS quantity,"
+                    + " LENGTH(" + GameWord.COLUMN_WORD + ") AS word_length"
                 + " FROM " + GameWord.TABLE_NAME
                 + " WHERE " + GameWord.COLUMN_GAME_ID + " = ?"
                 + " GROUP BY word_length"
