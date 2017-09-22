@@ -188,9 +188,7 @@ public class MainMenuScreen extends AppCompatActivity {
         animateOpenMenu(R.id.mainMenuScreenStatsMenu);
     }
     @VisibleForXML
-    public void onSettingsClick(View view) {
-        // TODO: Go to settings activity
-    }
+    public void onSettingsClick(View view) { }
 
     // Play Menu
     @VisibleForXML
@@ -216,13 +214,9 @@ public class MainMenuScreen extends AppCompatActivity {
 
     // Stats
     @VisibleForXML
-    public void onStatsProfileClick(View v) {
-        // TODO: Go to global profile activity
-    }
+    public void onStatsProfileClick(View v) { }
     @VisibleForXML
-    public void onStatsSpecialClick(View v) {
-        // TODO: Go to special selectors activity
-    }
+    public void onStatsSpecialClick(View v) { }
     @VisibleForXML
     public void onStatsGamesClick(View v) {
         startActivity(new Intent(this, StatsGameSelectScreen.class));

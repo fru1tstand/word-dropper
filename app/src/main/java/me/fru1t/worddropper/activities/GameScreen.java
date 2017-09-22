@@ -434,17 +434,11 @@ public class GameScreen extends AppCompatActivity implements ColorThemeEventHand
                 update -> update.put(Game.COLUMN_SCRAMBLES_USED, scramblesUsed));
     }
 
-    /**
-     * TODO: make this action do something
-     */
     @VisibleForXML
     public void onLevelClick(View v) {
         System.out.println("On level click");
     }
 
-    /**
-     * TODO: Make this action do something.
-     */
     @VisibleForXML
     public void onMovesLeftClick(View v) {
         System.out.println("moves left click");
