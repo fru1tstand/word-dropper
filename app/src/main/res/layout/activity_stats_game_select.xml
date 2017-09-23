@@ -9,21 +9,10 @@
         android:keepScreenOn="true"
         tools:context="me.fru1t.worddropper.ui.statsgameselect.StatsGameSelectActivity">
     <!-- Header -->
-    <me.fru1t.worddropper.ui.widget.ColoredLinearLayout
+    <me.fru1t.worddropper.ui.widget.ColoredToolBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:backgroundColorTheme="background_light"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:paddingLeft="@dimen/app_edgeSpace"
-            android:paddingRight="@dimen/app_edgeSpace"
-            android:orientation="horizontal">
-        <me.fru1t.worddropper.ui.widget.ColoredTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="22sp"
-                android:text="@string/statsGameSelectScreen_title" />
-    </me.fru1t.worddropper.ui.widget.ColoredLinearLayout>
+            app:toolBarTitle="@string/statsGameSelectScreen_title" />
 
     <!-- Game List -->
     <me.fru1t.worddropper.ui.widget.ColoredTextView

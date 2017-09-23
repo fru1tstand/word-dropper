@@ -61,4 +61,10 @@
     <declare-styleable name="ColoredListView">
         <attr name="backgroundColorTheme" />
     </declare-styleable>
+
+    <declare-styleable name="ColoredToolBar">
+        <attr name="backgroundColorTheme" />
+        <attr name="textColorTheme" />
+        <attr name="toolBarTitle" format="string" />
+    </declare-styleable>
 </resources>

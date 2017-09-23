@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingLeft="@dimen/app_edgeSpace"
+        android:paddingRight="@dimen/app_edgeSpace">
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:scrollHorizontally="true"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:id="@+id/title" />
+</merge>

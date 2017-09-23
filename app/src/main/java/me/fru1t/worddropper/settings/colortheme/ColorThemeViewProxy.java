@@ -57,7 +57,7 @@ public class ColorThemeViewProxy implements ColorThemeEventHandler {
             AttributeMap... attributeMaps) {
         actions = new Action[attributeMaps.length];
 
-        TypedArray styledAttributes = view.getContext().obtainStyledAttributes(set, attrs, 0, 0);
+        TypedArray styledAttributes = view.getContext().obtainStyledAttributes(set, attrs);
         for (int i = 0; i < attributeMaps.length; i++) {
             actions[i] = new Action(
                     attributeMaps[i].action,
