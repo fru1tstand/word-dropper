@@ -24,6 +24,7 @@ import me.fru1t.worddropper.R;
 import me.fru1t.worddropper.database.tables.Game;
 import me.fru1t.worddropper.settings.Difficulty;
 import me.fru1t.worddropper.ui.game.GameActivity;
+import me.fru1t.worddropper.ui.settings.SettingsActivity;
 import me.fru1t.worddropper.ui.statsgameselect.StatsGameSelectActivity;
 import me.fru1t.worddropper.ui.widget.GameListView;
 import me.fru1t.worddropper.ui.widget.ColoredFrameLayout;
@@ -190,7 +191,9 @@ public class MainMenuActivity extends AppCompatActivity {
         animateOpenMenu(R.id.mainMenuScreenStatsMenu);
     }
     @VisibleForXML
-    public void onSettingsClick(View view) { }
+    public void onSettingsClick(View view) {
+        startActivity(new Intent(this, SettingsActivity.class));
+    }
 
     // Play Menu
     @VisibleForXML

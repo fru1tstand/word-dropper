@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<me.fru1t.worddropper.ui.widget.ColoredLinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="me.fru1t.worddropper.ui.settings.SettingsActivity">
+    <me.fru1t.worddropper.ui.widget.ColoredToolBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:toolBarTitle="@string/settings_title" />
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+        </LinearLayout>
+    </ScrollView>
+</me.fru1t.worddropper.ui.widget.ColoredLinearLayout>

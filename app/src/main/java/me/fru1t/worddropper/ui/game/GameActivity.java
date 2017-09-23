@@ -30,6 +30,7 @@ import me.fru1t.worddropper.settings.ColorTheme;
 import me.fru1t.worddropper.settings.Difficulty;
 import me.fru1t.worddropper.settings.colortheme.ColorThemeEventHandler;
 import me.fru1t.worddropper.ui.gamestats.GameStatsActivity;
+import me.fru1t.worddropper.ui.settings.SettingsActivity;
 import me.fru1t.worddropper.ui.widget.MenuLayout;
 
 /**
@@ -216,7 +217,8 @@ public class GameActivity extends AppCompatActivity implements ColorThemeEventHa
         // Pause menu comes last so it's onWrapEventListener top
         pauseMenu.setOnHideListener(() -> pauseMenu.setVisibility(View.GONE));
         pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuSaveAndQuit, false, this::finish);
-        pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuSettings, true, () -> {});
+        pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuSettings, true, () ->
+                startActivity(new Intent(GameActivity.this, SettingsActivity.class)));
         pauseMenu.addMenuOption(R.string.gameScreen_pauseMenuRestartOption, true, () -> {
             app.getDatabaseUtils().endGame(gameId); // End game in db
             gameId = NEW_GAME; // Prepare for new game
