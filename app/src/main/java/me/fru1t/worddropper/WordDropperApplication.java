@@ -15,7 +15,8 @@ import me.fru1t.worddropper.settings.colortheme.ColorThemeEventHandler;
 /**
  * Settings and global variables (*gasp*) loaded onWrapEventListener startup.
  */
-public class WordDropperApplication extends Application {
+public class WordDropperApplication extends Application implements
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String LOG_TAG = "WordDropper";
 
@@ -39,8 +40,7 @@ public class WordDropperApplication extends Application {
         sharedPreferences = getSharedPreferences(
                 getResources().getString(R.string.app_sharedPreferencesFileName),
                 MODE_PRIVATE);
-        sharedPreferences.registerOnSharedPreferenceChangeListener(
-                (sharedPreferences1, key) -> updateFromSettings());
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         updateFromSettings();
 
         // Load external heavy calls
@@ -54,12 +54,21 @@ public class WordDropperApplication extends Application {
 
     /**
      * Retrieves a string preference given a key and default value.
-     * @param stringId The string id within a resource file.
+     * @param prefKey The preference name given via string resource id.
      * @param defaultValue The default value the setting should be if it doesn't exist.
      * @return The string preference.
      */
-    public String getStringPreference(@StringRes int stringId, String defaultValue) {
-        return sharedPreferences.getString(getResources().getString(stringId), defaultValue);
+    public String getStringPreference(@StringRes int prefKey, String defaultValue) {
+        return sharedPreferences.getString(getResources().getString(prefKey), defaultValue);
+    }
+
+    /**
+     * Applies a preference given its preference key and value.
+     * @param prefKey The preference name given via string resource id.
+     * @param value The value to store.
+     */
+    public void putStringPreference(@StringRes int prefKey, String value) {
+        sharedPreferences.edit().putString(getResources().getString(prefKey), value).apply();
     }
 
     /**
@@ -83,5 +92,10 @@ public class WordDropperApplication extends Application {
             colorTheme = newTheme;
             colorThemeEventHandlers.forEach(handler -> handler.onColorThemeChange(newTheme));
         }
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        updateFromSettings();
     }
 }

@@ -39,9 +39,8 @@
         <enum name="text_on_primary_dark" value="10" />
     </attr>
 
-    <!-- Defines a colored divider -->
+    <!-- Widget -->
     <declare-styleable name="Divider">
-        <!-- The color the divider should take on, determined by the active ColorTheme. -->
         <attr name="backgroundColorTheme" />
     </declare-styleable>
 
@@ -59,12 +58,19 @@
     </declare-styleable>
 
     <declare-styleable name="ColoredListView">
+        <!-- Represents the divider line color -->
         <attr name="backgroundColorTheme" />
     </declare-styleable>
 
     <declare-styleable name="ColoredToolBar">
         <attr name="backgroundColorTheme" />
         <attr name="textColorTheme" />
-        <attr name="toolBarTitle" format="string" />
+        <attr name="toolBarText" format="string" />
+    </declare-styleable>
+
+
+    <!-- Settings -->
+    <declare-styleable name="SettingsHeaderLayout">
+        <attr name="settingsHeaderText" format="string" />
     </declare-styleable>
 </resources>

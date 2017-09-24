@@ -2,6 +2,7 @@
 <resources>
     <!-- App globals -->
     <dimen name="app_edgeSpace">30dp</dimen>
+    <dimen name="app_vSpace">18dp</dimen>
 
     <!-- Main Menu Screen -->
     <dimen name="mainMenuScreen_titleTextSize">48sp</dimen>
@@ -36,4 +37,7 @@
 
     <!-- Wrapping progress bar -->
     <dimen name="wrappingProgressBar_textSize">8sp</dimen>
+
+    <!-- Settings -->
+    <dimen name="settings_itemTitleTextSize">18sp</dimen>
 </resources>

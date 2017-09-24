@@ -13,7 +13,7 @@
         <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
     </style>
 
-    <!-- End Game Screen -->
+    <!-- GameStats -->
     <style name="EndGameScreen_GraphButtonSpacer">
         <item name="android:layout_width">@dimen/endGameScreen_graphButtonSpacing</item>
         <item name="android:layout_height">match_parent</item>
@@ -32,7 +32,7 @@
     </style>
 
 
-    <!-- Main Menu Screen -->
+    <!-- MainMenu -->
     <style name="MainMenuScreen_MenuWrapper">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -62,5 +62,12 @@
         <item name="android:layout_marginLeft">30dp</item>
         <item name="android:layout_marginRight">30dp</item>
         <item name="backgroundColorTheme">primary</item>
+    </style>
+
+    <!-- Settings -->
+    <style name="Settings_ColorThemeColorBlock">
+        <item name="android:layout_width">12dp</item>
+        <item name="android:layout_height">12dp</item>
+        <item name="android:layout_marginEnd">12dp</item>
     </style>
 </resources>

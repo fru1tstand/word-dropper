@@ -12,7 +12,7 @@
     <me.fru1t.worddropper.ui.widget.ColoredToolBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:toolBarTitle="@string/statsGameSelectScreen_title" />
+            app:toolBarText="@string/statsGameSelectScreen_title" />
 
     <!-- Game List -->
     <me.fru1t.worddropper.ui.widget.ColoredTextView

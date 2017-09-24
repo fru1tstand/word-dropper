@@ -19,8 +19,6 @@ import me.fru1t.worddropper.settings.colortheme.ColorThemeXml;
  * Emulates the Android ToolBar with solely plain text.
  */
 public class ColoredToolBar extends LinearLayout {
-    private static final int PADDING_VERTICAL_DP = 18;
-
     private final WordDropperApplication app;
     private final ColorThemeViewProxy proxy;
 
@@ -41,25 +39,21 @@ public class ColoredToolBar extends LinearLayout {
         proxy = new ColorThemeViewProxy(this, attrs, R.styleable.ColoredToolBar,
                 new ColorThemeViewProxy.AttributeMap(
                         R.styleable.ColoredToolBar_backgroundColorTheme,
-                        ColorThemeXml.BACKGROUND_LIGHT,
+                        ColorThemeXml.PRIMARY,
                         this::setBackgroundColor
                 ),
                 new ColorThemeViewProxy.AttributeMap(
                         R.styleable.ColoredToolBar_textColorTheme,
-                        ColorThemeXml.TEXT,
+                        ColorThemeXml.TEXT_ON_PRIMARY,
                         title::setTextColor
                 ));
 
         TypedArray styledAttrs = context.obtainStyledAttributes(attrs, R.styleable.ColoredToolBar);
-        title.setText(styledAttrs.getText(R.styleable.ColoredToolBar_toolBarTitle));
+        title.setText(styledAttrs.getText(R.styleable.ColoredToolBar_toolBarText));
         styledAttrs.recycle();
 
         int paddingHorizontal = (int) getResources().getDimension(R.dimen.app_edgeSpace);
-        int paddingVertical = (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                PADDING_VERTICAL_DP,
-                getResources().getDisplayMetrics());
-
+        int paddingVertical = (int) getResources().getDimension(R.dimen.app_vSpace);
         setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical);
     }
 

@@ -6,19 +6,39 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:keepScreenOn="true"
         tools:context="me.fru1t.worddropper.ui.settings.SettingsActivity">
     <me.fru1t.worddropper.ui.widget.ColoredToolBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:toolBarTitle="@string/settings_title" />
+            app:toolBarText="@string/settings_title" />
 
     <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:paddingTop="18dp"
+            android:paddingBottom="18dp">
         <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            <!-- Color theme settings -->
+            <me.fru1t.worddropper.ui.settings.SettingsHeaderLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:settingsHeaderText="@string/settings_sectionColorTheme" />
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/colorThemeList" />
+
+            <!-- App settings -->
+            <me.fru1t.worddropper.ui.settings.SettingsHeaderLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:settingsHeaderText="@string/settings_sectionApplication" />
 
         </LinearLayout>
     </ScrollView>

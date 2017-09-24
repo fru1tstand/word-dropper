@@ -13,5 +13,6 @@
             android:scrollHorizontally="true"
             android:ellipsize="end"
             android:maxLines="1"
+            android:textStyle="bold"
             android:id="@+id/title" />
 </merge>

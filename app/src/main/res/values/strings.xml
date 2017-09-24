@@ -68,4 +68,7 @@
 
     <!-- Settings -->
     <string name="settings_title">WordDropper Settings</string>
+
+    <string name="settings_sectionColorTheme">Color Theme</string>
+    <string name="settings_sectionApplication">Application</string>
 </resources>
