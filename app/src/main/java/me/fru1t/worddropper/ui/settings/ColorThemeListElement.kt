@@ -33,7 +33,7 @@ class ColorThemeListElement @JvmOverloads constructor(context: Context, colorThe
         orientation = LinearLayout.VERTICAL
         isClickable = true
 
-        LayoutInflater.from(context).inflate(R.layout.layout_color_theme_list_element, this)
+        LayoutInflater.from(context).inflate(R.layout.layout_settings_color_theme_list_element, this)
 
         // Style elements
         setBackgroundColor(colorTheme.background)

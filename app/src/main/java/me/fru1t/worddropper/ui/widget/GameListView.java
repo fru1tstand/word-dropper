@@ -56,7 +56,7 @@ public class GameListView extends ColoredListView {
         super(context, attrs, defStyleAttr);
         app = (WordDropperApplication) context.getApplicationContext();
 
-        adapter = new ArrayAdapter<GameData>(getContext(), R.layout.layout_game_list_element) {
+        adapter = new ArrayAdapter<GameData>(getContext(), R.layout.layout_widget_game_list_element) {
             class ViewHolder {
                 TextView title;
                 TextView description;
@@ -75,7 +75,7 @@ public class GameListView extends ColoredListView {
                 if (convertView == null) {
                     convertView = LayoutInflater
                             .from(getContext())
-                            .inflate(R.layout.layout_game_list_element, parent, false);
+                            .inflate(R.layout.layout_widget_game_list_element, parent, false);
 
                     ViewHolder holder = new ViewHolder();
                     holder.title = (TextView) convertView.findViewById(R.id.title);

@@ -25,7 +25,7 @@ import me.fru1t.worddropper.settings.ColorTheme;
 import me.fru1t.worddropper.settings.colortheme.ColorThemeEventHandler;
 
 /**
- * Styles a menu. This is the driver to layout_menu.xml.
+ * Styles a menu. This is the driver to layout_widget_menuet_menu.xml.
  */
 public class MenuLayout extends RelativeLayout implements ColorThemeEventHandler {
     private final WordDropperApplication app;
@@ -46,7 +46,7 @@ public class MenuLayout extends RelativeLayout implements ColorThemeEventHandler
 
     public MenuLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        View.inflate(context, R.layout.layout_menu, this);
+        View.inflate(context, R.layout.layout_widget_menu, this);
 
         app = (WordDropperApplication) context.getApplicationContext();
         menuOptions = new ArrayList<>();

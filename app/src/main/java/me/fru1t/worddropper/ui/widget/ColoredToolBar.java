@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -32,7 +31,7 @@ public class ColoredToolBar extends LinearLayout {
 
     public ColoredToolBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        View root = LayoutInflater.from(context).inflate(R.layout.layout_colored_tool_bar, this);
+        View root = LayoutInflater.from(context).inflate(R.layout.layout_widget_colored_tool_bar, this);
         TextView title = (TextView) root.findViewById(R.id.title);
 
         app = (WordDropperApplication) context.getApplicationContext();
