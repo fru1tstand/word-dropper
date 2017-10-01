@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
@@ -34,8 +35,6 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-
-
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -43,8 +42,14 @@ dependencies {
     compile 'org.jdeferred:jdeferred-android-aar:1.2.6'
     compile 'org.slf4j:slf4j-android:1.7.7'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.8.47'
     testCompile 'com.google.truth:truth:0.33'
+
     provided 'org.projectlombok:lombok:1.16.18'
+}
+repositories {
+    mavenCentral()
 }
