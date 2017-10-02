@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- me.fru1t.worddropper.ui.settings.SettingsHeaderLayout -->
+<!-- me.fru1t.worddropper.ui.settings.SettingsHeader -->
 <merge
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
     <me.fru1t.worddropper.ui.widget.ColoredTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="22sp"
+            android:textSize="18sp"
             android:paddingLeft="@dimen/app_edgeSpace"
             android:paddingRight="@dimen/app_edgeSpace"
-            android:paddingTop="18dp"
+            android:paddingTop="1dp"
             android:paddingBottom="1dp"
             android:textStyle="bold"
-            app:textColorTheme="text_blend"
             android:id="@+id/title" />
     <me.fru1t.worddropper.ui.widget.Divider
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            app:backgroundColorTheme="primary_light" />
+            app:backgroundColorTheme="background_light" />
 </merge>

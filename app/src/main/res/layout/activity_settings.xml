@@ -16,15 +16,17 @@
     <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:paddingTop="18dp"
-            android:paddingBottom="18dp">
+            android:layout_weight="1">
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+            <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp" />
+
             <!-- Color theme settings -->
-            <me.fru1t.worddropper.ui.settings.SettingsHeaderLayout
+            <me.fru1t.worddropper.ui.settings.SettingsHeader
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:settingsHeaderText="@string/settings_sectionColorTheme" />
@@ -33,13 +35,18 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:id="@+id/colorThemeList" />
+            <Space style="@style/Settings_SectionSpacer" />
 
             <!-- App settings -->
-            <me.fru1t.worddropper.ui.settings.SettingsHeaderLayout
+            <me.fru1t.worddropper.ui.settings.SettingsHeader
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:settingsHeaderText="@string/settings_sectionApplication" />
-
+            <me.fru1t.worddropper.ui.settings.SettingsOption
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/settingsDeleteDataButton"
+                    app:settingsButtonTitle="@string/settings_deleteDataOptionTitle" />
         </LinearLayout>
     </ScrollView>
 </me.fru1t.worddropper.ui.widget.ColoredLinearLayout>

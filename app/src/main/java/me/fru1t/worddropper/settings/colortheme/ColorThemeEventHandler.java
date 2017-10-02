@@ -1,5 +1,7 @@
 package me.fru1t.worddropper.settings.colortheme;
 
+import android.support.annotation.NonNull;
+
 import me.fru1t.worddropper.settings.ColorTheme;
 
 /**
@@ -7,5 +9,5 @@ import me.fru1t.worddropper.settings.ColorTheme;
  */
 @FunctionalInterface
 public interface ColorThemeEventHandler {
-    void onColorThemeChange(ColorTheme colorTheme);
+    void onColorThemeChange(@NonNull ColorTheme colorTheme);
 }

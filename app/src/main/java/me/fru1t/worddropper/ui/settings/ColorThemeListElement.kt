@@ -13,7 +13,9 @@ import me.fru1t.worddropper.settings.ColorTheme
 /**
  * Displays the name and sample colors for a specific color theme.
  */
-class ColorThemeListElement @JvmOverloads constructor(context: Context, colorTheme: ColorTheme? = null) : LinearLayout(context) {
+class ColorThemeListElement @JvmOverloads constructor(
+        context: Context,
+        colorTheme: ColorTheme? = null) : LinearLayout(context) {
     init {
         if (colorTheme == null) {
             throw Exception("ColorThemeListElement must be initialized with a color theme.")

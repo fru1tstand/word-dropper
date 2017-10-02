@@ -5,6 +5,10 @@
     <string name="app_gameNotFoundError">The requested game couldn\'t be found.</string>
 
     <string name="integer">%d</string>
+    <string name="bytes">%.2fB</string>
+    <string name="kilobytes">%.2fKB</string>
+    <string name="megabytes">%.2fMB</string>
+    <string name="gigabytes">%.2fGB</string>
 
     <!-- GameStats -->
     <string name="endGameScreen_title">WordDropper</string>
@@ -71,4 +75,14 @@
 
     <string name="settings_sectionColorTheme">Color Theme</string>
     <string name="settings_sectionApplication">Application</string>
+
+    <string name="settings_deleteDataOptionTitle">Delete all data</string>
+    <string name="settings_deleteDataOptionDescription">WordDropper is using %s of storage.</string>
+    <string name="settings_deleteDataDialogMessage">Are you sure you want to erase all your
+        WordDropper data? This will remove all high scores, word history, and active/past games.
+        Deleting is permanent and cannot be undone.</string>
+    <string name="settings_deleteDataDialogTitle">Delete All Data?</string>
+    <string name="settings_deleteDataDialogButtonDelete">Delete</string>
+    <string name="settings_deleteDataDialogButtonCancel">Cancel</string>
+    <string name="settings_deleteDataCompleteToastMessage">Data deleted!</string>
 </resources>

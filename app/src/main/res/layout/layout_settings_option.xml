@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- me.fru1t.worddropper.ui.settings.SettingsOption -->
+<merge
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/app_vSpace" />
+    <me.fru1t.worddropper.ui.widget.ColoredTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/app_edgeSpace"
+            android:paddingRight="@dimen/app_edgeSpace"
+            android:textSize="@dimen/settings_itemTitleTextSize"
+            android:id="@+id/title" />
+    <me.fru1t.worddropper.ui.widget.ColoredTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/app_edgeSpace"
+            android:paddingRight="@dimen/app_edgeSpace"
+            app:textColorTheme="text_blend"
+            android:id="@+id/description" />
+    <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/app_vSpace" />
+    <me.fru1t.worddropper.ui.widget.Divider
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            app:backgroundColorTheme="background_light" />
+</merge>

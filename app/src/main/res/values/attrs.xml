@@ -70,7 +70,12 @@
 
 
     <!-- Settings -->
-    <declare-styleable name="SettingsHeaderLayout">
+    <declare-styleable name="SettingsHeader">
         <attr name="settingsHeaderText" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="SettingsOption">
+        <attr name="settingsButtonTitle" format="string" />
+        <attr name="settingsButtonDescription" format="string" />
     </declare-styleable>
 </resources>
