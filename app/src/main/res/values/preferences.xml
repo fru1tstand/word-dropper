@@ -4,5 +4,6 @@
         tools:ignore="MissingTranslation">
 
     <bool name="app_debug">true</bool>
+    <bool name="app_deleteDatabaseOnDebug">false</bool>
     <string name="pref_colorTheme">color-theme</string>
 </resources>

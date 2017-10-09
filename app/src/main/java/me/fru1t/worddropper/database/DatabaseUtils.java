@@ -53,7 +53,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
 
     @Override
     public void onOpen(SQLiteDatabase db) {
-        if (app.isDebugging()) {
+        if (app.isDebugging() && app.getDeleteDatabaseOnDebug()) {
             resetDatabase(db);
             Log.d(WordDropperApplication.LOG_TAG, "Cleared database for debug");
         }

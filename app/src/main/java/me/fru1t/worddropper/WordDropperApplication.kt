@@ -30,6 +30,8 @@ class WordDropperApplication : Application(), SharedPreferences.OnSharedPreferen
     val databaseUtils: DatabaseUtils by lazy { DatabaseUtils(applicationContext) }
     val isDebugging: Boolean
         get() = resources.getBoolean(R.bool.app_debug)
+    val deleteDatabaseOnDebug: Boolean
+        get() = resources.getBoolean(R.bool.app_deleteDatabaseOnDebug)
 
     private var colorTheme: ColorTheme? = null
 
