@@ -36,10 +36,17 @@ class Slik {
      * [Singleton] annotation.
      */
     fun provide(instance: Any, name: String? = null): Slik {
+        var key = makeClassKey(instance::class, name)
+        if (singletons.containsKey(key)) {
+            throw SlikException(
+                    "${instance::class.qualifiedName} named \"$name\" cannot" +
+                            " be provided twice.")
+        }
+        singletons.put(key, instance)
         instance::class.allSuperclasses.forEach {
-            kClass ->
-            if (!singletons.containsKey(kClass.qualifiedName + name)) {
-                singletons.put(kClass.qualifiedName + name, instance)
+            key = makeClassKey(it, name)
+            if (!singletons.containsKey(key)) {
+                singletons.put(key, instance)
             }
         }
         return this
@@ -52,12 +59,20 @@ class Slik {
      */
     fun inject(instance: Any) {
         // Inject into annotated fields
-        instance::class.java.declaredFields.forEach {
-            if (it.getAnnotation(Inject::class.java) == null) {
-                return@forEach
+        try {
+            instance::class.java.declaredFields.forEach {
+                if (it.getAnnotation(Inject::class.java) == null) {
+                    return@forEach
+                }
+                if (!it.isAccessible) {
+                    it.isAccessible = true
+                }
+                it.set(instance, resolve(it.type.kotlin, it.getAnnotation(Named::class.java)))
             }
-
-            it.set(instance, resolve(it.type.kotlin, it.getAnnotation(Named::class.java)))
+        } catch (e: SlikException) {
+            throw SlikException(
+                    "${instance::class.qualifiedName} failed to inject its dependencies." +
+                            "\r\n\t ${e.message}")
         }
     }
 
@@ -68,13 +83,12 @@ class Slik {
      * primary constructor (ie. a Kotlin class).
      */
     private fun <T: Any> resolve(kClass: KClass<T>, name: Named? = null): T {
-        val singletonName = "${kClass.qualifiedName}:${name?.name}"
+        val singletonName = makeClassKey(kClass, name?.name)
 
-        // Is it a singleton and do we already have the reference to it?
-        val isSingleton = kClass.findAnnotation<Singleton>() != null
-        if (isSingleton && singletons.containsKey(singletonName)) {
+        // If we have a reference, it's a singleton
+        if (singletons.containsKey(singletonName)) {
             @Suppress("UNCHECKED_CAST")
-            return singletons[singletonName]!! as T
+            return singletons[singletonName] as T
         }
 
         // No IOC support/basic sanity check
@@ -107,16 +121,20 @@ class Slik {
                         paramAnnotations[it].firstOrNull { it is Named } as Named?)
             } catch(e: SlikException) {
                 throw SlikException(
-                        "${kClass.qualifiedName}'s dependencies couldn't be fulfilled.", e)
+                        "${kClass.qualifiedName}'s dependencies couldn't be fulfilled." +
+                                "\r\n\t ${e.message}")
             }
         })
 
         // Cache as singleton if required
         val result = constructor.newInstance(*fulfillments)!!
-        if (isSingleton) {
+        if (kClass.findAnnotation<Singleton>() != null) {
             singletons.put(singletonName, result)
         }
 
         return result
     }
+
+    private fun makeClassKey(kClass: KClass<*>, name: String?): String =
+            "${kClass.qualifiedName}:$name"
 }
