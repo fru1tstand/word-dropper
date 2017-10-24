@@ -43,7 +43,8 @@ dependencies {
     compile 'org.jdeferred:jdeferred-android-aar:1.2.6'
     compile 'org.slf4j:slf4j-android:1.7.7'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.8.47'

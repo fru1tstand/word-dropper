@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.support.annotation.StringRes
+import me.fru1t.android.slick.Slik
 
 import java.util.HashSet
 
@@ -40,6 +41,14 @@ class WordDropperApplication : Application(), SharedPreferences.OnSharedPreferen
 
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
         updateFromSettings()
+
+        // Seed Slik
+        Slik.get(WordDropperApplication::class)
+                .provide(dictionary)
+                .provide(databaseUtils)
+                .provide(sharedPreferences)
+                .provide(isDebugging, "IsDebugging")
+                .provide(deleteDatabaseOnDebug, "DeleteDatabaseOnDebug")
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {

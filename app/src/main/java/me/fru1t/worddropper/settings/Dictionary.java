@@ -78,7 +78,7 @@ public class Dictionary {
 
     private static final int TOTAL_WORDS = 369648;
 
-    private @Getter final DeferredObject<Object, Object, Double> onLoadDefer;
+    private final DeferredObject<Object, Object, Double> onLoadDefer;
     private final WordDropperApplication app;
     private final HashSet<String> dictionary;
     private final CountDownLatch loaderCdl;
@@ -111,6 +111,10 @@ public class Dictionary {
                 .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "english_dictionary_g");
         (new DictionaryLoader())
                 .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "english_dictionary_h");
+    }
+
+    public DeferredObject<Object, Object, Double> getOnLoadDefer() {
+        return onLoadDefer;
     }
 
     /**
