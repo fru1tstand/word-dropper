@@ -57,8 +57,9 @@ class Slik {
      * Binds an [abstraction] to an [implementation] so that Slik may resolve a dependency for the
      * abstract class.
      */
-    fun <T1 : Any, T2 : T1> bind(abstraction: KClass<T1>, implementation: KClass<T2>) {
+    fun <T1 : Any, T2 : T1> bind(abstraction: KClass<T1>, implementation: KClass<T2>): Slik {
         bindings.put(abstraction, implementation)
+        return this
     }
 
     /**
