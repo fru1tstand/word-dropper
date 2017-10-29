@@ -14,25 +14,34 @@ class ColorThemeManager(private val preferences: PreferenceManager, context: Con
 
     var currentColorTheme =
             ColorTheme.valueOf(
-                    preferences.getString(
-                            R.string.pref_colorTheme, ColorTheme.INVERSE_ORANGE.name))
+                    preferences.getString(R.string.pref_colorTheme, ColorTheme.INVERSE_ORANGE.name))
         private set
 
     init {
+        // Sets the color theme if the preferences were set directly.
         preferences.addChangeListener {
             if (it != colorThemeKey) {
                 return@addChangeListener
             }
-
-            currentColorTheme = ColorTheme.valueOf(
-                            preferences.getString(
-                                    R.string.pref_colorTheme, ColorTheme.INVERSE_ORANGE.name))
-
-            colorThemeChangeListeners.forEach { it() }
+            loadColorThemeFromSettings()
         }
+        loadColorThemeFromSettings()
+    }
+
+    /** Sets the current color theme and saves the setting */
+    fun setColorTheme(theme: ColorTheme) {
+        preferences.applyString(R.string.pref_colorTheme, theme.name)
+        currentColorTheme = theme
+        colorThemeChangeListeners.forEach { it() }
     }
 
     fun addChangeListener(listener: () -> Unit): Boolean = colorThemeChangeListeners.add(listener)
     fun removeChangeListener(listener: () -> Unit): Boolean =
             colorThemeChangeListeners.remove(listener)
+
+    private fun loadColorThemeFromSettings() {
+        currentColorTheme = ColorTheme.valueOf(
+                preferences.getString(R.string.pref_colorTheme, ColorTheme.INVERSE_ORANGE.name))
+        colorThemeChangeListeners.forEach { it() }
+    }
 }
