@@ -8,7 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
 import android.util.Log
 import me.fru1t.android.database.Row
-import me.fru1t.android.slick.annotations.Named
+import me.fru1t.android.slik.annotations.Inject
+import me.fru1t.android.slik.annotations.Named
+import me.fru1t.android.slik.annotations.Singleton
 import me.fru1t.worddropper.R
 import me.fru1t.worddropper.WordDropperApplication.Companion.DELETE_DATABASE_ON_DEBUG
 import me.fru1t.worddropper.WordDropperApplication.Companion.IS_DEBUGGING
@@ -17,6 +19,8 @@ import me.fru1t.worddropper.database.tables.GameWord
 import me.fru1t.worddropper.settings.Difficulty
 
 /** The standard database utils implementation backed by Android's SQLite database. */
+@Inject
+@Singleton
 class DatabaseUtilsImpl(
         private @Named(IS_DEBUGGING) val isDebugging: Boolean,
         private @Named(DELETE_DATABASE_ON_DEBUG) val deleteOnDebug: Boolean,
