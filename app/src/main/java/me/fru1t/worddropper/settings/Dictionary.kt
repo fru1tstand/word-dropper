@@ -3,10 +3,10 @@ package me.fru1t.worddropper.settings
 import android.content.Context
 import android.os.AsyncTask
 import com.google.common.base.Strings
-import me.fru1t.android.slick.Slik
-import me.fru1t.android.slick.annotations.Inject
-import me.fru1t.android.slick.annotations.Named
-import me.fru1t.android.slick.annotations.Singleton
+import me.fru1t.android.slik.Slik
+import me.fru1t.android.slik.annotations.Inject
+import me.fru1t.android.slik.annotations.Named
+import me.fru1t.android.slik.annotations.Singleton
 import me.fru1t.worddropper.WordDropperApplication
 import me.fru1t.worddropper.WordDropperApplication.Companion.IS_DEBUGGING
 import org.jdeferred.impl.DeferredObject

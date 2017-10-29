@@ -1,8 +1,8 @@
 package me.fru1t.worddropper.settings
 
 import android.content.Context
-import me.fru1t.android.slick.annotations.Inject
-import me.fru1t.android.slick.annotations.Singleton
+import me.fru1t.android.slik.annotations.Inject
+import me.fru1t.android.slik.annotations.Singleton
 import me.fru1t.worddropper.R
 
 /** Handles changes to the color theme and classes that may react to those changes. */
