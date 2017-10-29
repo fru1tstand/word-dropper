@@ -1,6 +1,7 @@
 package me.fru1t.worddropper.settings.colortheme;
 
 import android.content.res.TypedArray;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StyleableRes;
 import android.util.AttributeSet;
@@ -39,10 +40,14 @@ public class ColorThemeViewProxy implements ColorThemeEventHandler {
         }
     }
 
-    @AllArgsConstructor
     private static class Action {
-        public final Consumer<Integer> action;
-        public final ColorThemeXml colorThemeXml;
+        final Consumer<Integer> action;
+        final ColorThemeXml colorThemeXml;
+
+        Action(Consumer<Integer> action, ColorThemeXml colorThemeXml) {
+            this.action = action;
+            this.colorThemeXml = colorThemeXml;
+        }
     }
 
     private final Action[] actions;
@@ -70,7 +75,7 @@ public class ColorThemeViewProxy implements ColorThemeEventHandler {
     }
 
     @Override
-    public void onColorThemeChange(ColorTheme colorTheme) {
+    public void onColorThemeChange(@NonNull ColorTheme colorTheme) {
         for (Action action : actions) {
             action.action.accept(action.colorThemeXml.colorMap.apply(colorTheme));
         }
