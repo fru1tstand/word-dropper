@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.AsyncTask
 import com.google.common.base.Strings
 import me.fru1t.android.slick.Slik
+import me.fru1t.android.slick.annotations.Inject
 import me.fru1t.android.slick.annotations.Named
 import me.fru1t.android.slick.annotations.Singleton
 import me.fru1t.worddropper.WordDropperApplication
@@ -14,6 +15,7 @@ import java.util.Random
 import java.util.concurrent.CountDownLatch
 
 /** Handles loading and caching game words. */
+@Inject
 @Singleton
 class Dictionary(
         private @Named(IS_DEBUGGING) val isDebugging: Boolean,
