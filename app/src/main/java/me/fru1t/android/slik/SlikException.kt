@@ -1,4 +1,4 @@
-package me.fru1t.android.slick
+package me.fru1t.android.slik
 
 /**
  * A Slik-specific exception.

@@ -1,4 +1,4 @@
-package me.fru1t.android.slick.annotations
+package me.fru1t.android.slik.annotations
 
 /**
  * Identifies injectable constructors and fields. A class must have 1 constructor be marked with

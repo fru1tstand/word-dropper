@@ -1,8 +1,8 @@
-package me.fru1t.android.slick
+package me.fru1t.android.slik
 
-import me.fru1t.android.slick.annotations.Inject
-import me.fru1t.android.slick.annotations.Named
-import me.fru1t.android.slick.annotations.Singleton
+import me.fru1t.android.slik.annotations.Inject
+import me.fru1t.android.slik.annotations.Named
+import me.fru1t.android.slik.annotations.Singleton
 import kotlin.reflect.KClass
 import kotlin.reflect.full.allSuperclasses
 import kotlin.reflect.full.findAnnotation
@@ -29,6 +29,7 @@ class Slik {
     }
 
     private val singletons = HashMap<String, Any>()
+    private val bindings = HashMap<KClass<*>, KClass<*>>()
 
     /**
      * Provide a singleton [instance] to slick with an optional [name] to use when resolving
@@ -50,6 +51,14 @@ class Slik {
             }
         }
         return this
+    }
+
+    /**
+     * Binds an [abstraction] to an [implementation] so that Slik may resolve a dependency for the
+     * abstract class.
+     */
+    fun <T1 : Any, T2 : T1> bind(abstraction: KClass<T1>, implementation: KClass<T2>) {
+        bindings.put(abstraction, implementation)
     }
 
     /**
@@ -77,13 +86,14 @@ class Slik {
     }
 
     /**
-     * Retrieves an instance of [kClass] by following the injection rules of Slik. If the class
-     * is marked as singleton, only a single instance per scope per name will be created. Otherwise,
-     * a new instance will be attempted. The class must be marked as [Inject]able and must have a
-     * primary constructor (ie. a Kotlin class).
+     * Retrieves an instance of [injectedClass] by following the injection rules of Slik. If the
+     * class is marked as singleton, only a single instance per scope per value will be created.
+     * Otherwise, a new instance will be attempted. The class must be marked as [Inject]able and
+     * must have a primary constructor (ie. be a Kotlin class).
      */
     private fun <T: Any> resolve(kClass: KClass<T>, name: Named? = null): T {
-        val singletonName = makeClassKey(kClass, name?.name)
+        val singletonName = makeClassKey(kClass, name?.value)
+        var injectedClass = kClass
 
         // If we have a reference, it's a singleton
         if (singletons.containsKey(singletonName)) {
@@ -91,25 +101,34 @@ class Slik {
             return singletons[singletonName] as T
         }
 
-        // No IOC support/basic sanity check
-        if (kClass.java.isInterface
-                || kClass.isAbstract
-                || kClass.isData
-                || kClass.java.isEnum
-                || kClass.java.isAnnotation
-                || kClass.java.isArray) {
-            throw SlikException("${kClass.qualifiedName} must be a regular kotlin class in order" +
-                    " for Slik to create an instance of it.")
+        // Sanity check
+        if (injectedClass.isData
+                || injectedClass.java.isEnum
+                || injectedClass.java.isAnnotation
+                || injectedClass.java.isArray) {
+            throw SlikException("${injectedClass.qualifiedName} must be a regular kotlin class in" +
+                    " order for Slik to create an instance of it.")
+        }
+
+        // Check for bindings
+        if (injectedClass.java.isInterface || injectedClass.isAbstract) {
+            if (!bindings.containsKey(injectedClass)) {
+                throw SlikException("${injectedClass.qualifiedName} is an interface or abstract " +
+                        "class that must be #bound to an implementation before Slik can inject it.")
+            }
+
+            @Suppress("UNCHECKED_CAST")
+            injectedClass = bindings[kClass]!! as KClass<T>
         }
 
         // Is it injectable?
-        if (kClass.findAnnotation<Inject>() == null) {
-            throw SlikException("${kClass.qualifiedName} must be @Inject annotated.")
+        if (injectedClass.findAnnotation<Inject>() == null) {
+            throw SlikException("${injectedClass.qualifiedName} must be @Inject annotated.")
         }
 
         // Get the class's constructor
-        val constructor = kClass.primaryConstructor?.javaConstructor
-                ?: throw SlikException("${kClass.qualifiedName} must be a kotlin class.")
+        val constructor = injectedClass.primaryConstructor?.javaConstructor
+                ?: throw SlikException("${injectedClass.qualifiedName} must be a kotlin class.")
 
         // Fulfill dependencies
         val params = constructor.parameterTypes
@@ -121,14 +140,14 @@ class Slik {
                         paramAnnotations[it].firstOrNull { it is Named } as Named?)
             } catch(e: SlikException) {
                 throw SlikException(
-                        "${kClass.qualifiedName}'s dependencies couldn't be fulfilled." +
+                        "${injectedClass.qualifiedName}'s dependencies couldn't be fulfilled." +
                                 "\r\n\t ${e.message}")
             }
         })
 
         // Cache as singleton if required
         val result = constructor.newInstance(*fulfillments)!!
-        if (kClass.findAnnotation<Singleton>() != null) {
+        if (injectedClass.findAnnotation<Singleton>() != null) {
             singletons.put(singletonName, result)
         }
 
