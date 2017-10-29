@@ -2,11 +2,11 @@ package me.fru1t.worddropper.settings
 
 import android.content.Context
 import android.content.SharedPreferences
-import me.fru1t.android.slick.annotations.Inject
-import me.fru1t.android.slick.annotations.Named
-import me.fru1t.android.slick.annotations.Singleton
+import me.fru1t.android.slik.annotations.Inject
+import me.fru1t.android.slik.annotations.Named
+import me.fru1t.android.slik.annotations.Singleton
 
-/** The standard preference manager backed by the Android shared preferences. */
+/** The standard preference manager implementation backed by Android shared preferences. */
 @Inject
 @Singleton
 class PreferenceManagerImpl(
