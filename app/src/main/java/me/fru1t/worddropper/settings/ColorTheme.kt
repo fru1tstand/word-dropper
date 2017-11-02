@@ -1,11 +1,20 @@
-package me.fru1t.worddropper.settings;
+package me.fru1t.worddropper.settings
 
-import android.graphics.Color;
+import android.graphics.Color
 
-/**
- * Presets for colors within the game.
- */
-public enum ColorTheme {
+/** Presets for colors within the game. */
+enum class ColorTheme(
+        val displayName: String,
+        val primary: Int,
+        val primaryDark: Int,
+        val primaryLight: Int,
+        val background: Int,
+        val backgroundLight: Int,
+        val text: Int,
+        val textBlend: Int,
+        val textOnPrimary: Int,
+        val textOnPrimaryLight: Int,
+        val textOnPrimaryDark: Int) {
     ORANGE(
             "Orange", // name
             Color.parseColor("#ff9800"),
@@ -46,7 +55,7 @@ public enum ColorTheme {
             Color.WHITE, // textOnPrimary
             Color.WHITE, // textOnPrimaryLight
             Color.WHITE // textOnPrimaryDark
-    );
+    )
 
     /*
         "", // name
@@ -61,32 +70,4 @@ public enum ColorTheme {
         Color.parseColor("#"), // textOnPrimaryLight
         Color.parseColor("#") // textOnPrimaryDark
     */
-
-    public final String displayName;
-    public final int primary;
-    public final int primaryDark;
-    public final int primaryLight;
-    public final int background;
-    public final int backgroundLight;
-    public final int text;
-    public final int textBlend;
-    public final int textOnPrimary;
-    public final int textOnPrimaryLight;
-    public final int textOnPrimaryDark;
-
-    ColorTheme(String displayName, int primary, int primaryDark, int primaryLight,
-               int background, int backgroundLight, int text, int textBlend, int textOnPrimary,
-               int textOnPrimaryLight, int textOnPrimaryDark) {
-        this.displayName = displayName;
-        this.primary = primary;
-        this.primaryDark = primaryDark;
-        this.primaryLight = primaryLight;
-        this.background = background;
-        this.backgroundLight = backgroundLight;
-        this.text = text;
-        this.textBlend = textBlend;
-        this.textOnPrimary = textOnPrimary;
-        this.textOnPrimaryLight = textOnPrimaryLight;
-        this.textOnPrimaryDark = textOnPrimaryDark;
-    }
 }

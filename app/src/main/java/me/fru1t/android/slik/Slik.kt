@@ -9,9 +9,7 @@ import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.jvm.javaConstructor
 
-/**
- * Simple Lightweight dependency Injection frameworK.
- */
+/** Simple Lightweight dependency Injection frameworK. */
 class Slik {
     companion object {
         private val scopes = HashMap<KClass<*>, Slik>()
@@ -67,10 +65,10 @@ class Slik {
      * injection is not an option (ie. when you have no control over the object lifecycle). In this
      * case, any subclass that requires injection must also call [inject].
      */
-    fun inject(instance: Any) {
+    fun <T : Any> inject(instance: T, abstractClass: KClass<T>? = null) {
         // Inject into annotated fields
         try {
-            instance::class.java.declaredFields.forEach {
+            (abstractClass ?: instance::class).java.declaredFields.forEach {
                 if (it.getAnnotation(Inject::class.java) == null) {
                     return@forEach
                 }
@@ -87,7 +85,7 @@ class Slik {
     }
 
     /**
-     * Retrieves an instance of [injectedClass] by following the injection rules of Slik. If the
+     * Retrieves an instance of [kClass] by following the injection rules of Slik. If the
      * class is marked as singleton, only a single instance per scope per value will be created.
      * Otherwise, a new instance will be attempted. The class must be marked as [Inject]able and
      * must have a primary constructor (ie. be a Kotlin class).
@@ -156,5 +154,5 @@ class Slik {
     }
 
     private fun makeClassKey(kClass: KClass<*>, name: String?): String =
-            "${kClass.qualifiedName}:$name"
+            "${kClass.qualifiedName}:${name ?: ""}"
 }

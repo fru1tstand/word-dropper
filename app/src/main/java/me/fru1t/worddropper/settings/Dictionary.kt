@@ -10,8 +10,8 @@ import me.fru1t.android.slik.annotations.Singleton
 import me.fru1t.worddropper.WordDropperApplication
 import me.fru1t.worddropper.WordDropperApplication.Companion.IS_DEBUGGING
 import org.jdeferred.impl.DeferredObject
-import java.util.Scanner
 import java.util.Random
+import java.util.Scanner
 import java.util.concurrent.CountDownLatch
 
 /** Handles loading and caching game words. */
@@ -24,9 +24,9 @@ class Dictionary(
         private val TOTAL_WORDS = 369648
     }
 
-    private val onLoadDefer: DeferredObject<Any, Any, Double>
     private val dictionary: HashSet<String>
     private val loaderCdl: CountDownLatch
+    val onLoadDefer: DeferredObject<Any, Any, Double>
 
     private var loadedWords: Int = 0
     var isLoaded = false

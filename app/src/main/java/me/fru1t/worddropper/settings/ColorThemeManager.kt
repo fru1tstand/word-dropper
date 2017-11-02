@@ -1,6 +1,7 @@
 package me.fru1t.worddropper.settings
 
 import android.content.Context
+import android.view.View
 import me.fru1t.android.slik.annotations.Inject
 import me.fru1t.android.slik.annotations.Singleton
 import me.fru1t.worddropper.R
@@ -38,6 +39,18 @@ class ColorThemeManager(private val preferences: PreferenceManager, context: Con
     fun addChangeListener(listener: () -> Unit): Boolean = colorThemeChangeListeners.add(listener)
     fun removeChangeListener(listener: () -> Unit): Boolean =
             colorThemeChangeListeners.remove(listener)
+
+    /** Binds a view to listen to color theme changes. */
+    fun bindView(view: View, listener: () -> Unit) {
+        view.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
+            override fun onViewDetachedFromWindow(v: View?) {
+                addChangeListener(listener)
+            }
+            override fun onViewAttachedToWindow(v: View?) {
+                removeChangeListener(listener)
+            }
+        })
+    }
 
     private fun loadColorThemeFromSettings() {
         currentColorTheme = ColorTheme.valueOf(

@@ -2,6 +2,7 @@ package me.fru1t.worddropper.database
 
 import android.content.ContentValues
 import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
 import me.fru1t.android.database.Row
 import me.fru1t.worddropper.settings.Difficulty
 
@@ -10,6 +11,12 @@ import me.fru1t.worddropper.settings.Difficulty
  * [DatabaseUtilsImpl] for the standard implementation.
  */
 interface DatabaseUtils {
+    /** Verifies the database is up and running */
+    fun startup()
+
+    /** Re-creates all tables in the database, deleting any information in the process. */
+    fun createTables(existingDb: SQLiteDatabase? = null)
+
     /** Returns the database size as a human-readable string */
     fun getDatabaseSize(): String
 

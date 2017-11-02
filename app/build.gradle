@@ -1,11 +1,10 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "26.0.1"
+    buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "me.fru1t.worddropper"
         minSdkVersion 19
@@ -49,8 +48,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.8.47'
     testCompile 'com.google.truth:truth:0.33'
-
-    provided 'org.projectlombok:lombok:1.16.18'
 }
 repositories {
     mavenCentral()

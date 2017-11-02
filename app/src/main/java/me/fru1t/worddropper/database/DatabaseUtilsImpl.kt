@@ -59,7 +59,20 @@ class DatabaseUtilsImpl(
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) =
             Unit // Do nothing
 
-    /* DatabaseUtils */
+    override fun startup() {
+        // An access to the database triggers the startup routines for Android's SQLite causing
+        // onCreate to be called if the tables don't already exist.
+        writableDatabase
+    }
+
+    override fun createTables(existingDb: SQLiteDatabase?) {
+        val db = existingDb ?: writableDatabase!!
+        db.execSQL(DROP_TABLE + Game.TABLE_NAME)
+        db.execSQL(DROP_TABLE + GameWord.TABLE_NAME)
+        db.execSQL(Game.CREATE_TABLE)
+        db.execSQL(GameWord.CREATE_TABLE)
+    }
+
     override fun getDatabaseSize(): String {
         val f = context.getDatabasePath(DATABASE_NAME)
         var size = f.length().toDouble()
@@ -131,7 +144,7 @@ class DatabaseUtilsImpl(
                 GameWord.COLUMN_GAME_ID + " = ?",
                 arrayOf(gameId.toString() + ""),
                 null, null,
-                GameWord._ID + " ASC")
+                BaseColumns._ID + " ASC")
 
         if (c.moveToFirst()) {
             do {
@@ -173,13 +186,4 @@ class DatabaseUtilsImpl(
                 } while (cursor.moveToNext())
                 return true
             }
-
-    /** Re-creates all tables in the database, deleting any information in the process. */
-    private fun createTables(existingDb: SQLiteDatabase?) {
-        val db = existingDb ?: writableDatabase!!
-        db.execSQL(DROP_TABLE + Game.TABLE_NAME)
-        db.execSQL(DROP_TABLE + GameWord.TABLE_NAME)
-        db.execSQL(Game.CREATE_TABLE)
-        db.execSQL(GameWord.CREATE_TABLE)
-    }
 }

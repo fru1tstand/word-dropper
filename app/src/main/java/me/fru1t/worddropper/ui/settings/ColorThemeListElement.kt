@@ -5,17 +5,26 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-
+import me.fru1t.android.slik.annotations.Inject
 import me.fru1t.worddropper.R
-import me.fru1t.worddropper.WordDropperApplication
 import me.fru1t.worddropper.settings.ColorTheme
+import me.fru1t.worddropper.settings.ColorThemeManager
 
-/**
- * Displays the name and sample colors for a specific color theme.
- */
+/** An injectable factory that creates [ColorThemeListElement]s */
+@Inject
+class ColorThemeListElementFactory(
+        private val context: Context,
+        private val colorThemeManager: ColorThemeManager) {
+    fun create(colorTheme: ColorTheme): ColorThemeListElement =
+            ColorThemeListElement(colorThemeManager, context, colorTheme)
+}
+
+/** Displays the value and sample colors for a specific color theme. */
 class ColorThemeListElement @JvmOverloads constructor(
+        private val colorThemeManager: ColorThemeManager,
         context: Context,
         colorTheme: ColorTheme? = null) : LinearLayout(context) {
+
     init {
         if (colorTheme == null) {
             throw Exception("ColorThemeListElement must be initialized with a color theme.")
@@ -29,8 +38,7 @@ class ColorThemeListElement @JvmOverloads constructor(
         val vPadding = resources.getDimension(R.dimen.app_vSpace).toInt()
         setPadding(hPadding, vPadding, hPadding, vPadding)
 
-        val app = context.applicationContext as WordDropperApplication
-        setOnClickListener { app.putStringPreference(R.string.pref_colorTheme, colorTheme.name) }
+        setOnClickListener { colorThemeManager.setColorTheme(colorTheme) }
 
         orientation = LinearLayout.VERTICAL
         isClickable = true

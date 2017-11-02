@@ -7,11 +7,9 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-
 import com.google.common.base.Strings
-import me.fru1t.android.slick.Slik
-import me.fru1t.android.slick.annotations.Inject
-
+import me.fru1t.android.slik.Slik
+import me.fru1t.android.slik.annotations.Inject
 import me.fru1t.worddropper.R
 import me.fru1t.worddropper.WordDropperApplication
 import me.fru1t.worddropper.database.DatabaseUtils
@@ -24,8 +22,8 @@ import me.fru1t.worddropper.ui.mainmenu.MainMenuActivity
  * any pre-loaded data is available for the rest of the services.
  */
 class SplashScreenActivity : AppCompatActivity() {
-    @Inject private lateinit var dictionary: Dictionary
-    @Inject private lateinit var databaseUtils: DatabaseUtils
+    private @Inject lateinit var dictionary: Dictionary
+    private @Inject lateinit var databaseUtils: DatabaseUtils
 
     private lateinit var root: LinearLayout
 
@@ -40,13 +38,13 @@ class SplashScreenActivity : AppCompatActivity() {
 
         // Load dictionary
         val t = addTextView("")
-        dictionary.onLoadDefer.progress({ t.text = it.toString() })
+        dictionary.onLoadDefer.progress { t.text = it.toString() }
         dictionary.onLoadDefer.done {
             Toast.makeText(this, "done loading", Toast.LENGTH_SHORT).show()
         }
 
         // Load database
-        databaseUtils.writableDatabase
+        databaseUtils.startup()
 
         goToMainMenu(1000)
     }
