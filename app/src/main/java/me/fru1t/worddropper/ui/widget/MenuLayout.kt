@@ -39,10 +39,6 @@ class MenuLayout @JvmOverloads constructor(
     init {
         Slik.get(WordDropperApplication::class).inject(this)
         View.inflate(context, R.layout.layout_widget_menu, this)
-        colorThemeManager.bindView(this, {
-            menu.setBackgroundColor(colorThemeManager.currentColorTheme.backgroundLight)
-            menuOptions.forEach { it.setTextColor(colorThemeManager.currentColorTheme.text) }
-        })
     }
 
     /**
@@ -137,5 +133,10 @@ class MenuLayout @JvmOverloads constructor(
 
         isClickable = true
         setOnClickListener { hide() }
+
+        colorThemeManager.bindView(this, {
+            menu.setBackgroundColor(colorThemeManager.currentColorTheme.backgroundLight)
+            menuOptions.forEach { it.setTextColor(colorThemeManager.currentColorTheme.text) }
+        })
     }
 }

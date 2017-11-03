@@ -5,8 +5,6 @@ import android.util.AttributeSet
 import android.view.View
 import me.fru1t.android.slik.annotations.Inject
 import me.fru1t.android.slik.annotations.Singleton
-import kotlin.reflect.full.primaryConstructor
-import kotlin.reflect.jvm.javaConstructor
 
 /** Factory that dynamically creates any view. */
 @Inject
@@ -14,6 +12,7 @@ import kotlin.reflect.jvm.javaConstructor
 class ViewFactory(val context: Context) {
     /** Creates a new [T] optionally given [attrs] and [defStyleAttr] */
     inline fun <reified T : View> create(attrs: AttributeSet? = null, defStyleAttr: Int = 0): T =
-            T::class.primaryConstructor!!.javaConstructor!!.newInstance(
-                    context, attrs, defStyleAttr)
+        T::class.java
+                .getConstructor(Context::class.java, AttributeSet::class.java, Int::class.java)
+                .newInstance(context, attrs, defStyleAttr)
 }
