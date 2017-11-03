@@ -40,16 +40,16 @@ class ColorThemeManager(private val preferences: PreferenceManager, context: Con
     fun removeChangeListener(listener: () -> Unit): Boolean =
             colorThemeChangeListeners.remove(listener)
 
-    /** Binds a view to listen to color theme changes. */
+    /** Binds a view to listen to color theme changes. Instantly calls the listener. */
     fun bindView(view: View, listener: () -> Unit) {
+        addChangeListener(listener)
         view.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
             override fun onViewDetachedFromWindow(v: View?) {
-                addChangeListener(listener)
-            }
-            override fun onViewAttachedToWindow(v: View?) {
                 removeChangeListener(listener)
             }
+            override fun onViewAttachedToWindow(v: View?) { }
         })
+        listener()
     }
 
     private fun loadColorThemeFromSettings() {
