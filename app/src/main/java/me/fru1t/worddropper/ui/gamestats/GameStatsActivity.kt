@@ -40,6 +40,7 @@ import me.fru1t.worddropper.database.tables.GameWord
 import me.fru1t.worddropper.settings.ColorThemeManager
 import me.fru1t.worddropper.settings.Difficulty
 import me.fru1t.worddropper.ui.game.GameActivity
+import me.fru1t.worddropper.ui.widget.ColoredTextView
 import java.util.ArrayList
 
 /** Data class containing an MPChart object and its corresponding TextView "button" */
@@ -108,8 +109,9 @@ class GameStatsActivity : AppCompatActivity() {
                     extraGameData[1] = cursor.getInt(1)
                 })
 
-        // We have to set this for later
+        // Handle difficulty
         difficulty = gameData.getString(Game.COLUMN_DIFFICULTY, Difficulty.ZEN.name)
+        (findViewById(R.id.difficulty) as ColoredTextView).text = difficulty
 
         // Side by side level and score
         animateValue(gameData.getInt(Game.COLUMN_LEVEL, 0),

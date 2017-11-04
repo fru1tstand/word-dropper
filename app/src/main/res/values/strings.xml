@@ -29,8 +29,6 @@
     <string name="endGameScreen_actionPlayAgain">Play Again</string>
     <string name="endGameScreen_actionMainMenu">Main Menu</string>
 
-    <string name="endGameScreen_summaryDifficulty">Difficulty: </string>
-
     <!-- Game -->
     <string name="gameScreen_pauseMenuSaveAndQuit">Save and Quit</string>
     <string name="gameScreen_pauseMenuSettings">Settings</string>

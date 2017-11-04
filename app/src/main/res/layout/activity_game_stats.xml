@@ -33,7 +33,7 @@
     <!-- Content -->
     <Space
             android:layout_width="match_parent"
-            android:layout_height="32dp" />
+            android:layout_height="16dp" />
     <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -43,8 +43,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+            <!-- Difficulty -->
+            <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp" />
+            <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                <me.fru1t.worddropper.ui.widget.ColoredTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/difficulty"
+                        app:backgroundColorTheme="background_light"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:textAlignment="center"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp" />
+            </FrameLayout>
 
             <!-- Side-by-side level and score-->
+            <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp" />
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -278,31 +299,10 @@
             <!-- Graphs -->
 
             <!-- Summary Statistics/Game info -->
-            <LinearLayout
+            <Space
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:baselineAligned="false">
-                <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_weight=".5">
-                    <me.fru1t.worddropper.ui.widget.ColoredTextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/endGameScreen_summaryDifficulty"
-                            android:id="@+id/endGameScreenSummaryDifficulty" />
-                </LinearLayout>
-
-                <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_weight=".5">
-
-                </LinearLayout>
-            </LinearLayout> <!-- Summary -->
+                    android:layout_height="32dp" />
+            <!-- Summary -->
 
             <!-- Word list -->
             <me.fru1t.worddropper.ui.widget.ColoredTextView
