@@ -15,6 +15,7 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import me.fru1t.android.annotations.VisibleForXML
 import me.fru1t.android.content.IntentFactory
+import me.fru1t.android.content.res.ResourceManager
 import me.fru1t.android.slik.Slik
 import me.fru1t.android.slik.annotations.Inject
 import me.fru1t.android.slik.annotations.Named
@@ -43,6 +44,7 @@ class GameActivity : AppCompatActivity() {
     private @Inject lateinit var databaseUtils: DatabaseUtils
     private @Inject lateinit var dictionary: Dictionary
     private @Inject lateinit var intentFactory: IntentFactory
+    private @Inject lateinit var res: ResourceManager
     private @Inject @Named(WordDropperApplication.IS_DEBUGGING) var isDebugging: Boolean = false
 
     // Game-related values
@@ -60,11 +62,6 @@ class GameActivity : AppCompatActivity() {
     private lateinit var scrambles: TextView
     private lateinit var movesLeft: TextView
     private lateinit var activeWord: TextView
-
-    // Resource cache
-    private val activeWordHorizontalPadding by lazy {
-        resources.getDimension(R.dimen.gameScreen_hudCurrentWordHorizontalPadding).toInt()
-    }
 
     // Chart
     private lateinit var wordHistoryChart: BarChart
@@ -408,8 +405,11 @@ class GameActivity : AppCompatActivity() {
 
         result = result.substring(0, 1).toUpperCase() + result.substring(1)
         activeWord.text = result
-        activeWord.setPadding(activeWordHorizontalPadding, activeWord.paddingTop,
-                activeWordHorizontalPadding, activeWord.paddingBottom)
+        activeWord.setPadding(
+                res.d(R.dimen.gameScreen_hudCurrentWordHorizontalPadding).toInt(),
+                activeWord.paddingTop,
+                res.d(R.dimen.gameScreen_hudCurrentWordHorizontalPadding).toInt(),
+                activeWord.paddingBottom)
     }
 
     /** Shows the pause menu if it's not already open. */
