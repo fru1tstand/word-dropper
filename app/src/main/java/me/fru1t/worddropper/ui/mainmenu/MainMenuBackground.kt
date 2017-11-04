@@ -6,7 +6,6 @@ import android.graphics.Paint
 import android.support.annotation.AttrRes
 import android.util.AttributeSet
 import android.view.View
-import com.google.common.base.Strings
 import me.fru1t.android.slik.Slik
 import me.fru1t.android.slik.annotations.Inject
 import me.fru1t.worddropper.R
@@ -17,23 +16,25 @@ import java.util.Random
 /** A single falling letter containing its own speed, positioning, and drawing methods. */
 private class FallingLetter(
         private val textPaint: Paint,
-        private val random: Random,
-        var width: Int = 1,
-        var height: Int = 1) {
-    private var yVelocity: Float = 0f
-    private var y: Float = random.nextInt(height).toFloat()
-    private var x: Float = 0f
+        private val random: Random) {
     private var s: String? = null
+    var yVelocity: Float = 0f
+        private set
+    var y: Float = 0f
+        private set
+    var x: Float = 0f
+        private set
 
-    fun randomize() {
+    fun randomize(width: Int, height: Int) {
         s = ('A' + random.nextInt('Z' - 'A')).toString()
         yVelocity = MIN_VELOCITY + random.nextFloat() * (MAX_VELOCITY - MIN_VELOCITY)
         x = random.nextInt(width).toFloat()
-        y = (-1 * LETTER_HEIGHT).toFloat()
+        y = (-1 * (random.nextInt(height) + LETTER_HEIGHT)).toFloat()
     }
 
     fun draw(canvas: Canvas) {
-        if (Strings.isNullOrEmpty(s)) {
+        if (s == null) {
+            y = Float.MAX_VALUE
             return
         }
 
@@ -41,18 +42,12 @@ private class FallingLetter(
 
         // Update
         y += yVelocity
-
-        // Reset if necessary
-        if (y > height + LETTER_HEIGHT) {
-            randomize()
-        }
     }
 
     companion object {
         private val MIN_VELOCITY = 1f
         private val MAX_VELOCITY = 5f
-
-        private val LETTER_HEIGHT = 40
+        val LETTER_HEIGHT = 60
     }
 }
 
@@ -84,18 +79,13 @@ class MainMenuBackground @JvmOverloads constructor(
         }
     }
 
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
-        fallingLetters.forEach {
-            it.width = w
-            it.height = h
-        }
-    }
-
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        for (i in fallingLetters.indices.reversed()) {
-            fallingLetters[i].draw(canvas)
+        fallingLetters.forEach {
+            it.draw(canvas)
+            if (it.y > height + FallingLetter.LETTER_HEIGHT) {
+                it.randomize(width, height)
+            }
         }
         invalidate()
     }

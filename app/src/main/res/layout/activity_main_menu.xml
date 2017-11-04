@@ -8,10 +8,10 @@
         android:id="@+id/mainMenuScreenRoot"
         android:keepScreenOn="true">
 
-    <!--<me.fru1t.worddropper.ui.mainmenu.MainMenuBackground-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:id="@+id/mainMenuScreenBackgroundView" />-->
+    <me.fru1t.worddropper.ui.mainmenu.MainMenuBackground
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/mainMenuScreenBackgroundView" />
 
     <!-- Logo -->
     <android.support.constraint.ConstraintLayout
