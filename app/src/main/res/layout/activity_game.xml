@@ -4,7 +4,6 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/gameScreenRoot"
         android:keepScreenOn="true"
         android:clipChildren="false"
         tools:context="me.fru1t.worddropper.ui.game.GameActivity">
@@ -46,7 +45,7 @@
                     <me.fru1t.worddropper.ui.widget.ColoredTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/gameScreenHudStatLevel"
+                            android:id="@+id/gameLevel"
                             android:textSize="@dimen/gameScreen_hudStatsValueTextSize"
                             app:textColorTheme="text_blend"/>
                 </LinearLayout>
@@ -69,7 +68,7 @@
                     <me.fru1t.worddropper.ui.widget.ColoredTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/gameScreenHudStatScrambles"
+                            android:id="@+id/gameScrambles"
                             android:textSize="@dimen/gameScreen_hudStatsValueTextSize"
                             app:textColorTheme="text_blend"/>
                 </LinearLayout>
@@ -82,6 +81,7 @@
                         android:gravity="center"
                         android:orientation="vertical"
                         android:clickable="true"
+                        android:focusable="true"
                         android:onClick="onMovesLeftClick">
                     <me.fru1t.worddropper.ui.widget.ColoredTextView
                             android:layout_width="wrap_content"
@@ -92,7 +92,7 @@
                     <me.fru1t.worddropper.ui.widget.ColoredTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/gameScreenHudStatMovesLeft"
+                            android:id="@+id/gameMovesLeft"
                             android:textSize="@dimen/gameScreen_hudStatsValueTextSize"
                             app:textColorTheme="text_blend"/>
                 </LinearLayout>
@@ -105,11 +105,12 @@
                     android:layout_weight="1"
                     android:clipChildren="false"
                     android:clickable="true"
+                    android:focusable="true"
                     android:onClick="onGraphicClick">
                 <com.github.mikephil.charting.charts.BarChart
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/gameScreenHudChart" />
+                        android:id="@+id/gameChart" />
                 <me.fru1t.worddropper.ui.widget.ColoredTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -117,7 +118,7 @@
                         android:paddingTop="@dimen/gameScreen_hudCurrentWordVerticalPadding"
                         android:paddingBottom="@dimen/gameScreen_hudCurrentWordVerticalPadding"
                         android:textSize="@dimen/gameScreen_hudCurrentWordTextSize"
-                        android:id="@+id/gameScreenHudActiveWord"
+                        android:id="@+id/gameActiveWord"
                         app:backgroundColorTheme="background" />
             </FrameLayout> <!-- Current word and graph -->
         </LinearLayout> <!-- hud -->
@@ -126,17 +127,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:id="@+id/gameScreenTileBoard"/>
+                android:id="@+id/gameTileBoard"/>
         <me.fru1t.worddropper.ui.game.WrappingProgressBar
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/gameScreen_progressHeight"
-                android:id="@+id/gameScreenProgress"/>
+                android:id="@+id/gameProgress"/>
     </LinearLayout>
 
     <me.fru1t.worddropper.ui.widget.MenuLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/gameScreenPauseMenu"
+            android:id="@+id/gamePauseMenu"
             android:visibility="gone"
             android:background="@color/menu_wrapperBackground" />
 </me.fru1t.worddropper.ui.widget.ColoredFrameLayout>

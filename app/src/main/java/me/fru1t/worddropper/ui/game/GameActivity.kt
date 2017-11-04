@@ -83,14 +83,14 @@ class GameActivity : AppCompatActivity() {
         setContentView(R.layout.activity_game)
 
         // Fetch elements we need to poke around with
-        tileBoard = findViewById(R.id.gameScreenTileBoard) as TileBoard
-        progressBar = findViewById(R.id.gameScreenProgress) as WrappingProgressBar
-        pauseMenu = findViewById(R.id.gameScreenPauseMenu) as MenuLayout
-        level = findViewById(R.id.gameScreenHudStatLevel) as TextView
-        scrambles = findViewById(R.id.gameScreenHudStatScrambles) as TextView
-        movesLeft = findViewById(R.id.gameScreenHudStatMovesLeft) as TextView
-        activeWord = findViewById(R.id.gameScreenHudActiveWord) as TextView
-        wordHistoryChart = findViewById(R.id.gameScreenHudChart) as BarChart
+        tileBoard = findViewById(R.id.gameTileBoard) as TileBoard
+        progressBar = findViewById(R.id.gameProgress) as WrappingProgressBar
+        pauseMenu = findViewById(R.id.gamePauseMenu) as MenuLayout
+        level = findViewById(R.id.gameLevel) as TextView
+        scrambles = findViewById(R.id.gameScrambles) as TextView
+        movesLeft = findViewById(R.id.gameMovesLeft) as TextView
+        activeWord = findViewById(R.id.gameActiveWord) as TextView
+        wordHistoryChart = findViewById(R.id.gameChart) as BarChart
 
         // Set up chart
         wordHistoryChart.setDrawBarShadow(false)
