@@ -19,5 +19,8 @@ class PreferenceManagerImpl(
             sharedPreferences.getString(key, defaultValue)
 
     override fun applyString(key: String, value: String) =
-            sharedPreferences.edit().putString(key, value).apply()
+            sharedPreferences
+                    .edit()
+                    .putString(key, value)
+                    .apply()
 }

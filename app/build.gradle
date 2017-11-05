@@ -49,6 +49,3 @@ dependencies {
     testCompile 'org.mockito:mockito-core:2.8.47'
     testCompile 'com.google.truth:truth:0.33'
 }
-repositories {
-    mavenCentral()
-}

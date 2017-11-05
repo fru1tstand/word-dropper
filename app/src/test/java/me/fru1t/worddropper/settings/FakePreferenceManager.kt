@@ -3,7 +3,7 @@ package me.fru1t.worddropper.settings
 import android.content.Context
 
 /** A preference manager backed by a HashMap */
-class FakePreferenceManager(context: Context) : PreferenceManager(context) {
+open class FakePreferenceManager(context: Context) : PreferenceManager(context) {
     private val preferences = HashMap<String, Any>()
 
     override fun getString(key: String, defaultValue: String): String =

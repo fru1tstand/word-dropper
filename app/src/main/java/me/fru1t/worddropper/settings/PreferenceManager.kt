@@ -2,6 +2,7 @@ package me.fru1t.worddropper.settings
 
 import android.content.Context
 import android.support.annotation.StringRes
+import android.support.annotation.VisibleForTesting
 
 /**
  * An interface for storing and retrieving preferences via string resource values. See
@@ -22,10 +23,12 @@ abstract class PreferenceManager(private val context: Context) {
     }
 
     /** Retrieves the preference stored at [key] or [defaultValue] if no preference is found. */
-    protected abstract fun getString(key: String, defaultValue: String): String
+    @VisibleForTesting
+    internal abstract fun getString(key: String, defaultValue: String): String
 
     /** Stores [value] at [key] asynchronously */
-    protected abstract fun applyString(key: String, value: String)
+    @VisibleForTesting
+    internal abstract fun applyString(key: String, value: String)
 
     fun addChangeListener(listener: (String) -> Unit): Boolean = changeListeners.add(listener)
     fun removeChangeListener(listener: (String) -> Unit): Boolean = changeListeners.remove(listener)
