@@ -1,10 +1,19 @@
 package me.fru1t.worddropper.settings
 
 import android.content.Context
+import android.support.annotation.StringRes
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
 
 /** A preference manager backed by a HashMap */
-open class FakePreferenceManager(context: Context) : PreferenceManager(context) {
+open class FakePreferenceManager : PreferenceManager(mock(Context::class.java)) {
     private val preferences = HashMap<String, Any>()
+
+    /** Stores a preference */
+    fun sideload(@StringRes resId: Int, value: Any) {
+        `when`(context.getString(resId)).thenReturn(resId.toString())
+        preferences.put(resId.toString(), value)
+    }
 
     override fun getString(key: String, defaultValue: String): String =
             get<String>(key) ?: defaultValue

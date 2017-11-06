@@ -8,4 +8,5 @@
 
     <!-- Preference Strings -->
     <string name="pref_colorTheme">color-theme</string>
+    <string name="pref_test">test-test-test</string>
 </resources>

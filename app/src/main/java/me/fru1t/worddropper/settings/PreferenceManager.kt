@@ -8,7 +8,7 @@ import android.support.annotation.VisibleForTesting
  * An interface for storing and retrieving preferences via string resource values. See
  * [PreferenceManagerImpl] for the standard implementation.
  */
-abstract class PreferenceManager(private val context: Context) {
+abstract class PreferenceManager(@VisibleForTesting internal val context: Context) {
     private val changeListeners = HashSet<(String) -> Unit>()
 
     /** Retrieves [keyRes] from preferences or [defaultValue] if it's not defined. */
