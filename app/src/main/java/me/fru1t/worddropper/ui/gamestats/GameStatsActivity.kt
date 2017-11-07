@@ -77,8 +77,8 @@ class GameStatsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_game_stats)
         gameId = intent.getLongExtra(EXTRA_GAME_ID, -1)
 
-        graphWrapper = findViewById(R.id.endGameScreenGraphWrapper) as FrameLayout
-        graphButtonsWrapper = findViewById(R.id.endGameScreenGraphButtonsWrapper) as LinearLayout
+        graphWrapper = findViewById(R.id.graphWrapper) as FrameLayout
+        graphButtonsWrapper = findViewById(R.id.graphButtonsWrapper) as LinearLayout
 
         // Fetch data
         val gameData = databaseUtils.getRowFromId(
@@ -115,20 +115,20 @@ class GameStatsActivity : AppCompatActivity() {
 
         // Side by side level and score
         animateValue(gameData.getInt(Game.COLUMN_LEVEL, 0),
-                findViewById(R.id.endGameScreenLevel) as TextView, 0)
+                findViewById(R.id.level) as TextView, 0)
         animateValue(extraGameData[1],
-                findViewById(R.id.endGameScreenScore) as TextView, 50)
+                findViewById(R.id.score) as TextView, 50)
         animateValue(gameData.getInt(Game.COLUMN_SCRAMBLES_EARNED, 0),
-                findViewById(R.id.endGameScreenScramblesEarned) as TextView, 50)
+                findViewById(R.id.scramblesEarned) as TextView, 50)
         animateValue(gameData.getInt(Game.COLUMN_SCRAMBLES_USED, 0),
-                findViewById(R.id.endGameScreenScramblesUsed) as TextView, 100)
-        animateValue(extraGameData[0], findViewById(R.id.endGameScreenWords) as TextView, 150)
+                findViewById(R.id.scramblesUsed) as TextView, 100)
+        animateValue(extraGameData[0], findViewById(R.id.words) as TextView, 150)
 
         // The chart will load once the color theme has been set
         activeGraphFunction = this::loadWordLengthGraph
 
         // Word List
-        val wordsList = findViewById(R.id.endGameScreenWordsList) as TextView
+        val wordsList = findViewById(R.id.wordList) as TextView
         val gameMovesList = databaseUtils.getGameMoves(intent.getLongExtra(EXTRA_GAME_ID, -1))
         gameMovesList.forEach { s -> wordsList.append(s + ", ") }
 
@@ -199,8 +199,8 @@ class GameStatsActivity : AppCompatActivity() {
     @VisibleForXML
     fun loadPointDistributionGraph(v: View?) {
         activeGraphFunction = this::loadPointDistributionGraph
-        if (memoizedGraphs.get(R.id.endGameScreenGraphPointDistributionButton) != null) {
-            showGraph(memoizedGraphs.get(R.id.endGameScreenGraphPointDistributionButton))
+        if (memoizedGraphs.get(R.id.graphPointDistribution) != null) {
+            showGraph(memoizedGraphs.get(R.id.graphPointDistribution))
             return
         }
 
@@ -208,8 +208,8 @@ class GameStatsActivity : AppCompatActivity() {
         val action =
                 GraphAction(
                         // TODO: wtf is with this name. Shorten it.
-                        findViewById(R.id.endGameScreenGraphPointDistributionButton) as TextView)
-        memoizedGraphs.put(R.id.endGameScreenGraphPointDistributionButton, action)
+                        findViewById(R.id.graphPointDistribution) as TextView)
+        memoizedGraphs.put(R.id.graphPointDistribution, action)
 
         // Data backend
         val rawData = ArrayList<BarEntry>()
@@ -276,14 +276,14 @@ class GameStatsActivity : AppCompatActivity() {
     @VisibleForXML
     fun loadWordLengthGraph(v: View?) {
         activeGraphFunction = this::loadWordLengthGraph
-        if (memoizedGraphs.get(R.id.endGameScreenGraphWordLengths) != null) {
-            showGraph(memoizedGraphs.get(R.id.endGameScreenGraphWordLengths))
+        if (memoizedGraphs.get(R.id.graphWordLengths) != null) {
+            showGraph(memoizedGraphs.get(R.id.graphWordLengths))
             return
         }
 
         // Prepare
-        val action = GraphAction(findViewById(R.id.endGameScreenGraphWordLengths) as TextView)
-        memoizedGraphs.put(R.id.endGameScreenGraphWordLengths, action)
+        val action = GraphAction(findViewById(R.id.graphWordLengths) as TextView)
+        memoizedGraphs.put(R.id.graphWordLengths, action)
 
         // Data backend
         val rawData = ArrayList<PieEntry>()
