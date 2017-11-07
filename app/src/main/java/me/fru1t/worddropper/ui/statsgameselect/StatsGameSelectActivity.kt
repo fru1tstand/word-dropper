@@ -10,7 +10,8 @@ import me.fru1t.worddropper.ui.gamestats.GameStatsActivity
 import me.fru1t.worddropper.ui.widget.GameData
 import me.fru1t.worddropper.ui.widget.GameListView
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 /**
  * Shows the user their list of games played in order to navigate to that game's more detailed
@@ -25,22 +26,23 @@ class StatsGameSelectActivity : AppCompatActivity() {
         val gameList = findViewById(R.id.gameList) as GameListView
         gameList.titleFunction = {
             (_, difficulty, unixStart) ->
-            difficulty.toUpperCase() + " - " + TITLE_DATE_FORMAT.format(Date(unixStart * 1000))
+                difficulty.toUpperCase() + " - " + TITLE_DATE_FORMAT.format(Date(unixStart * 1000))
         }
         gameList.descriptionFunction = {
             (_, _, _, gameStatus, score, words) ->
-            (words.toString() + " words - " + score + " points"
-                    + if (gameStatus == Game.STATUS_IN_PROGRESS) " - in progress" else "")
+                (words.toString() + " words - " + score + " points"
+                        + if (gameStatus == Game.STATUS_IN_PROGRESS) " - in progress" else "")
         }
 
         // Our action
-        gameList.setOnItemClickListener { parent, _, position, _ ->
-            val endGameIntent = Intent(this, GameStatsActivity::class.java)
-            endGameIntent.putExtra(
-                    GameStatsActivity.EXTRA_GAME_ID,
-                    (parent.getItemAtPosition(position) as GameData).gameId)
-            startActivity(endGameIntent)
-            finish()
+        gameList.setOnItemClickListener {
+            parent, _, position, _ ->
+                val endGameIntent = Intent(this, GameStatsActivity::class.java)
+                endGameIntent.putExtra(
+                        GameStatsActivity.EXTRA_GAME_ID,
+                        (parent.getItemAtPosition(position) as GameData).gameId)
+                startActivity(endGameIntent)
+                finish()
         }
 
         // Populate list view

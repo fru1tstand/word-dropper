@@ -8,8 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import me.fru1t.worddropper.ui.game.WrappingProgressBar;
-
 @RunWith(AndroidJUnit4.class)
 public class WrappingProgressBarTest {
     private static final int TEST_MAX = 10;

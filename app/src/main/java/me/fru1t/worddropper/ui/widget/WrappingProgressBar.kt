@@ -1,4 +1,4 @@
-package me.fru1t.worddropper.ui.game
+package me.fru1t.worddropper.ui.widget
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter

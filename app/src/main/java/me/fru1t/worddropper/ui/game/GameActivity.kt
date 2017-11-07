@@ -30,6 +30,7 @@ import me.fru1t.worddropper.settings.Difficulty
 import me.fru1t.worddropper.ui.gamestats.GameStatsActivity
 import me.fru1t.worddropper.ui.settings.SettingsActivity
 import me.fru1t.worddropper.ui.widget.MenuLayout
+import me.fru1t.worddropper.ui.widget.WrappingProgressBar
 import java.util.LinkedList
 
 /**
