@@ -14,12 +14,12 @@
     </style>
 
     <!-- GameStats -->
-    <style name="EndGameScreen_GraphButtonSpacer">
+    <style name="GameStats_GraphButtonSpacer">
         <item name="android:layout_width">@dimen/endGameScreen_graphButtonSpacing</item>
         <item name="android:layout_height">match_parent</item>
     </style>
 
-    <style name="EndGameScreen_GraphButton">
+    <style name="GameStats_GraphButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
 
@@ -29,6 +29,22 @@
         <item name="android:paddingBottom">2dp</item>
         <item name="android:textSize">@dimen/endGameScreen_graphButtonTextSize</item>
         <item name="android:clickable">true</item>
+    </style>
+
+    <style name="GameStats_SideBySide">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="GameStats_SideBySideDivider">
+        <item name="android:layout_width">1px</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="backgroundColorTheme">primary</item>
     </style>
 
 
