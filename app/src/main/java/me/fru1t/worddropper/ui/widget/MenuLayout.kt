@@ -134,9 +134,11 @@ class MenuLayout @JvmOverloads constructor(
         isClickable = true
         setOnClickListener { hide() }
 
-        colorThemeManager.bindView(this, {
-            menu.setBackgroundColor(colorThemeManager.currentColorTheme.backgroundLight)
-            menuOptions.forEach { it.setTextColor(colorThemeManager.currentColorTheme.text) }
-        })
+        post {
+            colorThemeManager.bindView(this, {
+                menu.setBackgroundColor(colorThemeManager.currentColorTheme.backgroundLight)
+                menuOptions.forEach { it.setTextColor(colorThemeManager.currentColorTheme.text) }
+            })
+        }
     }
 }
