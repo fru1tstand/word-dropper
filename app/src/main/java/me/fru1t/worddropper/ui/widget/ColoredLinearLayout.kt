@@ -13,14 +13,14 @@ import me.fru1t.worddropper.settings.colortheme.ColorThemeViewProxyFactory
 import me.fru1t.worddropper.settings.colortheme.ColorThemeXml
 
 /** An automatically colored LinearLayout  */
-class ColoredLinearLayout @JvmOverloads constructor(
+open class ColoredLinearLayout @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : LinearLayout(context, attrs, defStyleAttr) {
     private @Inject lateinit var factory: ColorThemeViewProxyFactory
     private val proxy: ColorThemeViewProxy
 
     init {
-        Slik.get(WordDropperApplication::class).inject(this)
+        Slik.get(WordDropperApplication::class).inject(this, ColoredLinearLayout::class)
         proxy = factory.create(
                 this,
                 attrs,
