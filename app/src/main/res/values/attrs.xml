@@ -9,6 +9,11 @@
         <attr name="metaButtonBarButtonStyle" format="reference" />
     </declare-styleable>
 
+    <!-- Summary Statistic View -->
+    <declare-styleable name="SummaryStatistic">
+        <attr name="titleText" format="string" />
+    </declare-styleable>
+
     <!-- Mapped to fields within ColorTheme by using ColorTheme#getColorFromXmlEnum(int). Keep
          synced with ColorThemeXml.java -->
     <attr name="textColorTheme" format="enum">
