@@ -186,4 +186,20 @@ class DatabaseUtilsImpl(
                 } while (cursor.moveToNext())
                 return true
             }
+
+    override fun forResult(query: String, args: Array<String>?, action: (Cursor) -> Unit): Boolean {
+        var row = 0
+        forEachResult(
+                query,
+                args,
+                {
+                    if (row++ > 0) {
+                        return@forEachResult
+                    }
+                    action(it)
+                }
+        )
+
+        return row == 1
+    }
 }

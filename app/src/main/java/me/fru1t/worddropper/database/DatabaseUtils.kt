@@ -50,4 +50,10 @@ interface DatabaseUtils {
      * if 1 or more rows returned, otherwise false.
      */
     fun forEachResult(query: String, args: Array<String>?, action: (Cursor) -> Unit): Boolean
+
+    /**
+     * Performs a [query] binding [args] and executes [action] asserting there is only a single
+     * result from the query. Returns true if 1 row returned, otherwise false.
+     */
+    fun forResult(query: String, args: Array<String>?, action: (Cursor) -> Unit): Boolean
 }
