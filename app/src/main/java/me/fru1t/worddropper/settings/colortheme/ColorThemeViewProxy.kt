@@ -3,6 +3,7 @@ package me.fru1t.worddropper.settings.colortheme
 import android.support.annotation.StyleableRes
 import android.util.AttributeSet
 import android.view.View
+import me.fru1t.android.content.res.use
 import me.fru1t.android.slik.annotations.Inject
 import me.fru1t.android.slik.annotations.Singleton
 import me.fru1t.worddropper.settings.ColorThemeManager
@@ -50,16 +51,17 @@ class ColorThemeViewProxy internal constructor(
     private val actions = arrayOfNulls<Action>(attributeMaps.size)
 
     init {
-        val styledAttributes = view.context.obtainStyledAttributes(set, attrs)
-        for (i in attributeMaps.indices) {
-            actions[i] = Action(
-                    attributeMaps[i].action,
-                    ColorThemeXml.getColorThemeXmlFromValue(
-                            styledAttributes.getInt(
-                                    attributeMaps[i].colorAttribute,
-                                    attributeMaps[i].defaultColor.value)))
+        view.context.obtainStyledAttributes(set, attrs).use {
+            for (i in attributeMaps.indices) {
+                actions[i] = Action(
+                        attributeMaps[i].action,
+                        ColorThemeXml.getColorThemeXmlFromValue(
+                                it.getInt(
+                                        attributeMaps[i].colorAttribute,
+                                        attributeMaps[i].defaultColor.value)))
+            }
         }
-        styledAttributes.recycle()
+
         colorThemeManager.bindView(view, {
             actions.forEach {
                 it!!.action(it.colorThemeXml.map(colorThemeManager.currentColorTheme))

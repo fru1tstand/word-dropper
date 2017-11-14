@@ -5,8 +5,11 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.TextView
+import me.fru1t.android.content.res.ResourceManager
+import me.fru1t.android.content.res.use
 import me.fru1t.android.slik.Slik
 import me.fru1t.android.slik.annotations.Inject
+import me.fru1t.android.view.find
 import me.fru1t.worddropper.R
 import me.fru1t.worddropper.WordDropperApplication
 import me.fru1t.worddropper.settings.colortheme.AttributeMap
@@ -19,6 +22,7 @@ class ColoredToolBar @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : LinearLayout(context, attrs, defStyleAttr) {
     private @Inject lateinit var colorThemeViewProxyFactory: ColorThemeViewProxyFactory
+    private @Inject lateinit var res: ResourceManager
     private val proxy: ColorThemeViewProxy
 
     init {
@@ -26,7 +30,7 @@ class ColoredToolBar @JvmOverloads constructor(
         val root = LayoutInflater
                 .from(context)
                 .inflate(R.layout.layout_widget_colored_tool_bar, this)
-        val title = root.findViewById(R.id.title) as TextView
+        val title = root.find<TextView>(R.id.title)
 
         proxy = colorThemeViewProxyFactory.create(
                 this,
@@ -41,12 +45,12 @@ class ColoredToolBar @JvmOverloads constructor(
                         ColorThemeXml.TEXT_ON_PRIMARY,
                         { title.setTextColor(it) }))
 
-        val styledAttrs = context.obtainStyledAttributes(attrs, R.styleable.ColoredToolBar)
-        title.text = styledAttrs.getText(R.styleable.ColoredToolBar_toolBarText)
-        styledAttrs.recycle()
+        context.obtainStyledAttributes(attrs, R.styleable.ColoredToolBar).use {
+            title.text = it.getText(R.styleable.ColoredToolBar_toolBarText)
+        }
 
-        val paddingHorizontal = resources.getDimension(R.dimen.app_edgeSpace).toInt()
-        val paddingVertical = resources.getDimension(R.dimen.app_vSpace).toInt()
+        val paddingHorizontal = res.d(R.dimen.app_edgeSpace).toInt()
+        val paddingVertical = res.d(R.dimen.app_vSpace).toInt()
         setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical)
     }
 }
