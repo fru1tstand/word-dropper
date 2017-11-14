@@ -28,6 +28,7 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import me.fru1t.android.annotations.VisibleForXML
+import me.fru1t.android.app.find
 import me.fru1t.android.slik.Slik
 import me.fru1t.android.slik.annotations.Inject
 import me.fru1t.android.widget.ViewFactory
@@ -41,6 +42,7 @@ import me.fru1t.worddropper.settings.ColorThemeManager
 import me.fru1t.worddropper.settings.Difficulty
 import me.fru1t.worddropper.ui.game.GameActivity
 import me.fru1t.worddropper.ui.widget.ColoredTextView
+import me.fru1t.worddropper.ui.widget.SummaryStatistic
 import java.util.ArrayList
 
 /** Data class containing an MPChart object and its corresponding TextView "button" */
@@ -131,6 +133,17 @@ class GameStatsActivity : AppCompatActivity() {
         val wordsList = findViewById(R.id.wordList) as TextView
         val gameMovesList = databaseUtils.getGameMoves(intent.getLongExtra(EXTRA_GAME_ID, -1))
         gameMovesList.forEach { s -> wordsList.append(s + ", ") }
+
+        // Summary statistics
+        databaseUtils.forResult(
+                "SELECT"
+                    + " ROUND(AVG(LENGTH(" + GameWord.COLUMN_WORD + ")), 1) AS avg_word_length" // 0
+                + " FROM " + GameWord.TABLE_NAME
+                + " WHERE " + GameWord.COLUMN_GAME_ID + " = ?",
+                arrayOf(gameId.toString()),
+                {
+                    find<SummaryStatistic>(R.id.avgWordLength).value.text = it.getString(0)
+                })
 
         // Color theme
         colorThemeManager.addChangeListener(this::onColorThemeChange)
