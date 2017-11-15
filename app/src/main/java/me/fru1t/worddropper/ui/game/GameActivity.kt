@@ -431,21 +431,19 @@ class GameActivity : AppCompatActivity() {
             return
         }
 
-        if (difficulty.isScramblingUnlimited()) {
-            tileBoard.scramble()
-            scramblesUsed++
-            databaseUtils.updateGame(gameId, { it.put(Game.COLUMN_SCRAMBLES_USED, scramblesUsed) })
-            return
-        }
-
-        if (scramblesUsed >= scramblesEarned) {
+        if (!difficulty.isScramblingUnlimited() && scramblesUsed >= scramblesEarned) {
             return
         }
 
         scramblesUsed++
         tileBoard.scramble()
-        scrambles.text = getString(R.string.integer, scramblesEarned - scramblesUsed)
-        databaseUtils.updateGame(gameId, { it.put(Game.COLUMN_SCRAMBLES_USED, scramblesUsed) })
+        if (!difficulty.isScramblingUnlimited()) {
+            scrambles.text = getString(R.string.integer, scramblesEarned - scramblesUsed)
+        }
+        databaseUtils.updateGame(gameId, {
+            it.put(Game.COLUMN_SCRAMBLES_USED, scramblesUsed)
+            it.put(Game.COLUMN_BOARD_STATE, tileBoard.getBoardState())
+        })
     }
 
     @VisibleForXML

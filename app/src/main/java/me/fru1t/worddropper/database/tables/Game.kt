@@ -3,6 +3,7 @@ package me.fru1t.worddropper.database.tables
 import android.content.ContentValues
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
+import android.util.Log
 import me.fru1t.worddropper.settings.Difficulty
 import me.fru1t.worddropper.ui.game.TileBoard
 
@@ -48,7 +49,10 @@ object Game : BaseColumns {
             + COLUMN_BOARD_STATE + " TEXT NOT NULL"
             + ");")
 
+    private val TAG = "WD.Database.Game"
+
     fun updateById(db: SQLiteDatabase, values: ContentValues, gameId: Long) {
         db.update(TABLE_NAME, values, BaseColumns._ID + " = ?", arrayOf(gameId.toString() + ""))
+        Log.d(TAG, "Updating game " + gameId + " with " + values.toString())
     }
 }
