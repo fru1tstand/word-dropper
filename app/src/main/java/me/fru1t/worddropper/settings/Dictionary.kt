@@ -2,7 +2,6 @@ package me.fru1t.worddropper.settings
 
 import android.content.Context
 import android.os.AsyncTask
-import com.google.common.base.Strings
 import me.fru1t.android.slik.Slik
 import me.fru1t.android.slik.annotations.Inject
 import me.fru1t.android.slik.annotations.Named
@@ -107,21 +106,22 @@ class Dictionary(
                 .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "english_dictionary_h")
     }
 
-    /**
-     * Determines the point value of a given string.
-     */
+    /** Determines the point value of a given string. */
     fun getWordValue(string: String?): Int {
-        if (Strings.isNullOrEmpty(string)) {
+        if (string.isNullOrEmpty()) {
             return 0
         }
 
-        var result = 0
-        for (c in string!!.toUpperCase().toCharArray()) {
-            result += LetterValue.valueOf(c + "").value
+        // Get base score
+        var result = string!!.toUpperCase().toCharArray().sumBy {
+            LetterValue.valueOf(it + "").value
         }
+
+        // Apply multiplier
         if (string.length > 3) {
             result *= (1.0 + (0.3 + 0.2 * (string.length - 3)) * (string.length - 3)).toInt()
         }
+
         return result
     }
 
@@ -131,16 +131,14 @@ class Dictionary(
      */
     fun isWord(s: String): Boolean = isDebugging || dictionary.contains(s)
 
-    /**
-     * Retrieves a random word from the dictionary that's valued at or above a given value
-     */
-    fun getRandomWord(minWordValue: Int): String {
+    /** Retrieves a random word from the dictionary that's valued at or above a given value */
+    fun getRandomWord(minWordValue: Int = 0): String {
         val r = Random()
         while (true) {
             var i = r.nextInt(dictionary.size)
             for (s in dictionary) {
                 if (i-- <= 0) {
-                    return if (getWordValue(s) >= minWordValue) {
+                    return if (getWordValue(s) >= minWordValue && s.length < 8) {
                         s
                     } else {
                         break
