@@ -203,7 +203,7 @@ class GameStatsActivity : AppCompatActivity() {
             action.chart!!.animateX(resources.getInteger(R.integer.animation_durationLag))
         } else {
             val textView = viewFactory.create<TextView>()
-            textView.setText(R.string.endGameScreen_graphNoData)
+            textView.setText(R.string.gameStats_graphNoData)
             textView.gravity = Gravity.CENTER
             textView.setTextColor(colorThemeManager.currentColorTheme.text)
 
@@ -227,7 +227,6 @@ class GameStatsActivity : AppCompatActivity() {
         // Prepare
         val action =
                 GraphAction(
-                        // TODO: wtf is with this name. Shorten it.
                         findViewById(R.id.graphPointDistribution) as TextView)
         memoizedGraphs.put(R.id.graphPointDistribution, action)
 
@@ -333,7 +332,7 @@ class GameStatsActivity : AppCompatActivity() {
                             PieEntry(
                                     it.getInt(0).toFloat(),
                                     getString(
-                                            R.string.endGameScreen_graphWordLengthsLabel,
+                                            R.string.gameStats_graphWordLengthsLabel,
                                             it.getInt(1))))
                 }
         )

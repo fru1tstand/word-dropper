@@ -16,14 +16,14 @@
     <me.fru1t.worddropper.ui.widget.ColoredTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/endGameScreen_title"
+            android:text="@string/gameStats_title"
             android:textSize="30sp"
             android:textStyle="bold"
             android:gravity="center_horizontal" />
     <me.fru1t.worddropper.ui.widget.ColoredTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/endGameScreen_subtitle"
+            android:text="@string/gameStats_subtitle"
             android:textSize="12sp"
             android:gravity="center_horizontal" />
 
@@ -76,7 +76,7 @@
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
                             android:id="@+id/levelTitle"
-                            android:text="@string/endGameScreen_levelTitle" />
+                            android:text="@string/gameStats_levelTitle" />
                     <Space
                             android:layout_width="0dp"
                             android:layout_height="8dp" />
@@ -93,7 +93,7 @@
                         android:layout_weight="0.5">
                     <me.fru1t.worddropper.ui.widget.ColoredTextView
                             android:id="@+id/scoreTitle"
-                            android:text="@string/endGameScreen_scoreTitle"
+                            android:text="@string/gameStats_scoreTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="14sp" />
@@ -123,7 +123,7 @@
                         android:layout_weight="0.333">
                     <me.fru1t.worddropper.ui.widget.ColoredTextView
                             android:id="@+id/scramblesEarnedTitle"
-                            android:text="@string/endGameScreen_scramblesEarnedTitle"
+                            android:text="@string/gameStats_scramblesEarnedTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="12sp" />
@@ -145,7 +145,7 @@
                         android:layout_weight="0.333">
                     <me.fru1t.worddropper.ui.widget.ColoredTextView
                             android:id="@+id/scramblesUsedTitle"
-                            android:text="@string/endGameScreen_scramblesUsedTitle"
+                            android:text="@string/gameStats_scramblesUsedTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="12sp" />
@@ -167,7 +167,7 @@
                         android:layout_weight="0.333">
                     <me.fru1t.worddropper.ui.widget.ColoredTextView
                             android:id="@+id/wordsTitle"
-                            android:text="@string/endGameScreen_wordsCreatedTitle"
+                            android:text="@string/gameStats_wordsCreatedTitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="12sp"/>
@@ -199,13 +199,13 @@
                         android:paddingRight="@dimen/endGameScreen_edgeSpacing"
                         android:id="@+id/graphButtonsWrapper">
                     <TextView
-                            android:text="@string/endGameScreen_graphWordLengths"
+                            android:text="@string/gameStats_graphWordLengths"
                             android:id="@+id/graphWordLengths"
                             android:onClick="loadWordLengthGraph"
                             style="@style/GameStats_GraphButton"/>
                     <Space style="@style/GameStats_GraphButtonSpacer" />
                     <TextView
-                            android:text="@string/endGameScreen_graphPointDistribution"
+                            android:text="@string/gameStats_graphPointDistribution"
                             android:onClick="loadPointDistributionGraph"
                             android:id="@+id/graphPointDistribution"
                             style="@style/GameStats_GraphButton" />
@@ -276,7 +276,7 @@
             android:orientation="horizontal"
             app:backgroundColorTheme="background_light">
         <me.fru1t.worddropper.ui.widget.ColoredTextView
-                android:text="@string/endGameScreen_actionPlayAgain"
+                android:text="@string/gameStats_actionPlayAgain"
                 android:textSize="@dimen/endGameScreen_actionTextSize"
                 android:gravity="center"
                 android:layout_width="0dp"
@@ -291,7 +291,7 @@
                 android:layout_height="match_parent"
                 app:backgroundColorTheme="background" />
         <me.fru1t.worddropper.ui.widget.ColoredTextView
-                android:text="@string/endGameScreen_actionMainMenu"
+                android:text="@string/gameStats_actionMainMenu"
                 android:textSize="@dimen/endGameScreen_actionTextSize"
                 android:gravity="center"
                 android:layout_width="0dp"

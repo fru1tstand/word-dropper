@@ -11,23 +11,23 @@
     <string name="gigabytes">%.2fGB</string>
 
     <!-- GameStats -->
-    <string name="endGameScreen_title">WordDropper</string>
-    <string name="endGameScreen_subtitle">Game Overview</string>
+    <string name="gameStats_title">WordDropper</string>
+    <string name="gameStats_subtitle">Game Overview</string>
 
-    <string name="endGameScreen_wordsCreatedTitle">Words Created</string>
-    <string name="endGameScreen_scramblesUsedTitle">Scrambles Used</string>
-    <string name="endGameScreen_scramblesEarnedTitle">Scrambles Earned</string>
-    <string name="endGameScreen_scoreTitle">Score</string>
-    <string name="endGameScreen_levelTitle">Level</string>
+    <string name="gameStats_wordsCreatedTitle">Words Created</string>
+    <string name="gameStats_scramblesUsedTitle">Scrambles Used</string>
+    <string name="gameStats_scramblesEarnedTitle">Scrambles Earned</string>
+    <string name="gameStats_scoreTitle">Score</string>
+    <string name="gameStats_levelTitle">Level</string>
 
-    <string name="endGameScreen_graphPointDistribution">Point Distribution</string>
-    <string name="endGameScreen_graphWordLengths">Word Length</string>
+    <string name="gameStats_graphPointDistribution">Point Distribution</string>
+    <string name="gameStats_graphWordLengths">Word Length</string>
 
-    <string name="endGameScreen_graphNoData">No Data :(</string>
-    <string name="endGameScreen_graphWordLengthsLabel">%d letters</string>
+    <string name="gameStats_graphNoData">No Data :(</string>
+    <string name="gameStats_graphWordLengthsLabel">%d letters</string>
 
-    <string name="endGameScreen_actionPlayAgain">Play Again</string>
-    <string name="endGameScreen_actionMainMenu">Main Menu</string>
+    <string name="gameStats_actionPlayAgain">Play Again</string>
+    <string name="gameStats_actionMainMenu">Main Menu</string>
 
     <string name="gameStats_stat_avgWordLength">Avg. Word Length</string>
     <string name="gameStats_stat_avgWordPoints">Avg. Word Points</string>
