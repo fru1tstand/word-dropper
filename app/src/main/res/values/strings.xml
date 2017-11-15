@@ -30,6 +30,8 @@
     <string name="endGameScreen_actionMainMenu">Main Menu</string>
 
     <string name="gameStats_stat_avgWordLength">Avg. Word Length</string>
+    <string name="gameStats_stat_avgWordPoints">Avg. Word Points</string>
+    <string name="gameStats_stat_totalLettersUsed">Total Letters Used</string>
 
     <!-- Game -->
     <string name="gameScreen_pauseMenuSaveAndQuit">Save and Quit</string>

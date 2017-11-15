@@ -137,12 +137,19 @@ class GameStatsActivity : AppCompatActivity() {
         // Summary statistics
         databaseUtils.forResult(
                 "SELECT"
-                    + " ROUND(AVG(LENGTH(" + GameWord.COLUMN_WORD + ")), 1) AS avg_word_length" // 0
+                    + " IFNULL(ROUND(AVG(LENGTH("
+                        + GameWord.COLUMN_WORD + ")), 1), 0) AS avg_word_length,"       // 0
+                    + " IFNULL(ROUND(AVG("
+                        + GameWord.COLUMN_POINT_VALUE + "), 1), 0) AS avg_word_value,"  // 1
+                    + " IFNULL(SUM(LENGTH("
+                        + GameWord.COLUMN_WORD + ")), 0) AS total_letters_used"         // 2
                 + " FROM " + GameWord.TABLE_NAME
                 + " WHERE " + GameWord.COLUMN_GAME_ID + " = ?",
                 arrayOf(gameId.toString()),
                 {
                     find<SummaryStatistic>(R.id.avgWordLength).value.text = it.getString(0)
+                    find<SummaryStatistic>(R.id.avgWordPoints).value.text = it.getString(1)
+                    find<SummaryStatistic>(R.id.totalLettersUsed).value.text = it.getString(2)
                 })
 
         // Color theme

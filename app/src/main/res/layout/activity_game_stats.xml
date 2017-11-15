@@ -237,49 +237,24 @@
                         android:layout_height="match_parent"
                         android:layout_weight="0.33"
                         app:titleText="@string/gameStats_stat_avgWordLength" />
-
                 <Space
                         android:layout_width="1dp"
                         android:layout_height="match_parent" />
-                <me.fru1t.worddropper.ui.widget.ColoredLinearLayout
+                <me.fru1t.worddropper.ui.widget.SummaryStatistic
+                        android:id="@+id/avgWordPoints"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.33"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        app:backgroundColorTheme="background_light">
-                    <me.fru1t.worddropper.ui.widget.ColoredTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="12sp"
-                            android:text="Avg. Word Length" />
-                    <me.fru1t.worddropper.ui.widget.ColoredTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="20sp"
-                            android:text="4.8" />
-                </me.fru1t.worddropper.ui.widget.ColoredLinearLayout>
+                        app:titleText="@string/gameStats_stat_avgWordPoints" />
                 <Space
                         android:layout_width="1dp"
                         android:layout_height="match_parent" />
-                <me.fru1t.worddropper.ui.widget.ColoredLinearLayout
+                <me.fru1t.worddropper.ui.widget.SummaryStatistic
+                        android:id="@+id/totalLettersUsed"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.33"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        app:backgroundColorTheme="background_light">
-                    <me.fru1t.worddropper.ui.widget.ColoredTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="12sp"
-                            android:text="Avg. Word Length" />
-                    <me.fru1t.worddropper.ui.widget.ColoredTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="20sp"
-                            android:text="4.8" />
-                </me.fru1t.worddropper.ui.widget.ColoredLinearLayout>
+                        app:titleText="@string/gameStats_stat_totalLettersUsed" />
                 <Space
                         android:layout_width="1dp"
                         android:layout_height="match_parent" />
