@@ -1,5 +1,6 @@
 package me.fru1t.android.slik
 
+import me.fru1t.android.slik.annotations.ImplementedBy
 import me.fru1t.android.slik.annotations.Inject
 import me.fru1t.android.slik.annotations.Named
 import me.fru1t.android.slik.annotations.Singleton
@@ -52,11 +53,16 @@ class Slik {
     }
 
     /**
-     * Binds an [abstraction] to an [implementation] so that Slik may resolve a dependency for the
-     * abstract class.
+     * Explicitly binds an [abstraction] to an [implementation] so that Slik may resolve a
+     * dependency for the abstract class or interface. Usually this is done by adding an
+     * [ImplementedBy] annotation to the [abstraction], but for classes that can't be touched
+     * (eg. external libraries), use this method.
      */
     fun <T1 : Any, T2 : T1> bind(abstraction: KClass<T1>, implementation: KClass<T2>): Slik {
-        bindings.put(abstraction, implementation)
+        bindings.put(abstraction, implementation)?.let {
+            throw SlikException("${abstraction.qualifiedName} is already bound to " +
+                    "${it.qualifiedName} but is being re-bound to ${implementation.qualifiedName}")
+        }
         return this
     }
 
@@ -109,15 +115,15 @@ class Slik {
                     " order for Slik to create an instance of it.")
         }
 
-        // Check for bindings
+        // Check that we know how to implement if it's abstract or an interface
         if (injectedClass.java.isInterface || injectedClass.isAbstract) {
-            if (!bindings.containsKey(injectedClass)) {
-                throw SlikException("${injectedClass.qualifiedName} is an interface or abstract " +
-                        "class that must be #bound to an implementation before Slik can inject it.")
-            }
-
             @Suppress("UNCHECKED_CAST")
-            injectedClass = bindings[kClass]!! as KClass<T>
+            injectedClass =
+                    (bindings[injectedClass]
+                            ?: injectedClass.findAnnotation<ImplementedBy>()?.value
+                            ?: throw SlikException("${injectedClass.qualifiedName} is an " +
+                            "interface or abstract class that must be #bound to an " +
+                            "implementation before Slik can inject it.")) as KClass<T>
         }
 
         // Is it injectable?
