@@ -3,11 +3,13 @@ package me.fru1t.worddropper.settings
 import android.content.Context
 import android.support.annotation.StringRes
 import android.support.annotation.VisibleForTesting
+import me.fru1t.android.slik.annotations.ImplementedBy
 
 /**
  * An interface for storing and retrieving preferences via string resource values. See
  * [PreferenceManagerImpl] for the standard implementation.
  */
+@ImplementedBy(PreferenceManagerImpl::class)
 abstract class PreferenceManager(@VisibleForTesting internal val context: Context) {
     private val changeListeners = HashSet<(String) -> Unit>()
 

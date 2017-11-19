@@ -4,12 +4,14 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import me.fru1t.android.database.Row
+import me.fru1t.android.slik.annotations.ImplementedBy
 import me.fru1t.worddropper.settings.Difficulty
 
 /**
  * Provides an interface for interacting with a persistent data storage scheme. See
  * [DatabaseUtilsImpl] for the standard implementation.
  */
+@ImplementedBy(DatabaseUtilsImpl::class)
 interface DatabaseUtils {
     /** Verifies the database is up and running */
     fun startup()
